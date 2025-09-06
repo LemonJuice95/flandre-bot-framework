@@ -1,0 +1,72 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'maven-publish'
+}
+
+group = 'io.github.lemonjuice95'
+version = '0.1.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'io.lemonjuice.flandre_bot.FlandreBot'
+        )
+    }
+}
+
+publishing {
+    publications {
+        maven (MavenPublication) {
+            groupId = 'io.github.lemonjuice95'
+            artifactId = 'flandre-bot-framework'
+            version = project.version
+
+            from components.java
+
+            pom {
+                name = 'Flandre Bot Framework'
+                description = 'A qq bot framework on Java 21, Using OneBot 11 protocol, Connect through WebSocket'
+            }
+        }
+    }
+
+    repositories {}
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+    implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
+    implementation 'org.reflections:reflections:0.10.2'
+
+    api 'com.google.guava:guava:33.4.8-jre'
+    api 'org.json:json:20250517'
+
+    //log4j2
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.25.1'
+    api 'org.apache.logging.log4j:log4j-api:2.25.1'
+    api 'org.apache.logging.log4j:log4j-core:2.25.1'
+}
+
+test {
+    useJUnitPlatform()
+}
