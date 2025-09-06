@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
+    id 'org.jreleaser' version '1.20.0'
 }
 
 group = 'io.github.lemonjuice95'
@@ -23,6 +24,32 @@ jar {
     }
 }
 
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+        mode = 'FILE'
+        publicKey = rootProject.findProperty("gpg.publicKey")
+        secretKey = rootProject.findProperty("gpg.secretKey")
+        passphrase = rootProject.findProperty("gpg.passphrase")
+    }
+
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+
+                    username = rootProject.findProperty("gpg.mavenUsername")
+                    password = rootProject.findProperty("gpg.mavenPassword")
+                }
+            }
+        }
+    }
+}
+
 publishing {
     publications {
         maven (MavenPublication) {
@@ -35,11 +62,37 @@ publishing {
             pom {
                 name = 'Flandre Bot Framework'
                 description = 'A qq bot framework on Java 21, Using OneBot 11 protocol, Connect through WebSocket'
+                url = 'https://github.com/LemonJuice95/flandre-bot-framework'
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/license/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'lemonjuice95'
+                        name = 'LemonJuice95'
+                        email = '1582017385@qq.com'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/LemonJuice95/flandre-bot-framework'
+                    developerConnection = 'scm:git:ssh://github.com/LemonJuice95/flandre-bot-framework'
+                    url = 'https://github.com/LemonJuice95/flandre-bot-framework'
+                }
             }
         }
     }
 
-    repositories {}
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
 }
 
 repositories {
