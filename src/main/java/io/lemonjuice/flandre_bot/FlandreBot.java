@@ -19,13 +19,17 @@ public class FlandreBot {
         start();
     }
 
+    public static String getName() {
+        return BotBasicConfig.BOT_NAME.get();
+    }
+
     public static void start() {
         BotEventBus.init();
         Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
 
         BasicConfigFileChecker.check();
         BotBasicConfig.read();
-        log.info("正在启动Bot: {}", BotBasicConfig.BOT_NAME.get());
+        log.info("正在启动Bot: {}", getName());
 
         BotEventBus.post(new PluginLoadEvent());
         BotEventBus.post(new BotInitEvent());
