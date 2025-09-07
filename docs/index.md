@@ -5,4 +5,4 @@
  - [基础配置文件](base_config.md)
  - [命令系统](commands.md)
  - [权限系统](permissions.md)
-WIP
+ - WIP
