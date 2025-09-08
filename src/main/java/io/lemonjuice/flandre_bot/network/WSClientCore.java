@@ -120,10 +120,14 @@ public class WSClientCore {
     public void onMessage(String json) {
         JSONObject jsonObject = new JSONObject(json);
         if (jsonObject.has("echo")) {
-            UUID uuid = UUID.fromString(jsonObject.getString("echo"));
-            WSResponse response = this.waitingResponses.get(uuid);
-            if(response != null) {
-                response.present(jsonObject);
+            try {
+                UUID uuid = UUID.fromString(jsonObject.getString("echo"));
+                WSResponse response = this.waitingResponses.get(uuid);
+                if (response != null) {
+                    response.present(jsonObject);
+                }
+            } catch (IllegalArgumentException ignored) {
+                //echo不符合uuid格式时，不执行逻辑
             }
         }
 
