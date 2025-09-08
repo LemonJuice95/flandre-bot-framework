@@ -7,6 +7,10 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+/**
+ * @deprecated 已经使用 {@link io.lemonjuice.flandre_bot.message.IMessageSource} 包装发送逻辑
+ */
+@Deprecated(since = "0.2.0", forRemoval = true)
 public class SendingUtils {
     /**
      * 发送群聊消息
