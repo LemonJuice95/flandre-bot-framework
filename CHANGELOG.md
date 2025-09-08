@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.2.1
+ - 修复WebSocket客户端无法正常启动的问题
+
 ## v0.2.0
  - 弃用`SendingUtils`类，`Message`类添加消息上下文包装发送逻辑
  - 添加WebSocket请求-响应模式的实现
