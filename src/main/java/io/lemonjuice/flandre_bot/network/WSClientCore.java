@@ -16,7 +16,9 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,6 +31,8 @@ public class WSClientCore {
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final Thread senderThread;
+
+    private final ConcurrentHashMap<UUID, WSResponse> waitingResponses = new ConcurrentHashMap<>();
 
     private final Session session;
     private static String token;
@@ -47,6 +51,31 @@ public class WSClientCore {
             return false;
         }
         return true;
+    }
+
+    public JSONObject request(JSONObject request) {
+        UUID uuid = UUID.randomUUID();
+        request.put("echo", uuid.toString());
+        WSResponse response = new WSResponse();
+
+        this.waitingResponses.putIfAbsent(uuid, response);
+        this.sendText(request.toString());
+
+        try {
+            if (response.await()) {
+                return response.getResponse();
+            } else {
+                JSONObject failedResult = new JSONObject();
+                failedResult.put("retcode", -1);
+                return failedResult;
+            }
+        } finally {
+            this.waitingResponses.remove(uuid);
+        }
+    }
+
+    public void sendJson(JSONObject json) {
+        this.sendText(json.toString());
     }
 
     public void sendText(String message) {
@@ -88,8 +117,17 @@ public class WSClientCore {
     @OnMessage
     public void onMessage(String json) {
         JSONObject jsonObject = new JSONObject(json);
+        if (jsonObject.has("echo")) {
+            UUID uuid = UUID.fromString(jsonObject.getString("echo"));
+            WSResponse response = this.waitingResponses.get(uuid);
+            if(response != null) {
+                response.present(jsonObject);
+            }
+        }
+
         String postType = jsonObject.optString("post_type", "");
 
+        //TODO 以后类型多起来了用switch
         if (postType.equals("message")) {
             Message message = MessageParser.tryParse(jsonObject);
             ReceivingMessageHandler.handle(message);
