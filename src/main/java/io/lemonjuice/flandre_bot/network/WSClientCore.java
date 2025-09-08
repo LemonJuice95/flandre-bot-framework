@@ -28,8 +28,8 @@ public class WSClientCore {
     @Getter
     private static WSClientCore instance;
 
-    private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-    private final AtomicBoolean running = new AtomicBoolean(false);
+    private final BlockingQueue<String> messageQueue;
+    private final AtomicBoolean running;
     private final Thread senderThread;
 
     private final ConcurrentHashMap<UUID, WSResponse> waitingResponses = new ConcurrentHashMap<>();
@@ -38,8 +38,10 @@ public class WSClientCore {
     private static String token;
 
     private WSClientCore(String url) throws DeploymentException, IOException {
-        this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
+        this.messageQueue = new LinkedBlockingQueue<>();
+        this.running = new AtomicBoolean(false);
         this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
+        this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
     }
 
     public synchronized static boolean connect(String url, String token) {
