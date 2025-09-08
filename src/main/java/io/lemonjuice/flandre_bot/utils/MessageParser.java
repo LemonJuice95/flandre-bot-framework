@@ -21,10 +21,8 @@ public class MessageParser {
             message.realId = json.getInt("real_id");
             message.realSeq = json.getString("real_seq");
 
-            String type = json.getString("message_type");
-            String subType = json.getString("sub_type");
-            message.type = type;
-            message.subType = subType;
+            message.type = json.getString("message_type");
+            message.subType = json.getString("sub_type");
 
             Message.Sender sender = new Message.Sender();
             JSONObject senderJson = json.getJSONObject("sender");
@@ -44,6 +42,8 @@ public class MessageParser {
 
             message.targetId = json.optLong("target_id", -1);
             message.groupId = json.optLong("group_id", -1);
+
+            message.generateContext();
 
             return message;
         } catch (JSONException e) {
