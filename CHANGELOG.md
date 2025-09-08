@@ -1,6 +1,6 @@
 # ChangeLog
 
-## v0.2.0 (WIP)
+## v0.2.0
  - 弃用`SendingUtils`类，`Message`类添加消息上下文包装发送逻辑
  - 添加WebSocket请求-响应模式的实现
  - WebSocket客户端发送消息现在使用阻塞队列
