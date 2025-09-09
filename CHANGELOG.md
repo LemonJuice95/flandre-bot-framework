@@ -1,7 +1,9 @@
 # ChangeLog
 
-## v0.4.2(WIP)
+## v0.5.0(WIP)
  - 修复`SimpleGroupCommandRunner`在消息内可能@Bot超过一次时，命令仍然匹配的问题
+ - 更改`MessageContext`的构造方式，采用类似建造者模式的链式调用，但并非纯正的建造者模式
+ - `MessageContext`添加快捷回复消息的方法
 
 ## v0.4.1
  - 修复版本显示问题
