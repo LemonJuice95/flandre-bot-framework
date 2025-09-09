@@ -38,7 +38,8 @@ public class FriendContext extends MessageContext {
         JSONObject data = new JSONObject();
         for(String m : messages) {
             node.put("type", "node");
-            data.put("user_id", this.getBotId());
+            if(this.getBotId() != -1)
+                data.put("user_id", this.getBotId());
             data.put("content", m);
             node.put("data", data);
             jsonArray.put(node);
