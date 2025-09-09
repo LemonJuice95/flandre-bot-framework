@@ -24,6 +24,12 @@ jar {
     }
 }
 
+processResources {
+    filesMatching('**/framework.properties') {
+        expand(project.properties)
+    }
+}
+
 jreleaser {
     signing {
         active = 'ALWAYS'

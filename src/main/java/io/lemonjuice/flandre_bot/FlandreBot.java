@@ -9,13 +9,19 @@ import io.lemonjuice.flandre_bot.network.WSClientCore;
 import io.lemonjuice.flandre_bot.network.WSReconnect;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
 @Log4j2
 public class FlandreBot {
+
     private static final CountDownLatch keepAlive = new CountDownLatch(1);
 
     public static void main(String[] args) {
+        FrameworkInfo.init();
         start();
     }
 
@@ -24,6 +30,9 @@ public class FlandreBot {
     }
 
     public static void start() {
+        System.out.println("Flandre Bot Framework v" + FrameworkInfo.getVersion());
+        System.out.println(FrameworkInfo.getLogo());
+
         BotEventBus.init();
         Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
 
@@ -44,6 +53,8 @@ public class FlandreBot {
             Thread.interrupted();
         }
     }
+
+
 
     public static void stop() {
         System.exit(0);
