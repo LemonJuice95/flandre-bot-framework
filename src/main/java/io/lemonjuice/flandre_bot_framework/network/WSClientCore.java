@@ -104,6 +104,8 @@ public class WSClientCore {
     public synchronized static void close() {
         try {
             instance.session.close();
+        } catch (NullPointerException ignored) {
+            //说明连接不存在，无需处理
         } catch (IOException e) {
             log.error("关闭ws客户端失败！");
         }
