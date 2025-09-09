@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
+import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 import lombok.Getter;
 
 import java.util.List;
@@ -10,6 +11,15 @@ public class MessageContext implements IMessageContext {
     private long messageId = -1;
 
     public MessageContext() {
+    }
+
+    @Override
+    public void replyWithText(String message) {
+        if(this.messageId != -1) {
+            this.sendText(CQCode.reply(this.messageId) + message);
+        } else {
+            throw new UnsupportedOperationException("不支持的消息发送操作");
+        }
     }
 
     @Override
