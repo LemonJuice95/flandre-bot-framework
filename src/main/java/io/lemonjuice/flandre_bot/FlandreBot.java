@@ -30,8 +30,8 @@ public class FlandreBot {
     }
 
     public static void start() {
-        System.out.println("Flandre Bot Framework v" + FrameworkInfo.getVersion());
-        System.out.println(FrameworkInfo.getLogo());
+        System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
+        System.out.println(FrameworkInfo.logo);
 
         BotEventBus.init();
         Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
