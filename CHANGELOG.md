@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.4.2(WIP)
+ - 修复`SimpleGroupCommandRunner`在消息内可能@Bot超过一次时，命令仍然匹配的问题
+
 ## v0.4.1
  - 修复版本显示问题
  - 修复slf4j的版本冲突问题
