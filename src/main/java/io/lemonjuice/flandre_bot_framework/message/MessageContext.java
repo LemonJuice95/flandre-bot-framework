@@ -6,10 +6,11 @@ import java.util.List;
 
 public class MessageContext implements IMessageContext {
     @Getter
-    private final long botId;
+    private long botId = -1;
+    @Getter
+    private long messageId = -1;
 
-    public MessageContext(long botId) {
-        this.botId = botId;
+    public MessageContext() {
     }
 
     @Override
@@ -20,5 +21,15 @@ public class MessageContext implements IMessageContext {
     @Override
     public void sendForwardText(List<String> messages) {
         throw new UnsupportedOperationException("不支持的消息发送操作");
+    }
+
+    public MessageContext withBotId(long botId) {
+        this.botId = botId;
+        return this;
+    }
+
+    public MessageContext withMessageId(long messageId) {
+        this.messageId = messageId;
+        return this;
     }
 }

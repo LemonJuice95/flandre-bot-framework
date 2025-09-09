@@ -11,8 +11,7 @@ import java.util.List;
 public class GroupContext extends MessageContext {
     public final long groupId;
 
-    public GroupContext(long groupId, long botId) {
-        super(botId);
+    public GroupContext(long groupId) {
         this.groupId = groupId;
     }
 

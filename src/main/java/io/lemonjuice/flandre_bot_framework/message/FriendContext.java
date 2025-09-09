@@ -11,8 +11,7 @@ import java.util.List;
 public class FriendContext extends MessageContext {
     private final long friendId;
 
-    public FriendContext(long friendId, long botId) {
-        super(botId);
+    public FriendContext(long friendId) {
         this.friendId = friendId;
     }
 

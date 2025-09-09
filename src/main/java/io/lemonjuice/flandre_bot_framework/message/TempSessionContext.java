@@ -9,8 +9,7 @@ public class TempSessionContext extends MessageContext {
     private final long userId;
     private final long groupId;
 
-    public TempSessionContext(long userId, long groupId, long botId) {
-        super(botId);
+    public TempSessionContext(long userId, long groupId) {
         this.userId = userId;
         this.groupId = groupId;
     }

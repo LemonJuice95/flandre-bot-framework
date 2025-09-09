@@ -38,15 +38,30 @@ public class Message {
     public void generateContext() {
         String detailedType = this.type + "." + this.subType;
         switch (detailedType) {
-            case "group.normal": this.context = new GroupContext(this.groupId, this.selfId); break;
-            case "private.friend": this.context = new FriendContext(this.userId, this.selfId); break;
-            case "private.group": this.context = new TempSessionContext(this.userId, this.groupId, this.selfId); break;
-            default: this.context = new MessageContext(this.selfId);
+            case "group.normal":
+                this.context = new GroupContext(this.groupId)
+                        .withBotId(this.selfId)
+                        .withMessageId(this.messageId);
+                break;
+
+            case "private.friend":
+                this.context = new FriendContext(this.userId)
+                        .withBotId(this.selfId)
+                        .withMessageId(this.messageId);
+                break;
+
+            case "private.group":
+                this.context = new TempSessionContext(this.userId, this.groupId)
+                        .withBotId(this.selfId)
+                        .withMessageId(this.messageId);
+                break;
+
+            default: this.context = new MessageContext().withBotId(this.selfId).withMessageId(this.messageId);
         }
     }
 
     static {
-        DUMMY.context = new MessageContext(0);
+        DUMMY.context = new MessageContext();
         DUMMY.realSeq = "";
         DUMMY.type = "";
         DUMMY.subType = "";
