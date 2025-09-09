@@ -3,6 +3,8 @@ package io.lemonjuice.flandre_bot_framework.command.group;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
+import java.util.regex.Pattern;
+
 /**
  * 群聊下简单命令的执行器（仅匹配完整命令体）
  */
@@ -25,7 +27,8 @@ public abstract class SimpleGroupCommandRunner extends GroupCommandRunner {
     public boolean matches() {
         if(this.needAtFirst()) {
             return this.command.message.startsWith(CQCode.at(this.command.selfId)) &&
-                    this.command.message.replace(CQCode.at(this.command.selfId), "").trim().equals(this.getCommandBody());
+                    this.command.message.replaceFirst(Pattern.quote(CQCode.at(this.command.selfId)), "")
+                            .trim().equals(this.getCommandBody());
         }
         return this.command.message.trim().equals(this.getCommandBody());
     }
