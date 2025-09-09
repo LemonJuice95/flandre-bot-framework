@@ -17,7 +17,7 @@ plugins {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'io.lemonjuice.flandre_bot.FlandreBot'
+                'Main-Class': 'io.lemonjuice.flandre_bot_framework.FlandreBot'
         )
     }
 }
