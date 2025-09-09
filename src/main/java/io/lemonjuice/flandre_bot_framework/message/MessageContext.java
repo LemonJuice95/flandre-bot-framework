@@ -4,10 +4,9 @@ import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class MessageContext implements IMessageContext {
-    @Getter
     private long botId = -1;
-    @Getter
     private long messageId = -1;
 
     public MessageContext() {
