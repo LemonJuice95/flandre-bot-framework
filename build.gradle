@@ -27,7 +27,7 @@ jar {
 processResources {
     filesMatching('**/framework.properties') {
         filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                'projectVersion': project.version
+                'projectVersion': rootProject.version
         ])
     }
 }
@@ -115,13 +115,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
-    implementation 'javax.websocket:javax.websocket-api:1.1'
-    implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
-    implementation('org.reflections:reflections:0.10.2') {
+    implementation ('javax.websocket:javax.websocket-api:1.1') {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-
-    implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
+    implementation('org.reflections:reflections:0.10.2')
 
     api 'com.google.guava:guava:33.4.8-jre'
     api 'org.json:json:20250517'
