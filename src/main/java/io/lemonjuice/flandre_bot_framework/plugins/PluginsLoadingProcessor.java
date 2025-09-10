@@ -31,7 +31,9 @@ public class PluginsLoadingProcessor {
         boolean completedFlag = false;
         while(!completedFlag) {
             completedFlag = true;
-            for(PluginNode node : this.remainingNodes) {
+            Iterator<PluginNode> nodeIterator = this.remainingNodes.iterator();
+            while(nodeIterator.hasNext()) {
+                PluginNode node = nodeIterator.next();
                 if(node.inEdges.isEmpty()) {
                     completedFlag = false;
                     try {
@@ -42,7 +44,7 @@ public class PluginsLoadingProcessor {
                         this.failedNodes.put(node, "自身发生异常");
                         this.failSubNodes(node, "依赖项加载失败");
                     } finally {
-                        this.remainingNodes.remove(node);
+                        nodeIterator.remove();
                     }
                 }
             }
