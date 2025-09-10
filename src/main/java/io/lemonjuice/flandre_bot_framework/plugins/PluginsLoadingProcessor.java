@@ -40,7 +40,7 @@ public class PluginsLoadingProcessor {
                         node.plugin.load();
                         node.outEdges.forEach(n -> n.inEdges.remove(node));
                     } catch (Exception e) {
-                        log.warn("插件加载失败: {}", node.plugin.getName());
+                        log.warn("插件加载失败: {}", node.plugin.getName(), e);
                         this.failedNodes.put(node, "自身发生异常");
                         this.failSubNodes(node, "依赖项加载失败");
                     } finally {
