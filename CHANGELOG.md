@@ -4,6 +4,7 @@
  - 修复`SimpleGroupCommandRunner`在消息内可能@Bot超过一次时，命令仍然匹配的问题
  - 更改`MessageContext`的构造方式，采用类似建造者模式的链式调用，但并非纯正的建造者模式
  - `MessageContext`添加快捷回复消息的方法
+ - 使用更加完善的插件加载器替代原有的PluginInitEvent()
 
 ## v0.4.1
  - 修复版本显示问题
