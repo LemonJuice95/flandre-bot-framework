@@ -2,6 +2,8 @@ package io.lemonjuice.flandre_bot_framework.network;
 
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.HeartBeatEvent;
+import io.lemonjuice.flandre_bot_framework.event.meta.WSConnectedEvent;
+import io.lemonjuice.flandre_bot_framework.event.meta.WSDisconnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.WSMessageEvent;
 import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
 import io.lemonjuice.flandre_bot_framework.model.Message;
@@ -116,6 +118,7 @@ public class WSClientCore {
         log.info("Bot已启动！");
         this.running.set(true);
         this.senderThread.start();
+        BotEventBus.post(new WSConnectedEvent());
     }
 
     @OnMessage
@@ -156,6 +159,7 @@ public class WSClientCore {
         this.running.set(false);
         this.senderThread.interrupt();
         new Thread(new WSReconnect()).start();
+        BotEventBus.post(new WSDisconnectedEvent());
     }
 
     @OnError
