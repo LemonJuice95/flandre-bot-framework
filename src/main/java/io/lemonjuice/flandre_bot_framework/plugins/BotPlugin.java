@@ -13,7 +13,9 @@ public interface BotPlugin {
      * 标记哪些插件需要在此插件加载前被加载
      * @return 前置插件类列表
      */
-    public List<Class<? extends BotPlugin>> getDependencies();
+    default public List<Class<? extends BotPlugin>> getDependencies() {
+        return List.of();
+    }
 
     /**
      * 执行插件加载逻辑
