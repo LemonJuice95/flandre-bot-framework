@@ -7,6 +7,10 @@ import java.util.List;
  * 同时包装了快捷发送的逻辑
  */
 public interface IMessageContext {
+    /**
+     * 回复一条消息
+     * @param message 消息内容
+     */
     public void replyWithText(String message);
 
     /**
