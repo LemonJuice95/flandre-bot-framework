@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.5.1
+ - 为插件提供默认的空依赖列表
+
 ## v0.5.0
  - 修复`SimpleGroupCommandRunner`在消息内可能@Bot超过一次时，命令仍然匹配的问题
  - 更改`MessageContext`的构造方式，采用类似建造者模式的链式调用，但并非纯正的建造者模式
