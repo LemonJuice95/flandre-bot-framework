@@ -4,7 +4,6 @@ import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileChecker;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
-import io.lemonjuice.flandre_bot_framework.event.meta.PluginLoadEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
 import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
 import io.lemonjuice.flandre_bot_framework.network.WSReconnect;
