@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot_framework.plugins;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class PluginsLoadingProcessor {
@@ -31,9 +32,7 @@ public class PluginsLoadingProcessor {
         boolean completedFlag = false;
         while(!completedFlag) {
             completedFlag = true;
-            Iterator<PluginNode> nodeIterator = this.remainingNodes.iterator();
-            while(nodeIterator.hasNext()) {
-                PluginNode node = nodeIterator.next();
+            for(PluginNode node : this.remainingNodes) {
                 if(node.inEdges.isEmpty()) {
                     completedFlag = false;
                     try {
@@ -41,13 +40,15 @@ public class PluginsLoadingProcessor {
                         node.plugin.load();
                         node.outEdges.forEach(n -> n.inEdges.remove(node));
                     } catch (Exception e) {
+                        log.warn("插件加载失败: {}", node.plugin.getName());
                         this.failedNodes.put(node, "自身发生异常");
                         this.failSubNodes(node, "依赖项加载失败");
                     } finally {
-                        nodeIterator.remove();
+                        node.handled = true;
                     }
                 }
             }
+            this.clearHandledNodes();
         }
 
         this.remainingNodes.forEach(node -> {
@@ -82,17 +83,22 @@ public class PluginsLoadingProcessor {
         this.remainingNodes.addAll(graph.values());
         this.remainingNodes.remove(unknownNode);
         this.failSubNodes(unknownNode, "依赖缺失");
+        this.clearHandledNodes();
     }
 
     private void failSubNodes(PluginNode start, String reason) {
-        Deque<PluginNode> nodesQueue = new ArrayDeque<>(start.outEdges.stream().filter(this.remainingNodes::contains).toList());
+        Deque<PluginNode> nodesQueue = new ArrayDeque<>(start.outEdges.stream().filter(node -> !node.handled).toList());
         while (!nodesQueue.isEmpty()) {
             PluginNode current = nodesQueue.peekFirst();
             nodesQueue.pop();
             this.failedNodes.put(current, reason);
-            this.remainingNodes.remove(current);
-            current.outEdges.stream().filter(this.remainingNodes::contains).forEach(nodesQueue::push);
+            current.handled = true;
+            current.outEdges.stream().filter(node -> !node.handled).forEach(nodesQueue::push);
         }
+    }
+
+    private void clearHandledNodes() {
+        this.remainingNodes.removeIf(node -> node.handled);
     }
 
     private void addEdge(PluginNode from, PluginNode to) {
@@ -104,6 +110,7 @@ public class PluginsLoadingProcessor {
         public final BotPlugin plugin;
         public final Set<PluginNode> outEdges = new HashSet<>();
         public final Set<PluginNode> inEdges = new HashSet<>();
+        public boolean handled = false;
 
         public PluginNode(BotPlugin plugin) {
             this.plugin = plugin;
