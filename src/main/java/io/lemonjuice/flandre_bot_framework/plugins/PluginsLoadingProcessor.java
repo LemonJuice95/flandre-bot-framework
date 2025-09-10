@@ -50,7 +50,6 @@ public class PluginsLoadingProcessor {
 
         this.remainingNodes.forEach(node -> {
             this.failedNodes.put(node, "循环依赖");
-            this.remainingNodes.remove(node);
         });
     }
 
