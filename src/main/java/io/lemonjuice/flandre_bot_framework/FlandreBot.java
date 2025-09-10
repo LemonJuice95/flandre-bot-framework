@@ -38,11 +38,13 @@ public class FlandreBot {
 
         BotEventBus.post(new PluginLoadEvent());
 
+        BotEventBus.post(new BotInitEvent());
+
         if(!WSClientCore.connect(BotBasicConfig.WS_URL.get(), BotBasicConfig.WS_TOKEN.get())) {
             new Thread(new WSReconnect()).start();
         }
 
-        BotEventBus.post(new BotInitEvent());
+
 
         try {
             keepAlive.await();
