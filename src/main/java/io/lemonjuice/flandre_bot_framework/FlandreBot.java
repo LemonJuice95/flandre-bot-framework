@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot_framework;
 
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileChecker;
+import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
@@ -14,7 +15,6 @@ import java.util.concurrent.CountDownLatch;
 
 @Log4j2
 public class FlandreBot {
-
     private static final CountDownLatch keepAlive = new CountDownLatch(1);
 
     public static void main(String[] args) {
@@ -42,11 +42,14 @@ public class FlandreBot {
         BotEventBus.post(new PluginRegisterEvent(pluginLoader));
         pluginLoader.loadPlugins();
 
+//        OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.post(new BotInitEvent());
 
         if(!WSClientCore.connect(BotBasicConfig.WS_URL.get(), BotBasicConfig.WS_TOKEN.get())) {
-            new Thread(new WSReconnect()).start();
+            Thread.startVirtualThread(WSReconnect::new);
         }
+
+
 
         try {
             keepAlive.await();
@@ -54,8 +57,6 @@ public class FlandreBot {
             Thread.interrupted();
         }
     }
-
-
 
     public static void stop() {
         System.exit(0);
