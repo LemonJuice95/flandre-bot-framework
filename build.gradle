@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.github.lemonjuice95'
-version = '0.5.2'
+version = '0.6.0'
 
 java {
     toolchain {
