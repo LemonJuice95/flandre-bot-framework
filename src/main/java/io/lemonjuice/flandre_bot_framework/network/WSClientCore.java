@@ -158,7 +158,7 @@ public class WSClientCore {
         log.info("Bot已断开连接!");
         this.running.set(false);
         this.senderThread.interrupt();
-        Thread.startVirtualThread(WSReconnect::new);
+        Thread.startVirtualThread(new WSReconnect());
         BotEventBus.post(new WSDisconnectedEvent());
     }
 
