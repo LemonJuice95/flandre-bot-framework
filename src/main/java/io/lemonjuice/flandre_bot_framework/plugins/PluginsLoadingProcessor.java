@@ -33,7 +33,7 @@ public class PluginsLoadingProcessor {
         while(!completedFlag) {
             completedFlag = true;
             for(PluginNode node : this.remainingNodes) {
-                if(node.inEdges.isEmpty()) {
+                if(node.inEdges.isEmpty() && !node.handled) {
                     completedFlag = false;
                     try {
                         log.info("正在加载插件: {}", node.plugin.getName());
