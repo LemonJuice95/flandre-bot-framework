@@ -47,11 +47,11 @@ public class FlandreBot {
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.post(new BotInitEvent());
 
+        consoleListenerThread.start();
+
         if(!WSClientCore.connect(BotBasicConfig.WS_URL.get(), BotBasicConfig.WS_TOKEN.get())) {
             Thread.startVirtualThread(new WSReconnect());
         }
-
-
 
         try {
             keepAlive.await();
