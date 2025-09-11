@@ -128,6 +128,8 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.25.1'
     api 'org.apache.logging.log4j:log4j-api:2.25.1'
     api 'org.apache.logging.log4j:log4j-core:2.25.1'
+
+    implementation 'org.jline:jline:3.30.6'
 }
 
 test {
