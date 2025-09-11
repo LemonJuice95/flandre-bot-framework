@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.6.1
+ - 控制台命令现在使用`BufferedReader`监听
+
 ## v0.6.0
  - 添加控制台命令系统
 
