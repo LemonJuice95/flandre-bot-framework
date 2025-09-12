@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot_framework;
 
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileChecker;
+import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
@@ -32,6 +33,7 @@ public class FlandreBot {
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
 
+        BotConsole.init();
         BotEventBus.init();
         Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
 
@@ -47,10 +49,14 @@ public class FlandreBot {
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.post(new BotInitEvent());
 
-        consoleListenerThread.start();
-
         if(!WSClientCore.connect(BotBasicConfig.WS_URL.get(), BotBasicConfig.WS_TOKEN.get())) {
             Thread.startVirtualThread(new WSReconnect());
+        }
+
+        if(BotConsole.isAvailable()) {
+            consoleListenerThread.start();
+        } else {
+            System.out.println("警告: 无法使用控制台命令系统");
         }
 
         try {

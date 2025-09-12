@@ -32,6 +32,13 @@ processResources {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            "-Alog4j.graalvm.groupId=io.github.lemonjuice95",
+            "-Alog4j.graalvm.artifactId=flandre-bot-framework"
+    ]
+}
+
 jreleaser {
     signing {
         active = 'ALWAYS'
@@ -115,17 +122,17 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
-    implementation ('javax.websocket:javax.websocket-api:1.1') {
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+    implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
+    implementation('org.reflections:reflections:0.10.2') {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
-    implementation('org.reflections:reflections:0.10.2')
 
     api 'com.google.guava:guava:33.4.8-jre'
     api 'org.json:json:20250517'
 
     //log4j2
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.25.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.1'
     api 'org.apache.logging.log4j:log4j-api:2.25.1'
     api 'org.apache.logging.log4j:log4j-core:2.25.1'
 
