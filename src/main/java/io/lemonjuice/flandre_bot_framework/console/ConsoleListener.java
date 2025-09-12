@@ -4,12 +4,8 @@ import io.lemonjuice.flandre_bot_framework.FlandreBot;
 import lombok.extern.log4j.Log4j2;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Function;
 
@@ -24,7 +20,7 @@ public class ConsoleListener implements Runnable {
             while (true) {
                 String command = "";
                 try {
-                    command = lineReader.readLine();
+                    command = lineReader.readLine("> ");
                 } catch (EndOfFileException ignored) {
                     continue;
                 }

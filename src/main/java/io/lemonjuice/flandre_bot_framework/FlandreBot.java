@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileChecker;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
+import io.lemonjuice.flandre_bot_framework.console.TerminalConsoleAppender;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
@@ -32,14 +33,17 @@ public class FlandreBot {
     public static void start() {
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
+        log.info("正在启动Bot: {}", getName());
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
 
         BotConsole.init();
+        TerminalConsoleAppender.bindConsole(BotConsole.getInstance());
+
         BotEventBus.init();
-        Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
 
         BasicConfigFileChecker.check();
         BotBasicConfig.read();
-        log.info("正在启动Bot: {}", getName());
 
 //        BotEventBus.post(new PluginLoadEvent());
         PluginsLoadingProcessor pluginLoader = new PluginsLoadingProcessor();
