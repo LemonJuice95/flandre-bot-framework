@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework;
 
+import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotStopEvent;
 import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
@@ -11,6 +12,7 @@ public class Stop implements Runnable {
     public void run() {
         log.info("正在停止应用...");
         BotEventBus.post(new BotStopEvent());
+        BotConsole.close();
         WSClientCore.close();
     }
 }

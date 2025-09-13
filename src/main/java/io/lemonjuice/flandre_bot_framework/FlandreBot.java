@@ -13,15 +13,20 @@ import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
 import io.lemonjuice.flandre_bot_framework.network.WSReconnect;
 import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
+import org.apache.logging.log4j.core.config.plugins.util.PluginRegistry;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 @Log4j2
 public class FlandreBot {
     private static final CountDownLatch keepAlive = new CountDownLatch(1);
-    private static final Thread consoleListenerThread = new Thread(new ConsoleListener());
+    private static final Thread consoleListenerThread = new Thread(new ConsoleListener(), "Console");
 
     public static void main(String[] args) {
+        configureLog4j2();
         FrameworkInfo.init();
         start();
     }
@@ -30,16 +35,19 @@ public class FlandreBot {
         return BotBasicConfig.BOT_NAME.get();
     }
 
+    private static void configureLog4j2() {
+        PluginManager pluginManager = new PluginManager(Appender.ELEMENT_TYPE);
+        pluginManager.collectPlugins(List.of("io.lemonjuice.flandre_bot_framework.console"));
+    }
+
     public static void start() {
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
         log.info("正在启动Bot: {}", getName());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(new Stop()));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Stop(), "Shutdown"));
 
         BotConsole.init();
-        TerminalConsoleAppender.bindConsole(BotConsole.getInstance());
-
         BotEventBus.init();
 
         BasicConfigFileChecker.check();

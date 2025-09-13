@@ -16,9 +16,11 @@ public class TerminalConsoleAppender extends AbstractAppender {
     private static Terminal terminal;
     private static LineReader lineReader;
     private static final PrintStream stdout = System.out;
-    
+
     protected TerminalConsoleAppender(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreException, Property[] properties) {
         super(name, filter, layout, ignoreException, properties);
+        BotConsole.init();
+        bindConsole(BotConsole.getInstance());
     }
     
     @PluginFactory

@@ -28,20 +28,24 @@ public class BotConsole {
 
     public synchronized static void init() {
         try {
-            instance = new BotConsole();
-            available = true;
+            if(!available) {
+                instance = new BotConsole();
+                available = true;
+            }
         } catch (IOException e) {
             log.error("创建JLine Terminal失败！控制台命令系统将禁用", e);
         }
     }
 
     public synchronized static void close() {
-        try {
-            instance.terminal.close();
-        } catch (IOException | NullPointerException ignored) {
-        } finally {
-            available = false;
-            instance = null;
+        if(available) {
+            try {
+                instance.terminal.close();
+            } catch (IOException | NullPointerException ignored) {
+            } finally {
+                available = false;
+                instance = null;
+            }
         }
     }
 }
