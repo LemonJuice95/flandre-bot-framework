@@ -45,7 +45,7 @@ public class PluginsLoadingProcessor {
                         } else {
                             this.failedNodes.put(node, "自身发生异常");
                         }
-                        this.failSubNodes(node, String.format("依赖项 (%s) 加载失败", node.plugin.getName()));
+                        this.failSubNodes(node, String.format("依赖项 \"%s\" 加载失败", node.plugin.getName()));
                     } finally {
                         node.handled = true;
                     }
