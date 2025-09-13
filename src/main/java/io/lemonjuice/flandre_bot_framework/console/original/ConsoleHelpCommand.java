@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.console.original;
 
+import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleCommandLookup;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleCommandRunner;
 
@@ -32,11 +33,11 @@ public class ConsoleHelpCommand extends ConsoleCommandRunner {
 
     @Override
     public void apply() {
-        System.out.println(String.format("控制台命令帮助 (第%d页/共%d页)", this.page, this.maxPage));
+        BotConsole.println(String.format("控制台命令帮助 (第%d页/共%d页)", this.page, this.maxPage));
         int startIndex = Math.max(COMMANDS_PER_PAGE * (this.page - 1), 0);
         int endIndex = Math.min(startIndex + COMMANDS_PER_PAGE, ConsoleCommandLookup.COMMAND_HELPS.size());
         for(int i = startIndex; i < endIndex; i++) {
-            System.out.println(ConsoleCommandLookup.COMMAND_HELPS.get(i));
+            BotConsole.println(ConsoleCommandLookup.COMMAND_HELPS.get(i));
         }
     }
 

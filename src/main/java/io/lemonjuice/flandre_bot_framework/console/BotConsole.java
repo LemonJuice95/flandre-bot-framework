@@ -26,6 +26,33 @@ public class BotConsole {
         this.lineReader = LineReaderBuilder.builder().terminal(this.terminal).build();
     }
 
+    public static void println(String str) {
+        if(!available || instance == null || instance.terminal == null) {
+            System.out.println(str);
+        } else {
+            if(instance.lineReader != null) {
+                instance.lineReader.printAbove(str);
+            } else {
+                instance.terminal.writer().println(str);
+                instance.terminal.writer().flush();
+            }
+        }
+    }
+
+    public static void print(String str) {
+        if(!available || instance == null || instance.terminal == null) {
+            System.out.print(str);
+        } else {
+            if(instance.lineReader != null) {
+                instance.lineReader.printAbove(str);
+            } else {
+                instance.terminal.writer().print(str);
+                instance.terminal.writer().flush();
+            }
+        }
+    }
+
+
     public synchronized static void init() {
         try {
             if(!available) {
