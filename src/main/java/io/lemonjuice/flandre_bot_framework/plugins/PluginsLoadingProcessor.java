@@ -3,7 +3,6 @@ package io.lemonjuice.flandre_bot_framework.plugins;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Log4j2
 public class PluginsLoadingProcessor {
@@ -41,8 +40,12 @@ public class PluginsLoadingProcessor {
                         node.outEdges.forEach(n -> n.inEdges.remove(node));
                     } catch (Exception e) {
                         log.warn("插件加载失败: {}", node.plugin.getName(), e);
-                        this.failedNodes.put(node, "自身发生异常");
-                        this.failSubNodes(node, "依赖项加载失败");
+                        if(e instanceof PluginLoadingException && e.getMessage() != null && !e.getMessage().isEmpty()) {
+                            this.failedNodes.put(node, e.getMessage());
+                        } else {
+                            this.failedNodes.put(node, "自身发生异常");
+                        }
+                        this.failSubNodes(node, String.format("依赖项 (%s) 加载失败", node.plugin.getName()));
                     } finally {
                         node.handled = true;
                     }
