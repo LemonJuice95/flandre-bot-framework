@@ -43,15 +43,17 @@ public class FlandreBot {
     public static void start() {
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
-        log.info("正在启动Bot: {}", getName());
+
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Stop(), "Shutdown"));
 
-        BotConsole.init();
-        BotEventBus.init();
-
         BasicConfigFileChecker.check();
         BotBasicConfig.read();
+
+        log.info("正在启动Bot: {}", getName());
+
+        BotConsole.init();
+        BotEventBus.init();
 
 //        BotEventBus.post(new PluginLoadEvent());
         PluginsLoadingProcessor pluginLoader = new PluginsLoadingProcessor();
