@@ -21,7 +21,7 @@ public class PluginsLoadingProcessor {
         if(!this.failedNodes.isEmpty()) {
             StringBuilder failedMsg = new StringBuilder();
             failedNodes.forEach((node, reason) -> {
-                failedMsg.append(String.format("%s (%s)\n", node.plugin.getName(), reason));
+                failedMsg.append(String.format("%-30s (%s)\n", node.plugin.getName(), reason));
             });
             log.warn("以下插件未加载: \n{}", failedMsg.toString().trim());
         }
