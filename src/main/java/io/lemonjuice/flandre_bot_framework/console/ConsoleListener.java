@@ -6,7 +6,9 @@ import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.UserInterruptException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 @Log4j2
@@ -28,8 +30,8 @@ public class ConsoleListener implements Runnable {
                     continue;
                 }
 
-                String[] commandArray = Arrays.stream(command.split(" ")).filter(str -> !str.isEmpty()).toArray(String[]::new);
-                String commandBody = commandArray[0];
+                String[] commandArray = this.parseCommand(command);
+                String commandBody = commandArray[0].toLowerCase();
                 if (ConsoleCommandLookup.CONSOLE_COMMANDS.containsKey(commandBody)) {
                     String[] args = Arrays.copyOfRange(commandArray, 1, commandArray.length);
                     Function<String[], ConsoleCommandRunner> provider = ConsoleCommandLookup.CONSOLE_COMMANDS.get(commandBody);
@@ -42,5 +44,41 @@ public class ConsoleListener implements Runnable {
         } catch (UserInterruptException e) {
             FlandreBot.stop();
         }
+    }
+
+    private String[] parseCommand(String command) {
+        List<String> commandArray = new ArrayList<>();
+        boolean inQuote = false;
+        StringBuilder argI = new StringBuilder();
+        for(int i = 0; i < command.length(); i++) {
+            switch (command.charAt(i)) {
+                case '\\' -> {
+                    if(i < command.length() - 1) {
+                        argI.append(command.charAt(i));
+                        i++;
+                        argI.append(command.charAt(i));
+                    }
+                }
+                case '\"' -> inQuote = !inQuote;
+                case ' ' -> {
+                    if(inQuote) {
+                        argI.append(command.charAt(i));
+                    } else {
+                        commandArray.add(argI.toString());
+                        argI = new StringBuilder();
+                    }
+                }
+                default -> argI.append(command.charAt(i));
+            }
+        }
+        commandArray.add(argI.toString());
+        return commandArray.stream().map(arg -> {
+            return arg.replace("\\n", "\n")
+                    .replace("\\r", "\r")
+                    .replace("\\\"", "\"")
+                    .replace("\\t", "\t")
+                    .replace("\\ ", " ")
+                    .replace("\\\\", "\\");
+        }).filter(arg -> !arg.isEmpty()).toArray(String[]::new);
     }
 }

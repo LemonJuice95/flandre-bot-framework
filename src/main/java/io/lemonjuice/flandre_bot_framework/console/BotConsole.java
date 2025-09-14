@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.impl.DefaultParser;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -23,7 +24,7 @@ public class BotConsole {
 
     private BotConsole() throws IOException {
         this.terminal = TerminalBuilder.builder().dumb(true).build();
-        this.lineReader = LineReaderBuilder.builder().terminal(this.terminal).build();
+        this.lineReader = LineReaderBuilder.builder().terminal(this.terminal).parser(new DefaultParser().escapeChars(new char[0])).build();
     }
 
     public static void println(String str) {
