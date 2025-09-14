@@ -115,7 +115,7 @@ public class WSClientCore {
 
     @OnOpen
     public void onOpen(Session session) {
-        log.info("Websocket连接成功！");
+        log.info("Bot连接成功！");
         this.running.set(true);
         this.senderThread.start();
         BotEventBus.post(new WSConnectedEvent());
@@ -155,7 +155,7 @@ public class WSClientCore {
 
     @OnClose
     public void onClose(Session session) {
-        log.info("Bot已断开连接!");
+        log.info("Bot连接已断开!");
         this.running.set(false);
         this.senderThread.interrupt();
         Thread.startVirtualThread(new WSReconnect());
