@@ -29,6 +29,12 @@ public class FlandreBot {
         configureLog4j2();
         FrameworkInfo.init();
         start();
+
+        try {
+            keepAlive.await();
+        } catch (InterruptedException e) {
+            Thread.interrupted();
+        }
     }
 
     public static String getName() {
@@ -41,6 +47,8 @@ public class FlandreBot {
     }
 
     public static void start() {
+        long startTime = System.currentTimeMillis();
+
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
 
@@ -67,16 +75,13 @@ public class FlandreBot {
             Thread.startVirtualThread(new WSReconnect());
         }
 
+        float usedTime = (System.currentTimeMillis() - startTime) / 1000.0F;
+        log.info(String.format("Bot已启动！(%.2fs)", usedTime));
+
         if(BotConsole.isAvailable()) {
             consoleListenerThread.start();
         } else {
             System.out.println("警告: 无法使用控制台命令系统");
-        }
-
-        try {
-            keepAlive.await();
-        } catch (InterruptedException e) {
-            Thread.interrupted();
         }
     }
 

@@ -115,7 +115,7 @@ public class WSClientCore {
 
     @OnOpen
     public void onOpen(Session session) {
-        log.info("Bot已启动！");
+        log.info("Websocket连接成功！");
         this.running.set(true);
         this.senderThread.start();
         BotEventBus.post(new WSConnectedEvent());
