@@ -22,11 +22,10 @@ public class WSReconnect implements Runnable {
                 log.info("重连成功! ");
                 break;
             } else {
+                if(this.waitTime < 160000) {
+                    this.waitTime *= 2;
+                }
                 log.info("重连失败，将在{}秒后重试", this.waitTime / 1000);
-            }
-
-            if(this.waitTime < 160000) {
-                this.waitTime *= 2;
             }
         }
     }
