@@ -29,7 +29,7 @@ public interface IMessageContext {
     public void sendText(String message, boolean sendAsRawText);
 
     /**
-     * 发送合并消息
+     * 发送合并消息<b>（目前该操作仅支持napcat框架使用）</b>
      * @param messages 消息内容
      */
     public void sendForwardText(List<String> messages);
