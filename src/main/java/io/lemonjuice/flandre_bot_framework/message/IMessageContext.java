@@ -29,7 +29,9 @@ public interface IMessageContext {
     public void sendText(String message, boolean sendAsRawText);
 
     /**
-     * 发送合并消息<b>（目前该操作仅支持napcat框架使用）</b>
+     * 发送合并消息<br>
+     * <b>（非OneBot标准API，实现端框架可能不支持）</b><br>
+     * （目前已知支持的框架: NapCat）
      * @param messages 消息内容
      */
     public void sendForwardText(List<String> messages);
