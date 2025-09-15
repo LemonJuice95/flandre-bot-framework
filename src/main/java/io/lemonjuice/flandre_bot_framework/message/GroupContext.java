@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
 import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,10 +10,17 @@ import java.util.List;
 
 @Getter
 public class GroupContext extends MessageContext {
-    public final long groupId;
+    protected final long groupId;
+    protected final String groupName;
 
     public GroupContext(long groupId) {
         this.groupId = groupId;
+        this.groupName = ContextManager.getGroup(groupId).getGroupName();
+    }
+
+    public GroupContext(long groupId, String groupName) {
+        this.groupId = groupId;
+        this.groupName = groupName;
     }
 
     @Override

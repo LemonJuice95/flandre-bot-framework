@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
+import io.lemonjuice.flandre_bot_framework.account.AccountInfo;
 import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 import lombok.Getter;
 
@@ -7,10 +8,11 @@ import java.util.List;
 
 @Getter
 public class MessageContext implements IMessageContext {
-    private long botId = -1;
+    private long botId;
     private long messageId = -1;
 
     public MessageContext() {
+        this.botId = AccountInfo.getBotId();
     }
 
     @Override

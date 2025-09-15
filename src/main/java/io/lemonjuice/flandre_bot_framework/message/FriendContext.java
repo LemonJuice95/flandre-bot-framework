@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
+import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
 import lombok.Getter;
 import org.json.JSONArray;
@@ -10,9 +11,16 @@ import java.util.List;
 @Getter
 public class FriendContext extends MessageContext {
     private final long friendId;
+    private final String nickname;
 
     public FriendContext(long friendId) {
         this.friendId = friendId;
+        this.nickname = ContextManager.getFriend(friendId).getNickname();
+    }
+
+    public FriendContext(long friendId, String nickname) {
+        this.friendId = friendId;
+        this.nickname = nickname;
     }
 
     @Override

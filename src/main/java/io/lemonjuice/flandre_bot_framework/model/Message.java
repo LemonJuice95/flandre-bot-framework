@@ -38,25 +38,27 @@ public class Message {
     public void generateContext() {
         String detailedType = this.type + "." + this.subType;
         switch (detailedType) {
-            case "group.normal":
+            case "group.normal" -> {
                 this.context = new GroupContext(this.groupId)
                         .withBotId(this.selfId)
                         .withMessageId(this.messageId);
-                break;
+            }
 
-            case "private.friend":
-                this.context = new FriendContext(this.userId)
+            case "private.friend" -> {
+                this.context = new FriendContext(this.userId, this.sender.nickName)
                         .withBotId(this.selfId)
                         .withMessageId(this.messageId);
-                break;
+            }
 
-            case "private.group":
+            case "private.group" -> {
                 this.context = new TempSessionContext(this.userId, this.groupId)
                         .withBotId(this.selfId)
                         .withMessageId(this.messageId);
-                break;
+            }
 
-            default: this.context = new MessageContext().withBotId(this.selfId).withMessageId(this.messageId);
+            default -> {
+                this.context = new MessageContext().withBotId(this.selfId).withMessageId(this.messageId);
+            }
         }
     }
 
