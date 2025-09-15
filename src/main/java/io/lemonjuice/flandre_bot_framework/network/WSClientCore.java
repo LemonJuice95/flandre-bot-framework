@@ -58,6 +58,12 @@ public class WSClientCore {
     }
 
     public JSONObject request(JSONObject request) {
+        JSONObject failedResult = new JSONObject();
+        failedResult.put("retcode", -1);
+        if(!running.get()) {
+            return failedResult;
+        }
+
         UUID uuid = UUID.randomUUID();
         request.put("echo", uuid.toString());
         WSResponse response = new WSResponse();
@@ -69,8 +75,6 @@ public class WSClientCore {
             if (response.await()) {
                 return response.getResponse();
             } else {
-                JSONObject failedResult = new JSONObject();
-                failedResult.put("retcode", -1);
                 return failedResult;
             }
         } finally {
@@ -158,6 +162,11 @@ public class WSClientCore {
         log.info("Bot连接已断开!");
         this.running.set(false);
         this.senderThread.interrupt();
+        this.waitingResponses.values().forEach(res -> {
+            JSONObject failedResult = new JSONObject();
+            failedResult.put("retcode", -1);
+            res.present(failedResult);
+        });
         Thread.startVirtualThread(new WSReconnect());
         BotEventBus.post(new WSDisconnectedEvent());
     }
