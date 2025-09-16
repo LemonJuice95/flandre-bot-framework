@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.handler;
 
+import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import io.lemonjuice.flandre_bot_framework.command.BotCommandLookup;
 import io.lemonjuice.flandre_bot_framework.command.CommandRunner;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
@@ -7,6 +8,8 @@ import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.msg.CommandRunEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.MessageEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.PermissionDeniedEvent;
+import io.lemonjuice.flandre_bot_framework.message.GroupContext;
+import io.lemonjuice.flandre_bot_framework.message.IMessageContext;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot_framework.plugins.BotPlugin;
@@ -51,15 +54,17 @@ public class ReceivingMessageHandler {
     }
 
     private static void logMessage(Message message) {
-        String from = "私聊(";
+        String from = "未知来源";
         String nickName = !message.sender.card.isEmpty() ? message.sender.card : message.sender.nickName;
         String messageContent = message.message;
 
         if(message.type.equals("private")) {
-            from += message.userId + ")";
+            from = String.format("私聊(%d)", message.userId);
         }
         if(message.type.equals("group")) {
-            from = "群聊(" + message.groupId + ")";
+            GroupContext context = ContextManager.getGroup(message.groupId);
+            String groupName = context.getGroupName().isEmpty() ? "" : String.format("[%s]", context.getGroupName());
+            from = String.format("群聊%s(%d)", groupName, message.groupId);
         }
 
         log.info("消息接收 来自{}: [{}]: {}", from, nickName, messageContent);
