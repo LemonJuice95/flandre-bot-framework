@@ -85,6 +85,7 @@ public class ContextManager {
 
     public static void initGroupContexts() {
         synchronized (groupContextInitLock) {
+            log.info("正在初始化群聊列表");
             JSONObject request = new JSONObject();
             request.put("action", "get_group_list");
             JSONObject response = WSClientCore.getInstance().request(request);
@@ -102,11 +103,12 @@ public class ContextManager {
                 log.error("群聊列表拉取失败！");
             }
         }
-        log.info("群聊信息初始化完毕！");
+        log.info("群聊列表初始化完毕！");
     }
 
     public static void initFriendContexts() {
         synchronized (friendContextInitLock) {
+            log.info("正在初始化好友列表");
             JSONObject request = new JSONObject();
             request.put("action", "get_friend_list");
             JSONObject response = WSClientCore.getInstance().request(request);
@@ -124,6 +126,6 @@ public class ContextManager {
                 log.error("好友列表拉取失败！");
             }
         }
-        log.info("好友信息初始化完毕！");
+        log.info("好友列表初始化完毕！");
     }
 }
