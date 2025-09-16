@@ -17,7 +17,7 @@ public class ConsoleStopCommand extends ConsoleCommandRunner {
 
     @Override
     public List<String> getCommandBodies() {
-        return List.of("stop");
+        return List.of("stop", "exit");
     }
 
     @Override
