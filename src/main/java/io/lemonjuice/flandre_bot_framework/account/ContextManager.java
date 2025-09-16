@@ -81,7 +81,6 @@ public class ContextManager {
             JSONObject response = WSClientCore.getInstance().request(request);
             if (response.optInt("retcode", -1) == 0) {
                 GROUP_CONTEXTS.clear();
-
                 JSONArray groupList = response.optJSONArray("data", new JSONArray());
                 for (int i = 0; i < groupList.length(); i++) {
                     JSONObject group = groupList.getJSONObject(i);
