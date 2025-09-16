@@ -14,7 +14,7 @@ public class ConsoleCommandRegister {
     public void load() {
         this.commands.forEach(provider -> {
             ConsoleCommandRunner tmpRunner = provider.apply(new String[]{});
-            ConsoleCommandLookup.COMMAND_HELPS.add(String.format("%-45s - %s", tmpRunner.getUsingFormat(), tmpRunner.getDescription()));
+            ConsoleCommandLookup.COMMAND_HELPS.add(String.format("%-45s -%s", tmpRunner.getUsingFormat(), tmpRunner.getDescription()));
             tmpRunner.getCommandBodies().forEach(body -> {
                 ConsoleCommandLookup.CONSOLE_COMMANDS.put(body, provider);
             });
