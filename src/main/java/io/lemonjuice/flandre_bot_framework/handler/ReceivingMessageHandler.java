@@ -9,7 +9,10 @@ import io.lemonjuice.flandre_bot_framework.event.msg.MessageEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.PermissionDeniedEvent;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
+import io.lemonjuice.flandre_bot_framework.plugins.BotPlugin;
+import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
 import lombok.extern.log4j.Log4j2;
+import org.json.JSONObject;
 
 import java.util.function.Function;
 
@@ -17,7 +20,8 @@ import java.util.function.Function;
 public class ReceivingMessageHandler {
     private static final boolean SYNC_MODE = BotBasicConfig.COMMAND_SYNC_MODE.get();
 
-    public static void handle(Message message) {
+    public static void handle(JSONObject json) {
+        Message message = MessageParser.parseMessage(json);
         if(BotBasicConfig.LOG_MESSAGES.get()) {
             logMessage(message);
         }
@@ -37,7 +41,12 @@ public class ReceivingMessageHandler {
             } else {
                 Thread.startVirtualThread(() -> handlePrivateCommand(message));
             }
-            BotEventBus.post(new MessageEvent.Private(message));
+
+            if (message.subType.equals("friend")) {
+                BotEventBus.post(new MessageEvent.Friend(message));
+            } else if (message.subType.equals("group")) {
+                BotEventBus.post(new MessageEvent.TempSession(message));
+            }
         }
     }
 
