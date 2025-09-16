@@ -5,7 +5,10 @@ import io.lemonjuice.flandre_bot_framework.event.meta.HeartBeatEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.WSConnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.WSDisconnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.WSMessageEvent;
+import io.lemonjuice.flandre_bot_framework.handler.NoticeHandler;
 import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
+import io.lemonjuice.flandre_bot_framework.handler.RequestHandler;
+import io.lemonjuice.flandre_bot_framework.handler.WSMetaEventHandler;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
 import lombok.Getter;
@@ -142,16 +145,11 @@ public class WSClientCore {
 
         String postType = jsonObject.optString("post_type", "");
 
-        //TODO 以后类型多起来了用switch
-        if (postType.equals("message")) {
-            Message message = MessageParser.tryParse(jsonObject);
-            ReceivingMessageHandler.handle(message);
-        }
-
-        if (postType.equals("meta_event")) {
-            if (jsonObject.getString("meta_event_type").equals("heartbeat")) {
-                BotEventBus.post(new HeartBeatEvent());
-            }
+        switch (postType) {
+            case "message" -> ReceivingMessageHandler.handle(jsonObject);
+            case "meta_event" -> WSMetaEventHandler.handle(jsonObject);
+            case "request" -> RequestHandler.handle(jsonObject);
+            case "notice" -> NoticeHandler.handle(jsonObject);
         }
 
         BotEventBus.post(new WSMessageEvent(jsonObject));
