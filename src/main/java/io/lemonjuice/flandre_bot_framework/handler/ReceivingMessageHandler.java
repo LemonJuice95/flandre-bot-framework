@@ -25,6 +25,10 @@ public class ReceivingMessageHandler {
 
     public static void handle(JSONObject json) {
         Message message = MessageParser.parseMessage(json);
+        if(message == null) {
+            return;
+        }
+
         if(BotBasicConfig.LOG_MESSAGES.get()) {
             logMessage(message);
         }
