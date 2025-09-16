@@ -76,12 +76,12 @@ public class ContextManager {
 
     public static void initGroupContexts() {
         synchronized (groupContextInitLock) {
-            GROUP_CONTEXTS.clear();
-
             JSONObject request = new JSONObject();
             request.put("action", "get_group_list");
             JSONObject response = WSClientCore.getInstance().request(request);
             if (response.optInt("retcode", -1) == 0) {
+                GROUP_CONTEXTS.clear();
+
                 JSONArray groupList = response.optJSONArray("data", new JSONArray());
                 for (int i = 0; i < groupList.length(); i++) {
                     JSONObject group = groupList.getJSONObject(i);
@@ -99,12 +99,11 @@ public class ContextManager {
 
     public static void initFriendContexts() {
         synchronized (friendContextInitLock) {
-            FRIEND_CONTEXTS.clear();
-
             JSONObject request = new JSONObject();
             request.put("action", "get_friend_list");
             JSONObject response = WSClientCore.getInstance().request(request);
             if (response.optInt("retcode", -1) == 0) {
+                FRIEND_CONTEXTS.clear();
                 JSONArray friendList = response.optJSONArray("data", new JSONArray());
                 for (int i = 0; i < friendList.length(); i++) {
                     JSONObject friend = friendList.getJSONObject(i);
