@@ -12,6 +12,8 @@ public class OriginalConsoleCommands {
     static {
         register(ConsoleHelpCommand::new);
         register(ConsoleStopCommand::new);
+        register(ConsoleGroupsCommand::new);
+        register(ConsoleFriendsCommand::new);
     }
 
     private static void register(Function<String[], ConsoleCommandRunner> runnerProvider) {
