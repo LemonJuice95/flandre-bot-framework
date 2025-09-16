@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,6 +19,14 @@ public class ContextManager {
 
     private static final Object groupContextInitLock = new Object();
     private static final Object friendContextInitLock = new Object();
+
+    public static List<GroupContext> getGroups() {
+        return List.copyOf(GROUP_CONTEXTS.values());
+    }
+
+    public static List<FriendContext> getFriends() {
+        return List.copyOf(FRIEND_CONTEXTS.values());
+    }
 
     public static GroupContext getGroup(long id) {
         Optional<GroupContext> optContext = Optional.ofNullable(GROUP_CONTEXTS.get(id));
