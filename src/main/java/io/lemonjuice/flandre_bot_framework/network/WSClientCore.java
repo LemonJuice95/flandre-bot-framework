@@ -1,7 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.network;
 
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
-import io.lemonjuice.flandre_bot_framework.event.meta.HeartBeatEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.WSConnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.WSDisconnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.WSMessageEvent;
@@ -9,8 +8,6 @@ import io.lemonjuice.flandre_bot_framework.handler.NoticeHandler;
 import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
 import io.lemonjuice.flandre_bot_framework.handler.RequestHandler;
 import io.lemonjuice.flandre_bot_framework.handler.WSMetaEventHandler;
-import io.lemonjuice.flandre_bot_framework.model.Message;
-import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
@@ -39,25 +36,31 @@ public class WSClientCore {
 
     private final ConcurrentHashMap<UUID, WSResponse> waitingResponses = new ConcurrentHashMap<>();
 
-    private final Session session;
+    private Session session;
     private static String token;
 
-    private WSClientCore(String url) throws DeploymentException, IOException {
+    private WSClientCore() {
         this.messageQueue = new LinkedBlockingQueue<>();
         this.running = new AtomicBoolean(false);
         this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
-        this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
     }
 
     public synchronized static boolean connect(String url, String token) {
         try {
             WSClientCore.token = token;
-            instance = new WSClientCore(url);
+            if(instance == null) {
+                instance = new WSClientCore();
+            }
+            instance.connect(url);
         } catch (Exception e) {
             log.error("Bot连接失败！", e);
             return false;
         }
         return true;
+    }
+
+    private void connect(String url) throws DeploymentException, IOException {
+        this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
     }
 
     public JSONObject request(JSONObject request) {
@@ -125,6 +128,7 @@ public class WSClientCore {
         log.info("Bot连接成功！");
         this.running.set(true);
         this.senderThread.start();
+
         BotEventBus.post(new WSConnectedEvent());
     }
 
