@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ClientEndpoint(configurator = WSClientCore.Configurator.class)
 public class WSClientCore {
     @Getter
-    private static WSClientCore instance;
+    private volatile static WSClientCore instance;
 
     private final BlockingQueue<String> messageQueue;
     private final AtomicBoolean running;
