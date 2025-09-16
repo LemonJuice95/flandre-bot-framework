@@ -23,17 +23,17 @@ public abstract class MultiSimpleGroupCommandRunner extends GroupCommandRunner {
     /**
      * @return 命令体字符串集合
      */
-    protected abstract Set<String> getCommandBody();
+    protected abstract Set<String> getCommandBodies();
 
     @Override
     public boolean matches() {
         if(this.needAtFirst()) {
             return this.command.message.startsWith(CQCode.at(this.command.selfId)) &&
-                    this.getCommandBody().contains(
+                    this.getCommandBodies().contains(
                             this.command.message
                                     .replaceFirst(Pattern.quote(CQCode.at(this.command.selfId)), "")
                                     .trim());
         }
-        return this.getCommandBody().contains(this.command.message.trim());
+        return this.getCommandBodies().contains(this.command.message.trim());
     }
 }

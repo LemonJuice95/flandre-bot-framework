@@ -16,10 +16,10 @@ public abstract class MultiSimplePrivateCommandRunner extends PrivateCommandRunn
     /**
      * @return 命令体字符串集合
      */
-    protected abstract Set<String> getCommandBody();
+    protected abstract Set<String> getCommandBodies();
 
     @Override
     public boolean matches() {
-        return this.getCommandBody().contains(this.command.message.trim());
+        return this.getCommandBodies().contains(this.command.message.trim());
     }
 }
