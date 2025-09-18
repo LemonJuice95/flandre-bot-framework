@@ -2,13 +2,17 @@ package io.lemonjuice.flandre_bot_framework.network;
 
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class NetworkContainer {
     @Getter
     private static INetworkImpl impl;
 
     //TODO 其他实现完成后添加进来
     public synchronized static void init(NetworkMode mode) {
+        log.info("初始化网络模块...");
+        log.info("连接模式: {}", mode.getName());
         impl = WSClient.getInstance();
         if(!impl.init(BotBasicConfig.NETWORK_URL.get(), BotBasicConfig.NETWORK_TOKEN.get())) {
             Thread.startVirtualThread(new WSReconnect());
