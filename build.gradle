@@ -32,13 +32,6 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += [
-            "-Alog4j.graalvm.groupId=io.github.lemonjuice95",
-            "-Alog4j.graalvm.artifactId=flandre-bot-framework"
-    ]
-}
-
 jreleaser {
     signing {
         active = 'ALWAYS'
