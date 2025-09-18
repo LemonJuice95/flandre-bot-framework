@@ -18,7 +18,7 @@ public class WSReconnect implements Runnable {
             }
             retry_count++;
             log.info("正在尝试重连Bot，次数: {}", retry_count);
-            if (WSClient.getInstance().connect(BotBasicConfig.NETWORK_URL.get(), BotBasicConfig.NETWORK_TOKEN.get())) {
+            if (WSClient.getInstance().init(BotBasicConfig.NETWORK_URL.get(), BotBasicConfig.NETWORK_TOKEN.get())) {
                 log.info("重连成功! ");
                 break;
             } else {

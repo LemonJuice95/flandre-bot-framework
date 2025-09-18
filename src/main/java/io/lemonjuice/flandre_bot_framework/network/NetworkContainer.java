@@ -10,7 +10,7 @@ public class NetworkContainer {
     //TODO 其他实现完成后添加进来
     public synchronized static void init(NetworkMode mode) {
         impl = WSClient.getInstance();
-        if(!impl.connect(BotBasicConfig.NETWORK_URL.get(), BotBasicConfig.NETWORK_TOKEN.get())) {
+        if(!impl.init(BotBasicConfig.NETWORK_URL.get(), BotBasicConfig.NETWORK_TOKEN.get())) {
             Thread.startVirtualThread(new WSReconnect());
         }
     }

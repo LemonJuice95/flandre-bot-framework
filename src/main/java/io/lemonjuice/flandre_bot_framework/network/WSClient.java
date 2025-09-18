@@ -47,7 +47,7 @@ public class WSClient implements INetworkImpl {
     }
 
     @Override
-    public synchronized boolean connect(String url, String token) {
+    public synchronized boolean init(String url, String token) {
         try {
             WSClient.token = token;
             this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));

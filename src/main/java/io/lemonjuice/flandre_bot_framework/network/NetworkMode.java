@@ -4,5 +4,4 @@ public enum NetworkMode {
     WS_CLIENT,
     WS_SERVER,
     HTTP_CLIENT,
-    HTTP_SERVER
 }
