@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.github.lemonjuice95'
-version = '0.7.2'
+version = '0.8.0'
 
 java {
     toolchain {
@@ -128,7 +128,6 @@ dependencies {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
 
-    api 'com.google.guava:guava:33.4.8-jre'
     api 'org.json:json:20250517'
 
     //log4j2

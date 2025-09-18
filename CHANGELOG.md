@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.8.0
+ - 【破坏性变更】抛弃Guava EventBus，改为框架内实现
+
 ## v0.7.2
  - 修复仍然存在的Websocket客户端初始化并发问题
 
