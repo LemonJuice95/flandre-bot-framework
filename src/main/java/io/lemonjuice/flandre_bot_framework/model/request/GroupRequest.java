@@ -1,7 +1,8 @@
 package io.lemonjuice.flandre_bot_framework.model.request;
 
 import io.lemonjuice.flandre_bot_framework.event.request.GroupRequestEvent;
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
+import io.lemonjuice.flandre_bot_framework.network.WSClient;
 import org.json.JSONObject;
 
 import java.util.function.Function;
@@ -20,14 +21,14 @@ public class GroupRequest extends BaseRequest {
      * 同意加群/群邀请请求
      */
     public void accept() {
-        WSClientCore.getInstance().sendJson(this.constructJson(true, ""));
+        this.handle(true, "");
     }
 
     /**
      * 拒绝加群/群邀请请求
      */
     public void deny() {
-        WSClientCore.getInstance().sendJson(this.constructJson(false, ""));
+        this.handle(false, "");
     }
 
     /**
@@ -35,20 +36,17 @@ public class GroupRequest extends BaseRequest {
      * @param reason 拒绝原因
      */
     public void deny(String reason) {
-        WSClientCore.getInstance().sendJson(this.constructJson(false, reason));
+        this.handle(false, reason);
     }
 
-    private JSONObject constructJson(boolean approve, String reason) {
+    private void handle(boolean approve, String reason) {
         JSONObject msg = new JSONObject();
-        msg.put("action", "set_group_add_request");
-        JSONObject params = new JSONObject();
-        params.put("flag", this.flag);
-        params.put("approve", approve);
+        msg.put("flag", this.flag);
+        msg.put("approve", approve);
         if(!approve && !reason.isEmpty()) {
-            params.put("reason", reason);
+            msg.put("reason", reason);
         }
-        msg.put("params", params);
-        return msg;
+        NetworkContainer.getImpl().sendMsg("set_group_add_request", msg);
     }
 
     public static class Builder extends BaseRequest.Builder<GroupRequest> {

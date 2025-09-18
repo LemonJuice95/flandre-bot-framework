@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
+import io.lemonjuice.flandre_bot_framework.network.WSClient;
 import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import lombok.Getter;
 import org.json.JSONArray;
@@ -25,22 +26,17 @@ public class GroupContext extends MessageContext {
 
     @Override
     public void sendText(String message, boolean sendAsRawText) {
-        JSONObject json = new JSONObject();
-        json.put("action", "send_group_msg");
-        JSONObject params = new JSONObject();
-        params.put("group_id", this.groupId);
-        params.put("message", message);
-        params.put("auto_escape", sendAsRawText);
-        json.put("params", params);
-        WSClientCore.getInstance().sendText(json.toString());
+        JSONObject msg = new JSONObject();
+        msg.put("group_id", this.groupId);
+        msg.put("message", message);
+        msg.put("auto_escape", sendAsRawText);
+        NetworkContainer.getImpl().sendMsg("send_group_msg", msg);
     }
 
     @Override
     public void sendForwardText(List<String> messages) {
-        JSONObject json = new JSONObject();
-        json.put("action", "send_group_forward_msg");
-        JSONObject params = new JSONObject();
-        params.put("group_id", this.groupId);
+        JSONObject msg = new JSONObject();
+        msg.put("group_id", this.groupId);
         JSONArray jsonArray = new JSONArray();
         JSONObject node = new JSONObject();
         JSONObject data = new JSONObject();
@@ -54,8 +50,7 @@ public class GroupContext extends MessageContext {
             node = new JSONObject();
             data = new JSONObject();
         }
-        params.put("messages", jsonArray);
-        json.put("params", params);
-        WSClientCore.getInstance().sendText(json.toString());
+        msg.put("messages", jsonArray);
+        NetworkContainer.getImpl().sendMsg("send_group_forward_msg", msg);
     }
 }

@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
+import io.lemonjuice.flandre_bot_framework.network.WSClient;
 import lombok.Getter;
 import org.json.JSONObject;
 
@@ -16,14 +17,11 @@ public class TempSessionContext extends MessageContext {
 
     @Override
     public void sendText(String message, boolean sendAsRawText) {
-        JSONObject json = new JSONObject();
-        json.put("action", "send_private_msg");
-        JSONObject params = new JSONObject();
-        params.put("group_id", this.groupId);
-        params.put("user_id", this.userId);
-        params.put("message", message);
-        params.put("auto_escape", sendAsRawText);
-        json.put("params", params);
-        WSClientCore.getInstance().sendText(json.toString());
+        JSONObject msg = new JSONObject();
+        msg.put("group_id", this.groupId);
+        msg.put("user_id", this.userId);
+        msg.put("message", message);
+        msg.put("auto_escape", sendAsRawText);
+        NetworkContainer.getImpl().sendMsg("send_private_msg", msg);
     }
 }

@@ -22,8 +22,8 @@ public class BotBasicConfig {
     public static final Supplier<String> BOT_NAME = () -> properties.getProperty("bot.name");
     public static final Supplier<Boolean> LOG_MESSAGES = () -> Boolean.parseBoolean(properties.getProperty("bot.log_messages"));
 
-    public static final Supplier<String> WS_URL = () -> properties.getProperty("bot.ws.url");
-    public static final Supplier<String> WS_TOKEN = () -> properties.getProperty("bot.ws.token");
+    public static final Supplier<String> NETWORK_URL = () -> properties.getProperty("bot.network.url");
+    public static final Supplier<String> NETWORK_TOKEN = () -> properties.getProperty("bot.network.token");
 
     public static final Supplier<Boolean> DEBUG_MODE = () -> Boolean.parseBoolean(properties.getProperty("bot.debug_mode"));
     public static final Supplier<List<Long>> DEBUG_USERS = () -> {

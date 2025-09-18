@@ -9,9 +9,11 @@ import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
 import io.lemonjuice.flandre_bot_framework.lifecycle.Stop;
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
-import io.lemonjuice.flandre_bot_framework.network.WSReconnect;
+import io.lemonjuice.flandre_bot_framework.network.INetworkImpl;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
+import io.lemonjuice.flandre_bot_framework.network.NetworkMode;
 import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
@@ -70,9 +72,7 @@ public class FlandreBot {
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.post(new BotInitEvent());
 
-        if(!WSClientCore.connect(BotBasicConfig.WS_URL.get(), BotBasicConfig.WS_TOKEN.get())) {
-            Thread.startVirtualThread(new WSReconnect());
-        }
+        NetworkContainer.init(NetworkMode.WS_CLIENT);
 
         float usedTime = (System.currentTimeMillis() - startTime) / 1000.0F;
         log.info(String.format("Bot已启动！(%.2fs)", usedTime));

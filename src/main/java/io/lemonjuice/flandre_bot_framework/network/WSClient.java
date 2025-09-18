@@ -1,9 +1,9 @@
 package io.lemonjuice.flandre_bot_framework.network;
 
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
-import io.lemonjuice.flandre_bot_framework.event.meta.WSConnectedEvent;
+import io.lemonjuice.flandre_bot_framework.event.meta.NetworkConnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.WSDisconnectedEvent;
-import io.lemonjuice.flandre_bot_framework.event.msg.WSMessageEvent;
+import io.lemonjuice.flandre_bot_framework.event.msg.NetworkMessageEvent;
 import io.lemonjuice.flandre_bot_framework.handler.NoticeHandler;
 import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
 import io.lemonjuice.flandre_bot_framework.handler.RequestHandler;
@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
+import javax.annotation.Nullable;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
@@ -25,10 +26,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Log4j2
-@ClientEndpoint(configurator = WSClientCore.Configurator.class)
-public class WSClientCore {
+@ClientEndpoint(configurator = WSClient.Configurator.class)
+public class WSClient implements INetworkImpl {
     @Getter
-    private volatile static WSClientCore instance;
+    private static final WSClient instance = new WSClient();
 
     private final BlockingQueue<String> messageQueue;
     private final AtomicBoolean running;
@@ -39,31 +40,45 @@ public class WSClientCore {
     private Session session;
     private static String token;
 
-    private WSClientCore() {
+    private WSClient() {
         this.messageQueue = new LinkedBlockingQueue<>();
         this.running = new AtomicBoolean(false);
         this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
     }
 
-    public synchronized static boolean connect(String url, String token) {
+    @Override
+    public synchronized boolean connect(String url, String token) {
         try {
-            WSClientCore.token = token;
-            if(instance == null) {
-                instance = new WSClientCore();
-            }
-            instance.connect(url);
+            WSClient.token = token;
+            this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
+            return true;
         } catch (Exception e) {
             log.error("Bot连接失败！", e);
             return false;
         }
-        return true;
     }
 
-    private void connect(String url) throws DeploymentException, IOException {
-        this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
+    @Override
+    public void sendMsg(String action, @Nullable JSONObject msg) {
+        JSONObject message = new JSONObject();
+        message.put("action", action);
+        if(msg != null) {
+            message.put("params", msg);
+        }
+        this.sendJson(message);
     }
 
-    public JSONObject request(JSONObject request) {
+    @Override
+    public JSONObject request(String action, @Nullable JSONObject msg) {
+        JSONObject request = new JSONObject();
+        request.put("action", action);
+        if(msg != null) {
+            request.put("params", msg);
+        }
+        return this.request(request);
+    }
+
+    private JSONObject request(JSONObject request) {
         JSONObject failedResult = new JSONObject();
         failedResult.put("retcode", -1);
         if(!running.get()) {
@@ -113,9 +128,9 @@ public class WSClientCore {
         }
     }
 
-    public synchronized static void close() {
+    public synchronized void close() {
         try {
-            instance.session.close();
+            this.session.close();
         } catch (NullPointerException ignored) {
             //说明连接不存在，无需处理
         } catch (IOException e) {
@@ -129,7 +144,7 @@ public class WSClientCore {
         this.running.set(true);
         this.senderThread.start();
 
-        BotEventBus.post(new WSConnectedEvent());
+        BotEventBus.post(new NetworkConnectedEvent());
     }
 
     @OnMessage
@@ -156,7 +171,7 @@ public class WSClientCore {
             case "notice" -> NoticeHandler.handle(jsonObject);
         }
 
-        BotEventBus.post(new WSMessageEvent(jsonObject));
+        BotEventBus.post(new NetworkMessageEvent(jsonObject));
     }
 
     @OnClose

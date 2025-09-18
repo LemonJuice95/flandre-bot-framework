@@ -1,6 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.model.request;
 
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import org.json.JSONObject;
 
 public class FriendRequest extends BaseRequest {
@@ -12,7 +12,7 @@ public class FriendRequest extends BaseRequest {
      * 同意加好友请求
      */
     public void accept() {
-        WSClientCore.getInstance().sendJson(this.constructJson(true, ""));
+        this.handle(true, "");
     }
 
     /**
@@ -20,27 +20,24 @@ public class FriendRequest extends BaseRequest {
      * @param remark 好友备注
      */
     public void accept(String remark) {
-        WSClientCore.getInstance().sendJson(this.constructJson(true, remark));
+        this.handle(true, remark);
     }
 
     /**
      * 拒绝加好友请求
      */
     public void deny() {
-        WSClientCore.getInstance().sendJson(this.constructJson(false, ""));
+        this.handle(false, "");
     }
 
-    private JSONObject constructJson(boolean approve, String remark) {
+    private void handle(boolean approve, String remark) {
         JSONObject msg = new JSONObject();
-        msg.put("action", "set_friend_add_request");
-        JSONObject params = new JSONObject();
-        params.put("flag", this.flag);
-        params.put("approve", approve);
+        msg.put("flag", this.flag);
+        msg.put("approve", approve);
         if(approve && !remark.isEmpty()) {
-            params.put("remark", remark);
+            msg.put("remark", remark);
         }
-        msg.put("params", params);
-        return msg;
+        NetworkContainer.getImpl().sendMsg("set_friend_add_request", msg);
     }
 
     public static class Builder extends BaseRequest.Builder<FriendRequest> {

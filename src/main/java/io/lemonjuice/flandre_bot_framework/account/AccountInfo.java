@@ -1,6 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.account;
 
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONException;
@@ -17,9 +17,7 @@ public class AccountInfo {
         botId = -1;
         botName = "";
 
-        JSONObject request = new JSONObject();
-        request.put("action", "get_login_info");
-        JSONObject response = WSClientCore.getInstance().request(request);
+        JSONObject response = NetworkContainer.getImpl().request("get_login_info", null);
         if(response.optInt("retcode", -1) == 0) {
             JSONObject data = response.optJSONObject("data", new JSONObject());
             try {

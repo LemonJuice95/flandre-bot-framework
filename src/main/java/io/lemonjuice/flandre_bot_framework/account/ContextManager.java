@@ -2,7 +2,8 @@ package io.lemonjuice.flandre_bot_framework.account;
 
 import io.lemonjuice.flandre_bot_framework.message.FriendContext;
 import io.lemonjuice.flandre_bot_framework.message.GroupContext;
-import io.lemonjuice.flandre_bot_framework.network.WSClientCore;
+import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
+import io.lemonjuice.flandre_bot_framework.network.WSClient;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,9 +45,7 @@ public class ContextManager {
     }
 
     public static void addGroup(long groupId) {
-        JSONObject request = new JSONObject();
-        request.put("action", "get_group_detail_info");
-        JSONObject response = WSClientCore.getInstance().request(request);
+        JSONObject response = NetworkContainer.getImpl().request("get_group_detail_info", null);
         if(response.optInt("retcode", -1) == 0){
             try {
                 JSONObject group = response.getJSONObject("data");
@@ -66,9 +65,7 @@ public class ContextManager {
     }
 
     public static void addFriend(long userId) {
-        JSONObject request = new JSONObject();
-        request.put("action", "get_stranger_info");
-        JSONObject response = WSClientCore.getInstance().request(request);
+        JSONObject response = NetworkContainer.getImpl().request("get_stranger_info", null);
         if(response.optInt("retcode", -1) == 0) {
             try {
                 JSONObject friend = response.getJSONObject("data");
@@ -86,9 +83,7 @@ public class ContextManager {
     public static void initGroupContexts() {
         synchronized (groupContextInitLock) {
             log.info("正在初始化群聊列表");
-            JSONObject request = new JSONObject();
-            request.put("action", "get_group_list");
-            JSONObject response = WSClientCore.getInstance().request(request);
+            JSONObject response = NetworkContainer.getImpl().request("get_group_list", null);
             if (response.optInt("retcode", -1) == 0) {
                 GROUP_CONTEXTS.clear();
                 JSONArray groupList = response.optJSONArray("data", new JSONArray());
@@ -109,9 +104,7 @@ public class ContextManager {
     public static void initFriendContexts() {
         synchronized (friendContextInitLock) {
             log.info("正在初始化好友列表");
-            JSONObject request = new JSONObject();
-            request.put("action", "get_friend_list");
-            JSONObject response = WSClientCore.getInstance().request(request);
+            JSONObject response = NetworkContainer.getImpl().request("get_friend_list", null);
             if (response.optInt("retcode", -1) == 0) {
                 FRIEND_CONTEXTS.clear();
                 JSONArray friendList = response.optJSONArray("data", new JSONArray());
