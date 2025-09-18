@@ -103,11 +103,11 @@ public class WSClient implements INetworkImpl {
         }
     }
 
-    public void sendJson(JSONObject json) {
+    private void sendJson(JSONObject json) {
         this.sendText(json.toString());
     }
 
-    public void sendText(String message) {
+    private void sendText(String message) {
         try {
             this.messageQueue.put(message);
         } catch (InterruptedException e) {
