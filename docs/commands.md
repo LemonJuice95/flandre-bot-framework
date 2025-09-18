@@ -63,7 +63,7 @@ static {
 ```
 @EventSubscriber
 public class ExampleBot {
-    @Subscribe
+    @SubscribeEvent
     public void init(BotInitEvent event) {
         ExampleCommandRegister.COMMANDS.load();
     }
