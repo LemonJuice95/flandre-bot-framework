@@ -1,7 +1,7 @@
 package io.lemonjuice.flandre_bot_framework;
 
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
-import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileChecker;
+import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileInit;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
@@ -9,11 +9,9 @@ import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
 import io.lemonjuice.flandre_bot_framework.lifecycle.Stop;
-import io.lemonjuice.flandre_bot_framework.network.INetworkImpl;
 import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import io.lemonjuice.flandre_bot_framework.network.NetworkMode;
 import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
@@ -56,8 +54,7 @@ public class FlandreBot {
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
 
-        BasicConfigFileChecker.check();
-        BotBasicConfig.read();
+        BasicConfigFileInit.init();
 
         log.info("正在启动Bot: {}", getName());
 

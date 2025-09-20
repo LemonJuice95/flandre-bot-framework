@@ -17,13 +17,14 @@ import java.util.regex.Pattern;
 public class BotBasicConfig {
     public static final File configFile = new File("./config/bot.properties");
 
-    private static final Properties properties = new Properties();
+    public static final Properties properties = new Properties();
 
     public static final Supplier<String> BOT_NAME = () -> properties.getProperty("bot.name");
     public static final Supplier<Boolean> LOG_MESSAGES = () -> Boolean.parseBoolean(properties.getProperty("bot.log_messages"));
 
     public static final Supplier<String> NETWORK_URL = () -> properties.getProperty("bot.network.url");
     public static final Supplier<String> NETWORK_TOKEN = () -> properties.getProperty("bot.network.token");
+    public static final Supplier<String> NETWORK_SERVER_ENDPOINT = () -> properties.getProperty("bot.network.server.endpoint");
 
     public static final Supplier<Boolean> DEBUG_MODE = () -> Boolean.parseBoolean(properties.getProperty("bot.debug_mode"));
     public static final Supplier<List<Long>> DEBUG_USERS = () -> {
