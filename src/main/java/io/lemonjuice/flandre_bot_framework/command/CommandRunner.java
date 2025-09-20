@@ -53,6 +53,7 @@ public abstract class CommandRunner {
     public enum Type {
         GROUP,
         PRIVATE,
-        FRIEND;
+        FRIEND,
+        GENERAL;
     }
 }
