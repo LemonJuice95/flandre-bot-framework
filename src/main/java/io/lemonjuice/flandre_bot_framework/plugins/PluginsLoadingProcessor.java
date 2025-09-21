@@ -38,29 +38,27 @@ public class PluginsLoadingProcessor {
 
         while(!nextNodes.isEmpty()) {
             PluginNode node = nextNodes.pollFirst();
-            if (node.inEdges.isEmpty() && !node.handled) {
-                try {
-                    log.info("正在加载插件: {}", node.plugin.getName());
-                    node.plugin.load();
-                    node.outEdges.forEach(n -> {
-                        n.inEdges.remove(node);
-                        if(!n.handled && n.inEdges.isEmpty()) {
-                            nextNodes.addLast(n);
-                        }
-                    });
-                } catch (Exception e) {
-                    log.warn("插件加载失败: {}", node.plugin.getName(), e);
-                    if (e instanceof PluginLoadingException && e.getMessage() != null && !e.getMessage().isEmpty()) {
-                        this.failedNodes.put(node, e.getMessage());
-                    } else {
-                        this.failedNodes.put(node, "自身发生异常");
+            try {
+                log.info("正在加载插件: {}", node.plugin.getName());
+                node.plugin.load();
+                node.outEdges.forEach(n -> {
+                    n.inEdges.remove(node);
+                    if (!n.handled && n.inEdges.isEmpty()) {
+                        nextNodes.addLast(n);
                     }
-                    this.failSubNodes(node, String.format("依赖项 \"%s\" 加载失败", node.plugin.getName()));
-                    this.clearHandledNodes();
-                } finally {
-                    node.handled = true;
-                    this.remainingNodes.remove(node);
+                });
+            } catch (Exception e) {
+                log.warn("插件加载失败: {}", node.plugin.getName(), e);
+                if (e instanceof PluginLoadingException && e.getMessage() != null && !e.getMessage().isEmpty()) {
+                    this.failedNodes.put(node, e.getMessage());
+                } else {
+                    this.failedNodes.put(node, "自身发生异常");
                 }
+                this.failSubNodes(node, String.format("依赖项 \"%s\" 加载失败", node.plugin.getName()));
+                this.clearHandledNodes();
+            } finally {
+                node.handled = true;
+                this.remainingNodes.remove(node);
             }
         }
 
