@@ -28,30 +28,40 @@ public class PluginsLoadingProcessor {
     }
 
     private void doLoad() {
-        boolean completedFlag = false;
-        while(!completedFlag) {
-            completedFlag = true;
-            for(PluginNode node : this.remainingNodes) {
-                if(node.inEdges.isEmpty() && !node.handled) {
-                    completedFlag = false;
-                    try {
-                        log.info("正在加载插件: {}", node.plugin.getName());
-                        node.plugin.load();
-                        node.outEdges.forEach(n -> n.inEdges.remove(node));
-                    } catch (Exception e) {
-                        log.warn("插件加载失败: {}", node.plugin.getName(), e);
-                        if(e instanceof PluginLoadingException && e.getMessage() != null && !e.getMessage().isEmpty()) {
-                            this.failedNodes.put(node, e.getMessage());
-                        } else {
-                            this.failedNodes.put(node, "自身发生异常");
+        ArrayDeque<PluginNode> nextNodes = new ArrayDeque<>();
+
+        for(PluginNode node : this.remainingNodes) {
+            if(!node.handled && node.inEdges.isEmpty()) {
+                nextNodes.addLast(node);
+            }
+        }
+
+        while(!nextNodes.isEmpty()) {
+            PluginNode node = nextNodes.pollFirst();
+            if (node.inEdges.isEmpty() && !node.handled) {
+                try {
+                    log.info("正在加载插件: {}", node.plugin.getName());
+                    node.plugin.load();
+                    node.outEdges.forEach(n -> {
+                        n.inEdges.remove(node);
+                        if(!n.handled && n.inEdges.isEmpty()) {
+                            nextNodes.addLast(n);
                         }
-                        this.failSubNodes(node, String.format("依赖项 \"%s\" 加载失败", node.plugin.getName()));
-                    } finally {
-                        node.handled = true;
+                    });
+                } catch (Exception e) {
+                    log.warn("插件加载失败: {}", node.plugin.getName(), e);
+                    if (e instanceof PluginLoadingException && e.getMessage() != null && !e.getMessage().isEmpty()) {
+                        this.failedNodes.put(node, e.getMessage());
+                    } else {
+                        this.failedNodes.put(node, "自身发生异常");
                     }
+                    this.failSubNodes(node, String.format("依赖项 \"%s\" 加载失败", node.plugin.getName()));
+                    this.clearHandledNodes();
+                } finally {
+                    node.handled = true;
+                    this.remainingNodes.remove(node);
                 }
             }
-            this.clearHandledNodes();
         }
 
         this.remainingNodes.forEach(node -> {
