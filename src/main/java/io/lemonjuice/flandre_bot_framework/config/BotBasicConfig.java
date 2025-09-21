@@ -24,7 +24,6 @@ public class BotBasicConfig {
 
     public static final Supplier<String> NETWORK_URL = () -> properties.getProperty("bot.network.url");
     public static final Supplier<String> NETWORK_TOKEN = () -> properties.getProperty("bot.network.token");
-    public static final Supplier<String> NETWORK_SERVER_ENDPOINT = () -> properties.getProperty("bot.network.server.endpoint");
 
     public static final Supplier<Boolean> DEBUG_MODE = () -> Boolean.parseBoolean(properties.getProperty("bot.debug_mode"));
     public static final Supplier<List<Long>> DEBUG_USERS = () -> {
