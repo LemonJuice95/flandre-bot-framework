@@ -38,7 +38,7 @@ public class WSClient implements INetworkImpl {
     private final ConcurrentHashMap<UUID, WSResponse> waitingResponses = new ConcurrentHashMap<>();
 
     private Session session;
-    private static String token;
+    private String token = "";
 
     private WSClient() {
         this.messageQueue = new LinkedBlockingQueue<>();
@@ -49,7 +49,7 @@ public class WSClient implements INetworkImpl {
     @Override
     public synchronized boolean init(String url, String token) {
         try {
-            WSClient.token = token;
+            this.token = token;
             this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
             return true;
         } catch (Exception e) {
@@ -196,8 +196,8 @@ public class WSClient implements INetworkImpl {
     public static class Configurator extends ClientEndpointConfig.Configurator {
         @Override
         public void beforeRequest(Map<String, List<String>> headers) {
-            if(token != null && !token.isEmpty()) {
-                headers.put("Authorization", Collections.singletonList("Bearer " + token));
+            if(instance.token != null && !instance.token.isEmpty()) {
+                headers.put("Authorization", Collections.singletonList("Bearer " + instance.token));
             }
         }
     }
