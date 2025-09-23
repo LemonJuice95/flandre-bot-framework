@@ -72,7 +72,7 @@ public class FlandreBot {
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.post(new BotInitEvent());
 
-        NetworkContainer.init(NetworkMode.WS_SERVER);
+        NetworkContainer.init(BotBasicConfig.NETWORK_MODE.get());
 
         float usedTime = (System.currentTimeMillis() - startTime) / 1000.0F;
         log.info(String.format("Bot已启动！(%.2fs)", usedTime));
