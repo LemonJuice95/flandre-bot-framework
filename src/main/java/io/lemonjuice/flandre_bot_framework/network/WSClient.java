@@ -1,8 +1,9 @@
 package io.lemonjuice.flandre_bot_framework.network;
 
+import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.NetworkConnectedEvent;
-import io.lemonjuice.flandre_bot_framework.event.meta.WSDisconnectedEvent;
+import io.lemonjuice.flandre_bot_framework.event.meta.NetworkDisconnectedEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.NetworkMessageEvent;
 import io.lemonjuice.flandre_bot_framework.handler.NoticeHandler;
 import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
@@ -47,10 +48,10 @@ public class WSClient implements INetworkImpl {
     }
 
     @Override
-    public synchronized boolean init(String url, String token) {
+    public synchronized boolean init(String token) {
         try {
             this.token = token;
-            this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
+            this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(BotBasicConfig.CLIENT_URL.get()));
             return true;
         } catch (Exception e) {
             log.error("Bot连接失败！", e);
@@ -185,7 +186,7 @@ public class WSClient implements INetworkImpl {
             res.present(failedResult);
         });
         Thread.startVirtualThread(new WSReconnect());
-        BotEventBus.post(new WSDisconnectedEvent());
+        BotEventBus.post(new NetworkDisconnectedEvent());
     }
 
     @OnError

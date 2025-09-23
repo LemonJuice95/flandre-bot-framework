@@ -22,7 +22,16 @@ public class BotBasicConfig {
     public static final Supplier<String> BOT_NAME = () -> properties.getProperty("bot.name");
     public static final Supplier<Boolean> LOG_MESSAGES = () -> Boolean.parseBoolean(properties.getProperty("bot.log_messages"));
 
-    public static final Supplier<String> NETWORK_URL = () -> properties.getProperty("bot.network.url");
+    public static final Supplier<String> CLIENT_URL = () -> properties.getProperty("bot.network.client.url");
+    public static final Supplier<String> SERVER_LISTENING_IPS = () -> properties.getProperty("bot.network.server.listening_ips");
+    public static final Supplier<Integer> SERVER_PORT = () -> {
+        try {
+            return Integer.valueOf(properties.getProperty("bot.network.server.port"));
+        } catch (NumberFormatException e) {
+            log.warn("服务器端口格式不正确，将使用默认端口49500");
+            return 49500;
+        }
+    };
     public static final Supplier<String> NETWORK_TOKEN = () -> properties.getProperty("bot.network.token");
 
     public static final Supplier<Boolean> DEBUG_MODE = () -> Boolean.parseBoolean(properties.getProperty("bot.debug_mode"));

@@ -15,6 +15,7 @@ import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -28,7 +29,7 @@ public class FlandreBot {
     public static void main(String[] args) {
         stopThread.setDaemon(false);
         Runtime.getRuntime().addShutdownHook(stopThread);
-        configureLog4j2();
+        configureLogger();
         FrameworkInfo.init();
         start();
 
@@ -43,7 +44,9 @@ public class FlandreBot {
         return BotBasicConfig.BOT_NAME.get();
     }
 
-    private static void configureLog4j2() {
+    private static void configureLogger() {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
         PluginManager pluginManager = new PluginManager(Appender.ELEMENT_TYPE);
         pluginManager.collectPlugins(List.of("io.lemonjuice.flandre_bot_framework.console"));
     }
@@ -69,7 +72,7 @@ public class FlandreBot {
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.post(new BotInitEvent());
 
-        NetworkContainer.init(NetworkMode.WS_CLIENT);
+        NetworkContainer.init(NetworkMode.WS_SERVER);
 
         float usedTime = (System.currentTimeMillis() - startTime) / 1000.0F;
         log.info(String.format("Bot已启动！(%.2fs)", usedTime));
