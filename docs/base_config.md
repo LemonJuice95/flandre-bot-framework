@@ -11,11 +11,24 @@
   - 是否在日志中记录收到的消息
 
 
-### WebSocket
-- `bot.ws.url` 
-  - OneBot实现端WebSocket服务器的地址
-- `bot.ws.token` 
-  - WebSocket连接附带的token
+### 网络
+- `bot.network.mode`
+  - 应用端的连接模式
+  - 0：Websocket正向连接
+  - 1：Websocket反向连接
+  - 默认值：0
+- `bot.network.client.url` 
+  - **仅在正向连接（应用端作为客户端）模式下有效**
+  - 实现端侧服务器的url
+- `bot.network.server.listening_ips`
+  - **仅在反向连接（应用端作为服务端）模式下有效**
+  - 应用端服务器监听的ip
+  - 默认值："0.0.0.0"
+- `bot.network.server.port`
+  - **仅在反向连接（应用端作为服务端）模式下有效**
+  - 应用端服务器监听的端口
+- `bot.network.token` 
+  - 连接附带的token
 
 ### 调试模式
 - `bot.debug_mode` 
