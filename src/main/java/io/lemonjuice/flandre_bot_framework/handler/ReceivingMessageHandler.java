@@ -11,6 +11,7 @@ import io.lemonjuice.flandre_bot_framework.event.msg.PermissionDeniedEvent;
 import io.lemonjuice.flandre_bot_framework.message.GroupContext;
 import io.lemonjuice.flandre_bot_framework.message.IMessageContext;
 import io.lemonjuice.flandre_bot_framework.model.Message;
+import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot_framework.plugins.BotPlugin;
 import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
@@ -99,8 +100,8 @@ public class ReceivingMessageHandler {
                 CommandRunner runner = providerFriend.apply(message);
                 if(runner.matches()) {
                     boolean run = true;
-                    if(runner.getPermissionLevel() == PermissionLevel.DEBUG &&
-                            !PermissionLevel.DEBUG.validatePermission(message)) {
+                    if(!isGroupPermission(runner.getPermissionLevel()) &&
+                            !runner.getPermissionLevel().validatePermission(message)) {
                         run = BotEventBus.postCancelable(new PermissionDeniedEvent(message, runner));
                     }
 
@@ -118,8 +119,8 @@ public class ReceivingMessageHandler {
         for(Function<Message, CommandRunner> providerNormal : BotCommandLookup.PRIVATE_COMMANDS) {
             CommandRunner runner = providerNormal.apply(message);
             if(runner.matches()) {
-                if(runner.getPermissionLevel() == PermissionLevel.DEBUG &&
-                        !PermissionLevel.DEBUG.validatePermission(message)) {
+                if(!isGroupPermission(runner.getPermissionLevel()) &&
+                        !runner.getPermissionLevel().validatePermission(message)) {
                     BotEventBus.post(new PermissionDeniedEvent(message, runner));
                 } else {
                     runner.apply();
@@ -130,6 +131,10 @@ public class ReceivingMessageHandler {
                 }
             }
         }
+    }
+
+    private static boolean isGroupPermission(IPermissionLevel level) {
+        return level == PermissionLevel.OWNER || level == PermissionLevel.ADMIN;
     }
 
 }
