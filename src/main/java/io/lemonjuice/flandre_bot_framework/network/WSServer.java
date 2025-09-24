@@ -34,7 +34,7 @@ public class WSServer {
 
     private final AtomicBoolean rejected = new AtomicBoolean(false);
     private final BlockingQueue<String> messageQueue;
-    private final Thread senderThread;
+    private Thread senderThread;
     private final ConcurrentHashMap<UUID, WSResponse> waitingResponses;
     private Session session;
 
@@ -43,7 +43,7 @@ public class WSServer {
 
     public WSServer() {
         this.messageQueue = new LinkedBlockingQueue<>();
-        this.senderThread = new Thread(this::sendingLoop);
+        this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
         this.waitingResponses = new ConcurrentHashMap<>();
     }
 
@@ -160,6 +160,7 @@ public class WSServer {
             WSServerContainer.getInstance().setConnection(this);
             this.session = session;
             this.running.set(true);
+            this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
             this.senderThread.start();
             log.info("bot已连接！");
             BotEventBus.post(new NetworkConnectedEvent());

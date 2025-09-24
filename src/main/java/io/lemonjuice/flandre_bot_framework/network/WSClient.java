@@ -34,7 +34,7 @@ public class WSClient implements INetworkImpl {
 
     private final BlockingQueue<String> messageQueue;
     private final AtomicBoolean running;
-    private final Thread senderThread;
+    private Thread senderThread;
 
     private final ConcurrentHashMap<UUID, WSResponse> waitingResponses = new ConcurrentHashMap<>();
 
@@ -143,6 +143,7 @@ public class WSClient implements INetworkImpl {
     public void onOpen(Session session) {
         log.info("Bot连接成功！");
         this.running.set(true);
+        this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
         this.senderThread.start();
 
         BotEventBus.post(new NetworkConnectedEvent());
