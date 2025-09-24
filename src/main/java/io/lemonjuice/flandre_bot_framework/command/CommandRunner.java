@@ -25,7 +25,7 @@ public abstract class CommandRunner {
 
     /**
      * 标记执行命令时所需的权限（普通成员/管理员/群主 或不对外开放的调试权限）
-     * 调试权限以外的其他权限仅在群聊中生效
+     * 原生权限中，调试权限以外的其他权限仅在群聊中生效
      * 框架中原生的权限等级参见 {@link io.lemonjuice.flandre_bot_framework.permission.PermissionLevel}
      * 处理权限不足时执行命令的逻辑请订阅事件 {@link PermissionDeniedEvent}
      * @return 权限等级
