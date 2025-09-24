@@ -9,7 +9,7 @@
 1. 首先，你需要一个可靠的Java IDE来进行开发，这里推荐使用[IntelliJ IDEA](https://www.jetbrains.com.cn/idea/)
 2. 创建一个新的gradle项目，**Java版本需选用21**
 3. 在`build.gradle`文件中，进行如下配置：
-```
+```groovy
 plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
@@ -49,7 +49,7 @@ dependencies {
 1. **在此之前，请先确保你进行部署的设备有Java 21环境，且环境变量已被正确设置**
 2. 使用gradle的shadowJar任务构建Bot的jar包
 3. 在运行目录下，根据你的系统创建启动脚本（win系统使用.bat文件，linux系统使用.sh文件），写入
-```
+```shell
 java -jar ${你的jar包文件名}.jar
 # 如果bot在windows系统上部署，建议在启动脚本后加入pause
 ```

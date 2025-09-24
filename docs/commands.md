@@ -11,6 +11,8 @@
 但需保证在类内部的方法中对于共享状态进行读/写时操作的原子性
 （除非在配置文件中开启了同步执行模式）
 
+（Update 2025.9.24：由于可能有多个网络IO线程，同步执行模式也无法保证100%线程安全）
+
 ### 基类方法
 - 构造器
   - 传入一个`Message`类型参数，代表用户发送的消息
@@ -48,19 +50,19 @@
 使用方式
 
 1. 首先，获取一个注册器的实例
-```
+```java
 public static final CommandRegister COMMANDS = new CommandRegister();
 ```
 
 2. 注册命令执行器构造器的方法引用
-```
+```java
 static {
   COMMANDS.register(ExampleCommandRunner::new);
 }
 ```
 
 3. 在Bot初始化时，加载命令注册器
-```
+```java
 @EventSubscriber
 public class ExampleBot {
     @SubscribeEvent
