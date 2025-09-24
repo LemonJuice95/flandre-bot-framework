@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.10.1
+ - 修复自定义的`IPermissionLevel`无法在私聊命令中生效的问题
+
 ## v0.10.0
  - 添加反向Websocket连接模式
  - 注：配置文件的网络部分发生了变更
