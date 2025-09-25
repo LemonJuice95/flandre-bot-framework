@@ -7,8 +7,8 @@ import org.json.JSONObject;
 
 @Getter
 public class TempSessionContext extends MessageContext {
-    private final long userId;
-    private final long groupId;
+    protected final long userId;
+    protected final long groupId;
 
     public TempSessionContext(long userId, long groupId) {
         this.userId = userId;
