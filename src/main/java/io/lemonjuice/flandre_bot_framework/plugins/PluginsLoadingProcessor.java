@@ -31,7 +31,7 @@ public class PluginsLoadingProcessor {
         ArrayDeque<PluginNode> nextNodes = new ArrayDeque<>();
 
         for(PluginNode node : this.remainingNodes) {
-            if(!node.handled && node.inEdges.isEmpty()) {
+            if(this.remainingNodes.contains(node) && node.inEdges.isEmpty()) {
                 nextNodes.addLast(node);
             }
         }
@@ -43,7 +43,7 @@ public class PluginsLoadingProcessor {
                 node.plugin.load();
                 node.outEdges.forEach(n -> {
                     n.inEdges.remove(node);
-                    if (!n.handled && n.inEdges.isEmpty()) {
+                    if (this.remainingNodes.contains(n) && n.inEdges.isEmpty()) {
                         nextNodes.addLast(n);
                     }
                 });
@@ -55,9 +55,7 @@ public class PluginsLoadingProcessor {
                     this.failedNodes.put(node, "自身发生异常");
                 }
                 this.failSubNodes(node, String.format("依赖项 \"%s\" 加载失败", node.plugin.getName()));
-                this.clearHandledNodes();
             } finally {
-                node.handled = true;
                 this.remainingNodes.remove(node);
             }
         }
@@ -94,22 +92,17 @@ public class PluginsLoadingProcessor {
         this.remainingNodes.addAll(graph.values());
         this.remainingNodes.remove(unknownNode);
         this.failSubNodes(unknownNode, "依赖缺失");
-        this.clearHandledNodes();
     }
 
     private void failSubNodes(PluginNode start, String reason) {
-        Deque<PluginNode> nodesQueue = new ArrayDeque<>(start.outEdges.stream().filter(node -> !node.handled).toList());
+        Deque<PluginNode> nodesQueue = new ArrayDeque<>(start.outEdges.stream().filter(this.remainingNodes::contains).toList());
         while (!nodesQueue.isEmpty()) {
             PluginNode current = nodesQueue.peekFirst();
             nodesQueue.pop();
             this.failedNodes.put(current, reason);
-            current.handled = true;
-            current.outEdges.stream().filter(node -> !node.handled).forEach(nodesQueue::push);
+            this.remainingNodes.remove(current);
+            current.outEdges.stream().filter(this.remainingNodes::contains).forEach(nodesQueue::push);
         }
-    }
-
-    private void clearHandledNodes() {
-        this.remainingNodes.removeIf(node -> node.handled);
     }
 
     private void addEdge(PluginNode from, PluginNode to) {
@@ -121,7 +114,6 @@ public class PluginsLoadingProcessor {
         public final BotPlugin plugin;
         public final Set<PluginNode> outEdges = new HashSet<>();
         public final Set<PluginNode> inEdges = new HashSet<>();
-        public boolean handled = false;
 
         public PluginNode(BotPlugin plugin) {
             this.plugin = plugin;

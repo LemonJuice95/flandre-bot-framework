@@ -13,6 +13,8 @@ public class PluginLoaderTest {
         processor.registerPlugin(new TestPlugin());
         processor.registerPlugin(new Dependency2Plugin());
         processor.registerPlugin(new TestPlugin2());
+        processor.registerPlugin(new ExceptionPlugin());
+        processor.registerPlugin(new ExceptionDepPlugin());
 
         processor.loadPlugins();
     }
