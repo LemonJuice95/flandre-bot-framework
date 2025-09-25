@@ -46,23 +46,29 @@ public class Message {
             case "group.normal" -> {
                 this.context = new GroupContext(this.groupId)
                         .withBotId(this.selfId)
-                        .withMessageId(this.messageId);
+                        .withMessageId(this.messageId)
+                        .withUserId(this.userId);
             }
 
             case "private.friend" -> {
                 this.context = new FriendContext(this.userId, this.sender.nickName)
                         .withBotId(this.selfId)
-                        .withMessageId(this.messageId);
+                        .withMessageId(this.messageId)
+                        .withUserId(this.userId);
             }
 
             case "private.group" -> {
                 this.context = new TempSessionContext(this.userId, this.groupId)
                         .withBotId(this.selfId)
-                        .withMessageId(this.messageId);
+                        .withMessageId(this.messageId)
+                        .withUserId(this.userId);
             }
 
             default -> {
-                this.context = new MessageContext().withBotId(this.selfId).withMessageId(this.messageId);
+                this.context = new MessageContext()
+                        .withBotId(this.selfId)
+                        .withMessageId(this.messageId)
+                        .withUserId(this.userId);
             }
         }
     }

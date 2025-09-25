@@ -8,8 +8,9 @@ import java.util.List;
 
 @Getter
 public class MessageContext implements IMessageContext {
-    private long botId;
-    private long messageId = -1;
+    protected long botId;
+    protected long messageId = -1;
+    protected long userId = -1;
 
     public MessageContext() {
         this.botId = AccountInfo.getBotId();
@@ -34,6 +35,11 @@ public class MessageContext implements IMessageContext {
         throw new UnsupportedOperationException("不支持的消息发送操作");
     }
 
+    @Override
+    public void poke() {
+        throw new UnsupportedOperationException("当前上下文不支持发送戳一戳");
+    }
+
     public MessageContext withBotId(long botId) {
         this.botId = botId;
         return this;
@@ -41,6 +47,11 @@ public class MessageContext implements IMessageContext {
 
     public MessageContext withMessageId(long messageId) {
         this.messageId = messageId;
+        return this;
+    }
+
+    public MessageContext withUserId(long userId) {
+        this.userId = userId;
         return this;
     }
 }

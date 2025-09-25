@@ -11,8 +11,8 @@ import java.util.List;
 
 @Getter
 public class FriendContext extends MessageContext {
-    private final long friendId;
-    private final String nickname;
+    protected final long friendId;
+    protected final String nickname;
 
     public FriendContext(long friendId) {
         this.friendId = friendId;
@@ -52,5 +52,12 @@ public class FriendContext extends MessageContext {
         }
         msg.put("messages", jsonArray);
         NetworkContainer.getImpl().sendMsg("send_private_forward_msg", msg);
+    }
+
+    @Override
+    public void poke() {
+        JSONObject msg = new JSONObject();
+        msg.put("user_id", this.userId);
+        NetworkContainer.getImpl().sendMsg("send_poke", msg);
     }
 }
