@@ -53,11 +53,4 @@ public class FriendContext extends MessageContext {
         msg.put("messages", jsonArray);
         NetworkContainer.getImpl().sendMsg("send_private_forward_msg", msg);
     }
-
-    @Override
-    public void poke() {
-        JSONObject msg = new JSONObject();
-        msg.put("user_id", this.userId);
-        NetworkContainer.getImpl().sendMsg("send_poke", msg);
-    }
 }

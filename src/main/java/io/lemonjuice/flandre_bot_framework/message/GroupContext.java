@@ -53,12 +53,4 @@ public class GroupContext extends MessageContext {
         msg.put("messages", jsonArray);
         NetworkContainer.getImpl().sendMsg("send_group_forward_msg", msg);
     }
-
-    @Override
-    public void poke() {
-        JSONObject msg = new JSONObject();
-        msg.put("group_id", this.groupId);
-        msg.put("user_id", this.userId);
-        NetworkContainer.getImpl().sendMsg("send_poke", msg);
-    }
 }

@@ -35,11 +35,6 @@ public class MessageContext implements IMessageContext {
         throw new UnsupportedOperationException("不支持的消息发送操作");
     }
 
-    @Override
-    public void poke() {
-        throw new UnsupportedOperationException("当前上下文不支持发送戳一戳");
-    }
-
     public MessageContext withBotId(long botId) {
         this.botId = botId;
         return this;
