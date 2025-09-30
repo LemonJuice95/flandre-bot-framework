@@ -1,5 +1,8 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
+import io.lemonjuice.flandre_bot_framework.utils.CQCode;
+
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
@@ -27,6 +30,14 @@ public interface IMessageContext {
      * @param sendAsRawText 是否不对消息内容进行转义
      */
     public void sendText(String message, boolean sendAsRawText);
+
+    /**
+     * 发送图片
+     * @param image 图片
+     */
+    default public void sendImage(BufferedImage image) {
+        this.sendText(CQCode.image(image));
+    }
 
     /**
      * 发送合并消息<br>
