@@ -65,4 +65,8 @@ public class BotEventBus {
         }
         return event.isCancelled();
     }
+
+    public static void unregister(Object object) {
+        instance.bus.unregister(object);
+    }
 }
