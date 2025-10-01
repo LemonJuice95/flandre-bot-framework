@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v0.13.0
+ - CQCode的图片添加对BufferedImage的支持
+ - 消息上下文类添加一个方法用于直接发送图片
+
 ## v0.12.0
  - 移除戳一戳api
 
