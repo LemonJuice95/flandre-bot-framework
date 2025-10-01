@@ -22,6 +22,7 @@ public class SyncEventBus {
                 if(params.length == 1 && Event.class.isAssignableFrom(params[0])) {
                     Class<?> eventClass = params[0];
                     CopyOnWriteArrayList<Pair<Object, Method>> list = this.getOrCreateList(eventClass);
+                    method.setAccessible(true);
                     list.add(Pair.of(object, method));
                 } else {
                     log.warn("{}中的{}方法不符合订阅者方法的条件，无法注册", object.getClass().getSimpleName(), method.getName());
@@ -37,7 +38,6 @@ public class SyncEventBus {
             if(subscriberMethods != null) {
                 for(Pair<Object, Method> pair : subscriberMethods) {
                     Method method = pair.getSecond();
-                    method.setAccessible(true);
                     try {
                         method.invoke(pair.getFirst(), event);
                     } catch (Exception e) {
