@@ -27,6 +27,14 @@ public class BotConsole {
         this.lineReader = LineReaderBuilder.builder().terminal(this.terminal).parser(new DefaultParser().escapeChars(new char[0])).build();
     }
 
+    public static String readLine() {
+        return instance.lineReader.readLine();
+    }
+
+    public static String readLine(String s) {
+        return instance.lineReader.readLine(s);
+    }
+
     public static void println(String str) {
         if(!available || instance == null || instance.terminal == null) {
             System.out.println(str);
