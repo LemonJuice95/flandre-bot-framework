@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 
@@ -20,6 +21,10 @@ public class CQCode {
 
     public static String image(String url) {
         return String.format("[CQ:image,file=%s]", url);
+    }
+
+    public static String image(File file) {
+        return String.format("[CQ:image,file=file:///%s]", file.getAbsolutePath());
     }
 
     public static String image(BufferedImage image) {
