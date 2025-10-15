@@ -8,6 +8,7 @@ import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleComma
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
+import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
 import io.lemonjuice.flandre_bot_framework.lifecycle.Stop;
 import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import io.lemonjuice.flandre_bot_framework.network.NetworkMode;
@@ -61,10 +62,10 @@ public class FlandreBot {
 
         log.info("正在启动Bot: {}", getName());
 
+        ReceivingMessageHandler.init();
         BotConsole.init();
         BotEventBus.init();
 
-//        BotEventBus.post(new PluginLoadEvent());
         PluginsLoadingProcessor pluginLoader = new PluginsLoadingProcessor();
         BotEventBus.post(new PluginRegisterEvent(pluginLoader));
         pluginLoader.loadPlugins();

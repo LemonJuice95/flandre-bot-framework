@@ -8,6 +8,7 @@ import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.msg.CommandRunEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.MessageEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.PermissionDeniedEvent;
+import io.lemonjuice.flandre_bot_framework.handler.command.CommandHandler;
 import io.lemonjuice.flandre_bot_framework.message.GroupContext;
 import io.lemonjuice.flandre_bot_framework.message.IMessageContext;
 import io.lemonjuice.flandre_bot_framework.model.Message;
@@ -23,6 +24,22 @@ import java.util.function.Function;
 @Log4j2
 public class ReceivingMessageHandler {
     private static final boolean SYNC_MODE = BotBasicConfig.COMMAND_SYNC_MODE.get();
+    private static volatile CommandHandler commandHandler = new ASyncCommandHandler();
+
+    public synchronized static void init() {
+        if(SYNC_MODE) {
+            commandHandler = new SyncCommandHandler();
+            ((SyncCommandHandler) commandHandler).getExecutorThread().start();
+        } else {
+            commandHandler = new ASyncCommandHandler();
+        }
+    }
+
+    public synchronized static void stop() {
+        if(commandHandler instanceof SyncCommandHandler syncHandler) {
+            syncHandler.getExecutorThread().interrupt();
+        }
+    }
 
     public static void handle(JSONObject json) {
         Message message = MessageParser.parseMessage(json);
@@ -35,27 +52,18 @@ public class ReceivingMessageHandler {
         }
 
         if(message.type.equals("group")) {
-            if(SYNC_MODE) {
-                handleGroupCommand(message);
-            } else {
-                Thread.startVirtualThread(() -> handleGroupCommand(message));
-            }
             BotEventBus.post(new MessageEvent.Group(message));
         }
 
         if(message.type.equals("private")) {
-            if(SYNC_MODE) {
-                handlePrivateCommand(message);
-            } else {
-                Thread.startVirtualThread(() -> handlePrivateCommand(message));
-            }
-
             if (message.subType.equals("friend")) {
                 BotEventBus.post(new MessageEvent.Friend(message));
             } else if (message.subType.equals("group")) {
                 BotEventBus.post(new MessageEvent.TempSession(message));
             }
         }
+
+        commandHandler.handle(message);
     }
 
     private static void logMessage(Message message) {
