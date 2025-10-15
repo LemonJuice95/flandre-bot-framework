@@ -11,6 +11,14 @@ import java.util.List;
  */
 public interface IMessageContext {
     /**
+     * 准备一个消息构建器
+     * @return 消息构建器
+     */
+    default public MessageToSend prepareMessageToSend() {
+        return new MessageToSend(this);
+    }
+
+    /**
      * 回复一条消息
      * @param message 消息内容
      */
