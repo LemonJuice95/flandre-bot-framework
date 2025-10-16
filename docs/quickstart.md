@@ -33,6 +33,8 @@ dependencies {
 
 在此之后，你便可以开始进行Bot的开发了，祝一切顺利！
 
+如果你在寻找一些简单的参考，示例项目在[这里](https://github.com/LemonJuice95/flandre-bot-example)
+
 ## 部署你的Bot
 
 ### Websocket正向连接模式
