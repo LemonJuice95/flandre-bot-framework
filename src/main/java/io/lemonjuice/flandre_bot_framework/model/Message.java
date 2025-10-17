@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class Message {
     public static final Message DUMMY = new Message.Builder().build();
 
-    @Getter
-    private IMessageContext context;
+    private volatile IMessageContext context;
 
     public final long selfId;
     public final long userId;
@@ -38,6 +37,17 @@ public class Message {
         public final String nickName;
         public final String card;
         public final String role;
+    }
+
+    public IMessageContext getContext() {
+        if(this.context == null) {
+            synchronized (this) {
+                if(this.context == null) {
+                    this.generateContext();
+                }
+            }
+        }
+        return this.context;
     }
 
     private void generateContext() {
@@ -186,7 +196,6 @@ public class Message {
                     this.message,
                     this.rawMessage
             );
-            result.generateContext();
             return result;
         }
     }
