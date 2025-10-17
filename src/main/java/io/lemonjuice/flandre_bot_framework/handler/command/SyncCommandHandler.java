@@ -1,6 +1,5 @@
-package io.lemonjuice.flandre_bot_framework.handler;
+package io.lemonjuice.flandre_bot_framework.handler.command;
 
-import io.lemonjuice.flandre_bot_framework.handler.command.CommandHandler;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
