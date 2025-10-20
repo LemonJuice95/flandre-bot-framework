@@ -2,7 +2,7 @@ package io.lemonjuice.flandre_bot_framework.handler.command;
 
 import io.lemonjuice.flandre_bot_framework.model.Message;
 
-public class ASyncCommandHandler extends CommandHandler {
+public class AsyncCommandHandler extends CommandHandler {
     @Override
     public void handle(Message message) {
         if(message.type.equals("group")) {
