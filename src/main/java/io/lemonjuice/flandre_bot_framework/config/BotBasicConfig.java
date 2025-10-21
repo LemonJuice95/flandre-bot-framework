@@ -32,7 +32,7 @@ public class BotBasicConfig {
         }
     };
     public static final Supplier<String> CLIENT_URL = () -> properties.getProperty("bot.network.client.url");
-    public static final Supplier<String> SERVER_LISTENING_IPS = () -> properties.getProperty("bot.network.server.host");
+    public static final Supplier<String> SERVER_HOST = () -> properties.getProperty("bot.network.server.host");
     public static final Supplier<Integer> SERVER_PORT = () -> {
         try {
             return Integer.valueOf(properties.getProperty("bot.network.server.port"));

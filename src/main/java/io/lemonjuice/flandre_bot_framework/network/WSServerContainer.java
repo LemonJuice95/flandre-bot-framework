@@ -20,7 +20,7 @@ public class WSServerContainer implements INetworkImpl {
     @Getter
     private final AtomicBoolean runningStatus = new AtomicBoolean(false);
 
-    private final Server server = new Server(BotBasicConfig.SERVER_LISTENING_IPS.get(), BotBasicConfig.SERVER_PORT.get(), "/", null, WSServer.class);
+    private final Server server = new Server(BotBasicConfig.SERVER_HOST.get(), BotBasicConfig.SERVER_PORT.get(), "/", null, WSServer.class);
 
     @Setter
     private volatile WSServer connection;
