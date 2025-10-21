@@ -20,7 +20,7 @@
 - `bot.network.client.url` 
   - **仅在正向连接（应用端作为客户端）模式下有效**
   - 实现端侧服务器的url
-- `bot.network.server.listening_ips`
+- `bot.network.server.host`
   - **仅在反向连接（应用端作为服务端）模式下有效**
   - 应用端服务器监听的ip
   - 默认值："0.0.0.0"
