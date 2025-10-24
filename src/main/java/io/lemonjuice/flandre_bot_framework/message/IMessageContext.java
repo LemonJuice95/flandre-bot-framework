@@ -43,8 +43,8 @@ public interface IMessageContext {
      * 发送图片
      * @param image 图片
      */
-    default public void sendImage(BufferedImage image) {
-        this.sendText(CQCode.image(image));
+    default public void sendImage(BufferedImage image, String formatName) {
+        this.sendText(CQCode.image(image, formatName));
     }
 
     /**

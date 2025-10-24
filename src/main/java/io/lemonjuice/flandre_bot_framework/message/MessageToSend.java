@@ -47,8 +47,8 @@ public class MessageToSend {
      * @param image 图片
      * @return 构建中的消息
      */
-    public MessageToSend appendImage(BufferedImage image) {
-        this.msgBuilder.append(CQCode.image(image));
+    public MessageToSend appendImage(BufferedImage image, String formatName) {
+        this.msgBuilder.append(CQCode.image(image, formatName));
         return this;
     }
 

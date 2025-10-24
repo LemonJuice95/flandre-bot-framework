@@ -27,9 +27,9 @@ public class CQCode {
         return String.format("[CQ:image,file=file:///%s]", file.getAbsolutePath());
     }
 
-    public static String image(BufferedImage image) {
+    public static String image(BufferedImage image, String formatName) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-            ImageIO.write(image, "jpg", stream);
+            ImageIO.write(image, formatName, stream);
             String base64 = Base64.getEncoder().encodeToString(stream.toByteArray());
             return String.format("[CQ:image,file=base64://%s]", base64);
         } catch (IOException e) {
