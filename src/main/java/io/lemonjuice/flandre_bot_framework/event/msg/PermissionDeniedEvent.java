@@ -8,7 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 在命令执行被权限拒绝时推送
+ * 推送时机: 在命令执行被权限拒绝时<br>
+ * 可以取消该事件来在某些特定条件下无视某一权限的限制
  */
 @Getter
 @AllArgsConstructor

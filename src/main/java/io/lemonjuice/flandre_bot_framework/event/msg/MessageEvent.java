@@ -12,6 +12,9 @@ public abstract class MessageEvent extends Event {
         this.message = message;
     }
 
+    /**
+     * 推送时机: 接收到群聊消息时
+     */
     public static class Group extends MessageEvent {
         public Group(Message message) {
             super(message);
@@ -24,12 +27,18 @@ public abstract class MessageEvent extends Event {
         }
     }
 
+    /**
+     * 推送时机: 接收到好友消息时
+     */
     public static class Friend extends Private {
         public Friend(Message message) {
             super(message);
         }
     }
 
+    /**
+     * 推送时机: 接收到临时会话消息时
+     */
     public static class TempSession extends Private {
         public TempSession(Message message) {
             super(message);

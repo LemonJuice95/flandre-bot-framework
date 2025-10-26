@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.json.JSONObject;
 
 /**
+ * 推送时机: 接收到网络层消息时（原始json对象）<br>
  * 为开发者保留一个入口来手动处理收到的原始信息
  */
 @Getter
