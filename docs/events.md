@@ -4,7 +4,7 @@
 
 ## 目录
  - [使用方式](#使用方式)
- - WIP
+ - [事件列表](#事件列表)
 
 ## 使用方式
 
@@ -33,3 +33,9 @@ public class SomeClass {
     //...
 }
 ```
+
+## 事件列表
+
+WIP
+
+文档尚未完成，请前往`io.lemonjuice.flandre_bot_framework.event`包查看事件列表，事件有javadoc进行说明
