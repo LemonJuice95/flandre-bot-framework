@@ -38,11 +38,15 @@
   - 在群聊中直接匹配整串命令
   - 由`getCommandBody()`方法设置命令体
   - 由`needAtFirst()`方法设置是否需要先`@Bot`再键入命令
+- `MultiSimpleGroupCommandRunner`
+  - 直接匹配整串命令，但支持多种命令串
 - `PrivateCommandRunner`
   - 私聊命令的基类（覆写`getType()`方法）
   - 通过`needBeFriends()`方法控制是否需要添加bot为好友
 - `SimplePrivateCommandRunner`
   - 大体上与`SimpleGroupCommandRunner`相似，只是缺少了`needAtFirst()`方法
+- `MultiSimplePrivateCommandRunner`
+  - 直接匹配整串命令，但支持多种命令串
 
 ## 命令注册器（CommandRegister类）
 用于注册命令执行器
