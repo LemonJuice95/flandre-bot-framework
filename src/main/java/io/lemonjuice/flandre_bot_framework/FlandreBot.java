@@ -64,13 +64,14 @@ public class FlandreBot {
 
         ReceivingMessageHandler.init();
         BotConsole.init();
+        OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.init();
 
         PluginsLoadingProcessor pluginLoader = new PluginsLoadingProcessor();
         BotEventBus.post(new PluginRegisterEvent(pluginLoader));
         pluginLoader.loadPlugins();
 
-        OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
+
         BotEventBus.post(new BotInitEvent());
 
         NetworkContainer.init(BotBasicConfig.NETWORK_MODE.get());
