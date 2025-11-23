@@ -41,10 +41,6 @@ public class FlandreBot {
         }
     }
 
-    public static String getName() {
-        return BotBasicConfig.BOT_NAME.get();
-    }
-
     private static void configureLogger() {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
@@ -59,8 +55,6 @@ public class FlandreBot {
         System.out.println(FrameworkInfo.logo);
 
         BasicConfigFileInit.init();
-
-        log.info("正在启动Bot: {}", getName());
 
         ReceivingMessageHandler.init();
         BotConsole.init();

@@ -20,7 +20,6 @@ public class BotBasicConfig {
 
     public static final Properties properties = new Properties();
 
-    public static final Supplier<String> BOT_NAME = () -> properties.getProperty("bot.name");
     public static final Supplier<Boolean> LOG_MESSAGES = () -> Boolean.parseBoolean(properties.getProperty("bot.log_messages"));
 
     public static final Supplier<NetworkMode> NETWORK_MODE = () -> {
