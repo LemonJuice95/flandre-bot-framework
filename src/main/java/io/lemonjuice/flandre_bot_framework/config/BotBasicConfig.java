@@ -20,7 +20,7 @@ public class BotBasicConfig {
 
     public static final Properties properties = new Properties();
 
-    public static final Supplier<Boolean> LOG_MESSAGES = () -> Boolean.parseBoolean(properties.getProperty("bot.log_messages"));
+    public static final Supplier<Boolean> LOG_MESSAGES = () -> Boolean.valueOf(properties.getProperty("bot.log_messages"));
 
     public static final Supplier<NetworkMode> NETWORK_MODE = () -> {
         try {
@@ -42,7 +42,7 @@ public class BotBasicConfig {
     };
     public static final Supplier<String> NETWORK_TOKEN = () -> properties.getProperty("bot.network.token");
 
-    public static final Supplier<Boolean> DEBUG_MODE = () -> Boolean.parseBoolean(properties.getProperty("bot.debug_mode"));
+    public static final Supplier<Boolean> DEBUG_MODE = () -> Boolean.valueOf(properties.getProperty("bot.debug_mode"));
     public static final Supplier<List<Long>> DEBUG_USERS = () -> {
         List<Long> result = new ArrayList<>();
         String ids = properties.getProperty("bot.debug_users");
@@ -59,7 +59,7 @@ public class BotBasicConfig {
         return result;
     };
 
-    public static final Supplier<Boolean> COMMAND_SYNC_MODE = () -> Boolean.parseBoolean(properties.getProperty("bot.command_sync_mode"));
+    public static final Supplier<Boolean> COMMAND_SYNC_MODE = () -> Boolean.valueOf(properties.getProperty("bot.command_sync_mode"));
 
     public static void read() {
         try (InputStream input = new FileInputStream(configFile)) {
