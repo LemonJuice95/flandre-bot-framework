@@ -18,6 +18,14 @@ public interface BotPlugin {
     }
 
     /**
+     * 初始化插件所需的配置文件
+     * @return 配置文件是否无缺失
+     */
+    default public boolean initConfig() {
+        return true;
+    }
+
+    /**
      * 执行插件加载逻辑
      */
     public void load();

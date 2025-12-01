@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.plugins;
 
+import io.lemonjuice.flandre_bot_framework.FlandreBot;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
@@ -12,6 +13,14 @@ public class PluginsLoadingProcessor {
 
     public void registerPlugin(BotPlugin plugin) {
         this.plugins.add(plugin);
+    }
+
+    public void initConfigs() {
+        for(BotPlugin plugin : this.plugins) {
+            if(!plugin.initConfig()) {
+                FlandreBot.markKeyConfigLost("插件\"" + plugin.getName() + "\"的配置文件需要进行配置");
+            }
+        }
     }
 
     public void loadPlugins() {

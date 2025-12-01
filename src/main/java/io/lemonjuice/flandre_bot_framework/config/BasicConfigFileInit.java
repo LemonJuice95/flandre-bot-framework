@@ -26,8 +26,7 @@ public class BasicConfigFileInit {
             } catch (Exception e) {
                 log.error("配置文件释放失败！", e);
             }
-            log.warn("请先在config/bot.properties文件内进行配置后再次启动");
-            FlandreBot.stop();
+            FlandreBot.markKeyConfigLost("请先在config/bot.properties文件内进行配置后再次启动");
         }
     }
 }
