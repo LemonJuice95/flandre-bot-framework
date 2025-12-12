@@ -18,7 +18,7 @@ public abstract class CommandRunner {
     }
 
     /**
-     * 标记命令的类型（群聊/所有私聊/好友）
+     * 标记命令的类型（群聊/所有私聊/好友/通用）
      * @return 命令类型的枚举值 {@link Type}
      */
     public abstract Type getType();
