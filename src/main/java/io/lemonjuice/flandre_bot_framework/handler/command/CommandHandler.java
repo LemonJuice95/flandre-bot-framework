@@ -58,11 +58,16 @@ public abstract class CommandHandler {
         for(Function<Message, CommandRunner> providerNormal : BotCommandLookup.PRIVATE_COMMANDS) {
             CommandRunner runner = providerNormal.apply(message);
             if(runner.matches()) {
+                boolean run = true;
+
                 if(!isGroupPermission(runner.getPermissionLevel()) &&
                         !runner.getPermissionLevel().validatePermission(message)) {
-                    BotEventBus.post(new PermissionDeniedEvent(message, runner));
-                } else {
+                    run = BotEventBus.postCancelable(new PermissionDeniedEvent(message, runner));
+                }
+
+                if(run && !BotEventBus.postCancelable(new CommandRunEvent.Pre(message, runner))) {
                     runner.apply();
+                    BotEventBus.post(new CommandRunEvent.Post(message, runner));
                 }
 
                 if(runner.blockAfterCommands()) {
