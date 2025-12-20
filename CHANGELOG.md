@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.18.2
+ - 更新使用的log4j2版本
+
 ## v0.18.1
  - 修复通用私聊指令不发布CommandRunEvent的问题
 
