@@ -28,7 +28,7 @@ public class Message {
     public final int font;
     public final String format;
 
-    public final String message;
+    public final MessageSegmentList message;
     public final String rawMessage;
 
     @AllArgsConstructor
@@ -100,7 +100,7 @@ public class Message {
         public int font = 0;
         public String format = "";
 
-        public String message = "";
+        public MessageSegmentList message = new MessageSegmentList();
         public String rawMessage = "";
 
         public Builder selfId(long selfId) {
@@ -168,7 +168,7 @@ public class Message {
             return this;
         }
 
-        public Builder message(String message) {
+        public Builder message(MessageSegmentList message) {
             this.message = message;
             return this;
         }

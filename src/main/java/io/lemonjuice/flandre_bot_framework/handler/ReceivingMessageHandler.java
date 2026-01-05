@@ -61,7 +61,7 @@ public class ReceivingMessageHandler {
     private static void logMessage(Message message) {
         String from = "未知来源";
         String nickName = !message.sender.card.isEmpty() ? message.sender.card : message.sender.nickName;
-        String messageContent = message.message;
+        String messageContent = message.message.toString();
 
         if(message.type.equals("private")) {
             from = String.format("私聊(%d)", message.userId);

@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
+import io.lemonjuice.flandre_bot_framework.message.segment.ImageMessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -18,6 +19,8 @@ public interface IMessageContext {
         return new MessageToSend(this);
     }
 
+    public void sendMessage(List<MessageSegment> segments);
+
     /**
      * 回复一条消息
      * @param message 消息内容
@@ -28,23 +31,14 @@ public interface IMessageContext {
      * 发送文本消息
      * @param message 消息内容
      */
-    default public void sendText(String message) {
-        this.sendText(message, false);
-    }
-
-    /**
-     * 发送文本消息
-     * @param message 消息内容
-     * @param sendAsRawText 是否不对消息内容进行转义
-     */
-    public void sendText(String message, boolean sendAsRawText);
+    public void sendText(String message);
 
     /**
      * 发送图片
      * @param image 图片
      */
     default public void sendImage(BufferedImage image, String formatName) {
-        this.sendText(CQCode.image(image, formatName));
+        this.sendMessage(List.of(new ImageMessageSegment(image, formatName)));
     }
 
     /**
@@ -53,5 +47,5 @@ public interface IMessageContext {
      * （目前已知支持的实现端: NapCat）
      * @param messages 消息内容
      */
-    public void sendForwardText(List<String> messages);
+    public void sendForwardMessage(List<List<MessageSegment>> messages);
 }

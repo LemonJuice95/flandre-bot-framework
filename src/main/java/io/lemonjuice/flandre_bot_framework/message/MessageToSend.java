@@ -1,16 +1,23 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
+import io.lemonjuice.flandre_bot_framework.message.segment.AtMessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.ImageMessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.TextMessageSegment;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageToSend {
     private final IMessageContext context;
+    private final List<MessageSegment> segments;
     private final StringBuilder msgBuilder = new StringBuilder();
 
     public MessageToSend(IMessageContext context) {
         this.context = context;
+        this.segments = new ArrayList<>();
     }
 
     /**
@@ -18,7 +25,7 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend newLine() {
-        this.msgBuilder.append("\n");
+        this.appendText("\n");
         return this;
     }
 
@@ -28,7 +35,7 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend appendAt(long uid) {
-        this.msgBuilder.append(CQCode.at(uid));
+        this.segments.add(new AtMessageSegment(uid));
         return this;
     }
 
@@ -38,7 +45,10 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend appendText(String text) {
-        this.msgBuilder.append(text);
+        if(this.segments.getLast() instanceof TextMessageSegment textSeg) {
+            this.segments.removeLast();
+            this.segments.add(new TextMessageSegment(textSeg.getContent() + text));
+        }
         return this;
     }
 
@@ -48,7 +58,7 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend appendImage(BufferedImage image, String formatName) {
-        this.msgBuilder.append(CQCode.image(image, formatName));
+        this.segments.add(new ImageMessageSegment(image, formatName, false));
         return this;
     }
 
@@ -58,7 +68,7 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend appendImage(File file) {
-        this.msgBuilder.append(CQCode.image(file));
+        this.segments.add(new ImageMessageSegment(file));
         return this;
     }
 
@@ -68,7 +78,7 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend appendImage(String url) {
-        this.msgBuilder.append(CQCode.image(url));
+        this.segments.add(new ImageMessageSegment(url));
         return this;
     }
 

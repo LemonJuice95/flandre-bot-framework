@@ -1,7 +1,9 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
 import io.lemonjuice.flandre_bot_framework.account.AccountInfo;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
+import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.ReplyMessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.TextMessageSegment;
 import lombok.Getter;
 
 import java.util.List;
@@ -17,21 +19,26 @@ public class MessageContext implements IMessageContext {
     }
 
     @Override
+    public void sendMessage(List<MessageSegment> segments) {
+        throw new UnsupportedOperationException("不支持的消息发送操作");
+    }
+
+    @Override
     public void replyWithText(String message) {
         if(this.messageId != -1) {
-            this.sendText(CQCode.reply(this.messageId) + message);
+            this.sendMessage(List.of(new ReplyMessageSegment(this.messageId), new TextMessageSegment(message)));
         } else {
             throw new UnsupportedOperationException("不支持的消息发送操作");
         }
     }
 
     @Override
-    public void sendText(String message, boolean sendAsRawText) {
+    public void sendText(String message) {
         throw new UnsupportedOperationException("不支持的消息发送操作");
     }
 
     @Override
-    public void sendForwardText(List<String> messages) {
+    public void sendForwardMessage(List<List<MessageSegment>> messages) {
         throw new UnsupportedOperationException("不支持的消息发送操作");
     }
 

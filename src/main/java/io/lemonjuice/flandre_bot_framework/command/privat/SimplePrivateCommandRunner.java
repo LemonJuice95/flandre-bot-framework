@@ -17,6 +17,6 @@ public abstract class SimplePrivateCommandRunner extends PrivateCommandRunner {
 
     @Override
     public boolean matches() {
-        return this.command.message.trim().equals(this.getCommandBody());
+        return this.command.message.equalsText(this.getCommandBody());
     }
 }
