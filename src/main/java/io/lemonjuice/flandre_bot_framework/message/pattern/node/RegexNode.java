@@ -6,13 +6,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexNode extends MessagePatternNode {
-    public RegexNode(Pattern regex) {
+    public RegexNode(Pattern regex, boolean trim) {
         super(segment -> {
            if(segment instanceof TextMessageSegment textSeg) {
-               Matcher matcher = regex.matcher(textSeg.getContent());
+               Matcher matcher = regex.matcher(trim ? textSeg.getContent().trim() : textSeg.getContent());
                return matcher.matches();
            }
            return false;
         });
+    }
+
+    public RegexNode(Pattern regex) {
+        this(regex, true);
     }
 }
