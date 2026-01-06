@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.20.1
+ - 修正`MessageToSend`中的部分问题
+
 ## v0.20.0
  - 为`RegexNode`添加是否将文本内容去除前后空白内容的选项
 
