@@ -27,7 +27,7 @@ public class MessagePattern {
         return this.matcher(message.message);
     }
 
-    public Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
