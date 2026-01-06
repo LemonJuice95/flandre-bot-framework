@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot_framework.message.pattern;
 import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AnySegmentNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.MessagePatternNode;
+import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.utils.data.Pair;
 import lombok.Getter;
 
@@ -20,6 +21,10 @@ public class MessagePattern {
 
     public MessageMatcher matcher(MessageSegmentList segments) {
         return new MessageMatcher(this, segments);
+    }
+
+    public MessageMatcher matcher(Message message) {
+        return this.matcher(message.message);
     }
 
     public Builder builder() {
