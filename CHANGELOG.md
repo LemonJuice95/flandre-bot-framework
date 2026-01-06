@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.20.2
+ - `MessagePattern`新增一个`builder()`方法与一个`matcher(Message)`方法
+
 ## v0.20.1
  - 修正`MessageToSend`中的部分问题
 
