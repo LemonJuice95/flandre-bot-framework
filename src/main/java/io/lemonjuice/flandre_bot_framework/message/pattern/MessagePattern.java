@@ -22,6 +22,10 @@ public class MessagePattern {
         return new MessageMatcher(this, segments);
     }
 
+    public Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
         private final MessagePatternNode headNode;
         private final Deque<Pair<List<MessagePatternNode>, List<MessagePatternNode>>> groupStack;
