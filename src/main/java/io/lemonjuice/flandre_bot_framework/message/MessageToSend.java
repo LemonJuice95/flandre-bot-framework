@@ -1,9 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.message;
 
-import io.lemonjuice.flandre_bot_framework.message.segment.AtMessageSegment;
-import io.lemonjuice.flandre_bot_framework.message.segment.ImageMessageSegment;
-import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
-import io.lemonjuice.flandre_bot_framework.message.segment.TextMessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,11 +10,44 @@ import java.util.List;
 public class MessageToSend {
     private final IMessageContext context;
     private final List<MessageSegment> segments;
-    private final StringBuilder msgBuilder = new StringBuilder();
 
     public MessageToSend(IMessageContext context) {
         this.context = context;
         this.segments = new ArrayList<>();
+    }
+
+    /**
+     * 添加一个消息段
+     * @param segment 消息段
+     * @return 构建中的消息
+     */
+    public MessageToSend appendSegment(MessageSegment segment) {
+        this.segments.add(segment);
+        return this;
+    }
+
+    /**
+     * 添加回复消息段（使用上下文中的消息id）
+     * @return 构建中的消息
+     */
+    public MessageToSend appendReply() {
+        if(this.context instanceof MessageContext ctx) {
+            if(ctx.messageId != -1) {
+                this.segments.add(new ReplyMessageSegment(ctx.messageId));
+                return this;
+            }
+        }
+        throw new IllegalStateException("此消息上下文不包含消息id");
+    }
+
+    /**
+     * 添加回复消息段
+     * @param messageId 消息id
+     * @return 构建中的消息
+     */
+    public MessageToSend appendReply(long messageId) {
+        this.segments.add(new ReplyMessageSegment(messageId));
+        return this;
     }
 
     /**
@@ -86,13 +116,6 @@ public class MessageToSend {
      * 发送消息
      */
     public void send() {
-        this.context.sendText(this.msgBuilder.toString());
-    }
-
-    /**
-     * 发送消息（回复触发本条消息的消息）
-     */
-    public void reply() {
-        this.context.replyWithText(this.msgBuilder.toString());
+        this.context.sendMessage(this.segments);
     }
 }
