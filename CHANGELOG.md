@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.20.3
+ - 修正`MessagePattern`中的`builder()`方法为静态
+
 ## v0.20.2
  - `MessagePattern`新增一个`builder()`方法与一个`matcher(Message)`方法
 
