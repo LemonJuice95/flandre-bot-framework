@@ -7,13 +7,14 @@ public class AtNode extends MessagePatternNode {
     public AtNode(long qq) {
         super(segment -> {
             if(segment instanceof AtMessageSegment atSeg) {
-                return atSeg.getQQ() == qq;
+                return atSeg.getQQ() == qq ||
+                        qq == -1 && atSeg.getQQ() == AccountInfo.getBotId();
             }
             return false;
         });
     }
 
     public static AtNode atBot() {
-        return new AtNode(AccountInfo.getBotId());
+        return new AtNode(-1);
     }
 }
