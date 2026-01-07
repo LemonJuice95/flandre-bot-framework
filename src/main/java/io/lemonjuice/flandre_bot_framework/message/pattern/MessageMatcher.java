@@ -43,11 +43,13 @@ public class MessageMatcher {
                 continue;
             }
             MessageSegment nextSegment = segments.peekFirst();
-            for(MessagePatternNode nextNode : currentState.getSecond().getNextNodes()) {
-                if(nextNode.validateCondition(nextSegment)) {
-                    segments.pollFirst();
-                    this.states.add(Pair.of(segments, nextNode));
-                    segments = new ArrayDeque<>(currentState.getFirst());
+            if(nextSegment != null) {
+                for (MessagePatternNode nextNode : currentState.getSecond().getNextNodes()) {
+                    if (nextNode.validateCondition(nextSegment)) {
+                        segments.pollFirst();
+                        this.states.add(Pair.of(segments, nextNode));
+                        segments = new ArrayDeque<>(currentState.getFirst());
+                    }
                 }
             }
         }

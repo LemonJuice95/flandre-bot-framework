@@ -75,9 +75,11 @@ public class MessageToSend {
      * @return 构建中的消息
      */
     public MessageToSend appendText(String text) {
-        if(this.segments.getLast() instanceof TextMessageSegment textSeg) {
+        if(!this.segments.isEmpty() && this.segments.getLast() instanceof TextMessageSegment textSeg) {
             this.segments.removeLast();
             this.segments.add(new TextMessageSegment(textSeg.getContent() + text));
+        } else {
+            this.segments.add(new TextMessageSegment(text));
         }
         return this;
     }
