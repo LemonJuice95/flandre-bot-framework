@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.20.6
+ - 消息解析时将会合并相邻的`TextMessageSegment`
+
 ## v0.20.5
  - 修复`HelpDocResource`中`<split>`标签的bug
  - 修复`AtNode`中`atBot()`的bug

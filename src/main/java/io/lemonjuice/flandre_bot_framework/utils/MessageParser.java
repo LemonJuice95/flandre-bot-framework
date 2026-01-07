@@ -58,7 +58,16 @@ public class MessageParser {
     public static MessageSegmentList parseArrayMessage(JSONArray array) {
         List<MessageSegment> segments = new ArrayList<>();
         for(int i = 0; i < array.length(); i++) {
-            segments.add(parseMessageSegment(array.getJSONObject(i)));
+            MessageSegment seg = parseMessageSegment(array.getJSONObject(i));
+            if(seg instanceof TextMessageSegment newTextSeg &&
+               !segments.isEmpty() &&
+                segments.getLast() instanceof TextMessageSegment textSeg) {
+                MessageSegment newSeg = new TextMessageSegment(textSeg.getContent() + newTextSeg.getContent());
+                segments.removeLast();
+                segments.add(newSeg);
+            } else {
+                segments.add(parseMessageSegment(array.getJSONObject(i)));
+            }
         }
         return new MessageSegmentList(segments);
     }
