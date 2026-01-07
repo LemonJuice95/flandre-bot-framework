@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.20.5
+ - 修复`HelpDocResource`中`<split>`标签的bug
+
 ## v0.20.4
  - 修复`MessageMatcher`和`MessageToSend`的部分bug
 
