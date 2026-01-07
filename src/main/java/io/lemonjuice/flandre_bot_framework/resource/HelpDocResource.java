@@ -32,7 +32,7 @@ public class HelpDocResource extends Resource<List<List<MessageSegment>>> {
             List<MessageSegment> reading = new ArrayList<>();
             StringBuilder readingStr = new StringBuilder();
             for(String c : contentsRaw) {
-                if(c.equals("<split>") && !reading.isEmpty()) {
+                if(c.equals("<split>") && (!reading.isEmpty() || !readingStr.isEmpty())) {
                     if(!readingStr.isEmpty()) {
                         reading.add(new TextMessageSegment(readingStr.toString()));
                         readingStr = new StringBuilder();
