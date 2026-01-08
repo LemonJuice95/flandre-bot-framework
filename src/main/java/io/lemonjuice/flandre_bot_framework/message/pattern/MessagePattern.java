@@ -163,7 +163,7 @@ public class MessagePattern {
         }
 
         public MessagePattern build() {
-            return new MessagePattern(this.headNode, new HashSet<>(this.currentNodes));
+            return new MessagePattern(this.headNode, Set.copyOf(this.currentNodes));
         }
     }
 
