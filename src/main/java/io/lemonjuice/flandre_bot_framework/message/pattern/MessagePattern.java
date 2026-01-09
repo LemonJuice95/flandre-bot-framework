@@ -163,6 +163,9 @@ public class MessagePattern {
         }
 
         public MessagePattern build() {
+            while(!this.groupStack.isEmpty()) {
+                this.endGroup();
+            }
             return new MessagePattern(this.headNode, Set.copyOf(this.currentNodes));
         }
     }
