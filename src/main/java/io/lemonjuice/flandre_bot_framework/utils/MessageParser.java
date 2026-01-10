@@ -41,6 +41,7 @@ public class MessageParser {
         MESSAGE_SEGMENT_TYPES.put("text", TextMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("video", VideoMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("xml", XmlMessageSegment::new);
+        MESSAGE_SEGMENT_TYPES.put("markdown", MarkdownMessageSegment::new);
     }
 
     @Nullable
