@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v0.20.7
+ - `MessagePattern`在构建时将会自动闭合未闭合的节点组
+ - 消除`HelpDocResource`末尾的换行
+
 ## v0.20.6
  - 消息解析时将会合并相邻的`TextMessageSegment`
 
