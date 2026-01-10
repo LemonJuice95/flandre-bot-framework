@@ -34,13 +34,13 @@ public class HelpDocResource extends Resource<List<List<MessageSegment>>> {
             for(String c : contentsRaw) {
                 if(c.equals("<split>") && (!reading.isEmpty() || !readingStr.isEmpty())) {
                     if(!readingStr.isEmpty()) {
-                        reading.add(new TextMessageSegment(readingStr.toString()));
+                        reading.add(new TextMessageSegment(readingStr.toString().trim()));
                         readingStr = new StringBuilder();
                     }
                     contents.add(reading);
                     reading = new ArrayList<>();
                 } else if(image_pattern.matcher(c).matches()) {
-                    reading.add(new TextMessageSegment(readingStr.toString()));
+                    reading.add(new TextMessageSegment(readingStr.toString().trim()));
                     readingStr = new StringBuilder();
                     Matcher matcher = image_pattern.matcher(c);
                     matcher.find();
@@ -61,7 +61,7 @@ public class HelpDocResource extends Resource<List<List<MessageSegment>>> {
                 }
             }
             if(!readingStr.toString().trim().isEmpty()) {
-                reading.add(new TextMessageSegment(readingStr.toString()));
+                reading.add(new TextMessageSegment(readingStr.toString().trim()));
             }
             if(!reading.isEmpty()) {
                 contents.add(reading);
