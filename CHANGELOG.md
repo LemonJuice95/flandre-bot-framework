@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.21.0
+ - 添加对markdown消息的支持
+
 ## v0.20.7
  - `MessagePattern`在构建时将会自动闭合未闭合的节点组
  - 消除`HelpDocResource`末尾的换行
