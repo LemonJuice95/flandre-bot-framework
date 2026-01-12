@@ -12,6 +12,7 @@ import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
 import io.lemonjuice.flandre_bot_framework.lifecycle.Stop;
 import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
+import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
@@ -67,6 +68,8 @@ public class FlandreBot {
         BotConsole.init();
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
         BotEventBus.init();
+
+        MessageParser.initSegmentMap();
 
         PluginsLoadingProcessor pluginLoader = new PluginsLoadingProcessor();
         BotEventBus.post(new PluginRegisterEvent(pluginLoader));

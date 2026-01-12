@@ -1,5 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.utils;
 
+import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
+import io.lemonjuice.flandre_bot_framework.event.meta.SegmentTypeRegisterEvent;
 import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
 import io.lemonjuice.flandre_bot_framework.message.segment.*;
 import io.lemonjuice.flandre_bot_framework.model.Message;
@@ -22,7 +24,7 @@ import java.util.function.Function;
 public class MessageParser {
     public static final Map<String, Function<JSONObject, MessageSegment>> MESSAGE_SEGMENT_TYPES = new HashMap<>();
 
-    static {
+    public static void initSegmentMap() {
         MESSAGE_SEGMENT_TYPES.put("at", AtMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("contact", ContactMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("dice", DiceMessageSegment::new);
@@ -42,6 +44,7 @@ public class MessageParser {
         MESSAGE_SEGMENT_TYPES.put("video", VideoMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("xml", XmlMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("markdown", MarkdownMessageSegment::new);
+        BotEventBus.post(new SegmentTypeRegisterEvent(MESSAGE_SEGMENT_TYPES));
     }
 
     @Nullable
@@ -100,7 +103,7 @@ public class MessageParser {
                     .font(json.getInt("font"))
                     .format(json.getString("message_format"));
             return message$builder.build();
-        } catch (JSONException e) {
+        } catch (Exception e) {
             log.error("消息解析异常! 原始json文本: \"{}\"", json.toString(), e);
             return null;
         }
