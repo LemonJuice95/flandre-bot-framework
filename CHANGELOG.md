@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.22.0
+ - 添加一个`SegmentTypeRegisterEvent`事件用于开发者自定义消息段类型（防止特定OneBot实现中的消息段无法解析）
+
 ## v0.21.0
  - 添加对markdown消息的支持
 
