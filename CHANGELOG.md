@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.23.0
+ - 为`MessageSegmentList`添加一个`trim()`方法用于删除首尾的空白消息段
+
 ## v0.22.0
  - 添加一个`SegmentTypeRegisterEvent`事件用于开发者自定义消息段类型（防止特定OneBot实现中的消息段无法解析）
 
