@@ -68,9 +68,10 @@ public class MessageSegmentList {
     }
 
     public boolean equalsAtWithText(long userId, String text, boolean trim) {
-        if(this.segments.size() == 2 &&
-            this.segments.getFirst() instanceof AtMessageSegment atSegment &&
-            this.segments.get(1) instanceof TextMessageSegment textSegment) {
+        List<MessageSegment> segments = trim ? this.trim().getSegments() : this.getSegments();
+        if(segments.size() == 2 &&
+            segments.getFirst() instanceof AtMessageSegment atSegment &&
+            segments.get(1) instanceof TextMessageSegment textSegment) {
             return atSegment.getQQ() == userId &&
                     Objects.equals(text, trim ? textSegment.getContent().trim() : textSegment.getContent());
         }
