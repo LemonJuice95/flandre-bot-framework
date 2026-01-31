@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.23.1
+ - 修正`equalsAtWithText()`方法在`trim`参数为`true`时的行为
+
 ## v0.23.0
  - 为`MessageSegmentList`添加一个`trim()`方法用于删除首尾的空白消息段
 
