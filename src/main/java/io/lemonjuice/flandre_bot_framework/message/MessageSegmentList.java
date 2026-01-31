@@ -22,6 +22,26 @@ public class MessageSegmentList {
         this.segments = segments;
     }
 
+    public MessageSegmentList trim() {
+        List<MessageSegment> newSegments = new ArrayList<>();
+        int start = 0;
+        while(start < this.segments.size() &&
+                this.segments.get(start) instanceof TextMessageSegment textSeg &&
+                textSeg.getContent().isBlank()) {
+            start++;
+        }
+        int end = this.segments.size();
+        while(end > 0 &&
+                this.segments.get(end - 1) instanceof TextMessageSegment textSeg &&
+                textSeg.getContent().isBlank()) {
+            end--;
+        }
+        for(int i = start; i < end; i++) {
+            newSegments.add(this.segments.get(i));
+        }
+        return new MessageSegmentList(newSegments);
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
