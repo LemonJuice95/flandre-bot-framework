@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v0.24.0
+ - 为群聊上下文添加成员列表
+
 ## v0.23.1
  - 修正`equalsAtWithText()`方法在`trim`参数为`true`时的行为
 
