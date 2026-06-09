@@ -92,6 +92,7 @@ public class ContextManager {
                     long id = group.getLong("group_id");
                     String name = group.getString("group_name");
                     GroupContext context = new GroupContext(id, name);
+                    context.initMembers();
                     GROUP_CONTEXTS.put(id, context);
                 }
             } else {
