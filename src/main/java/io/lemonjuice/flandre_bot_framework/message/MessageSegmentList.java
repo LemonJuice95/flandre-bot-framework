@@ -135,7 +135,7 @@ public class MessageSegmentList implements List<MessageSegment> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return new HashSet<>(this.segments).containsAll(c);
+        return this.segments.containsAll(c);
     }
 
     @Override
