@@ -137,3 +137,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+tasks.named("processResources") {
+    doFirst {
+        def frameworkPropertiesOld = file("./build/resources/framework.properties")
+        if(frameworkPropertiesOld.exists()) {
+            frameworkPropertiesOld.delete()
+        }
+    }
+}
