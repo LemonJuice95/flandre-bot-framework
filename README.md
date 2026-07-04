@@ -1,10 +1,10 @@
 # Flandre-Bot-Framework
 
-[![java21](https://img.shields.io/badge/Java-21-blue.svg)](https://www.oracle.com/java/technologies/downloads/#java21)
+[![java25](https://img.shields.io/badge/Java-25-blue.svg)](https://www.oracle.com/java/technologies/downloads/#java25)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Maven](https://img.shields.io/badge/Maven-Central-blue.svg)](https://central.sonatype.com/artifact/io.github.lemonjuice95/flandre-bot-framework)
 
-基于Java 21的轻量级QQ Bot框架，遵循OneBot 11协议，使用Websocket连接
+基于Java 25的轻量级QQ Bot框架，遵循OneBot 11协议，使用Websocket连接
 
 注：即使在反向连接模式下，也仅支持**单个**OneBot实现的客户端与应用端连接，如需使用多个bot账号请**多开应用端实例**
 
