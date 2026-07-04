@@ -69,7 +69,7 @@ publishing {
 
             pom {
                 name = 'Flandre Bot Framework'
-                description = 'A qq bot framework on Java 21, Using OneBot 11 protocol, Connect through WebSocket'
+                description = 'A qq bot framework on Java 25, Using OneBot 11 protocol, Connect through WebSocket'
                 url = 'https://github.com/LemonJuice95/flandre-bot-framework'
 
                 licenses {
