@@ -52,7 +52,7 @@ dependencies {
 2. 使用gradle的shadowJar任务构建Bot的jar包
 3. 在运行目录下，根据你的系统创建启动脚本（win系统使用.bat文件，linux系统使用.sh文件），写入
 ```shell
-java -jar ${你的jar包文件名}.jar
+java --enable-native-access=ALL-UNNAMED -jar ${你的jar包文件名}.jar
 # 如果bot在windows系统上部署，建议在启动脚本后加入pause
 ```
 4. 确保OneBot实现端的服务器正在运行后，运行启动脚本
