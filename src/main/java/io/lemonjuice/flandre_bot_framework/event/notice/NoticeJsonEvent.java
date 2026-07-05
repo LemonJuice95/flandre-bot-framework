@@ -12,5 +12,5 @@ import org.json.JSONObject;
 @AllArgsConstructor
 @Getter
 public class NoticeJsonEvent extends Event {
-    private final JSONObject notice;
+    protected final JSONObject notice;
 }

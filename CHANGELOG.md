@@ -1,5 +1,11 @@
 # ChangeLog
 
+## v0.25.0
+ - `MessageSegmentList`类实现了`List`接口，无需再获取`segments`字段
+ - 添加了`NoticeEvent`及其子类来拆分通知类型
+ - 将Java版本由Java21升级至Java25
+ - 优化`ContextManager`中通过id获取好友或群聊上下文的方法
+
 ## v0.24.0
  - 为群聊上下文添加成员列表
 
