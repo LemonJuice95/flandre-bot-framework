@@ -11,7 +11,7 @@
 3. 在`build.gradle`文件中，进行如下配置：
 ```groovy
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.gradleup.shadow' version '9.4.3'
 }
 
 jar {
