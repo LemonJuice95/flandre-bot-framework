@@ -30,13 +30,11 @@ public class ContextManager {
     }
 
     public static GroupContext getGroup(long id) {
-        Optional<GroupContext> optContext = Optional.ofNullable(GROUP_CONTEXTS.get(id));
-        return optContext.orElse(new GroupContext(id, ""));
+        return GROUP_CONTEXTS.computeIfAbsent(id, key -> new GroupContext(key, "<Unknown>"));
     }
 
     public static FriendContext getFriend(long id) {
-        Optional<FriendContext> optContext = Optional.ofNullable(FRIEND_CONTEXTS.get(id));
-        return optContext.orElse(new FriendContext(id, ""));
+        return FRIEND_CONTEXTS.computeIfAbsent(id, key -> new FriendContext(key, "<Unknown>"));
     }
 
     public synchronized static void init() {
