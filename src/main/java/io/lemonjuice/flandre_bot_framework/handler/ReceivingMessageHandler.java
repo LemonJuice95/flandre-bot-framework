@@ -68,7 +68,7 @@ public class ReceivingMessageHandler {
         }
         if(message.type.equals("group")) {
             GroupContext context = ContextManager.getGroup(message.groupId);
-            String groupName = context.getGroupName().isEmpty() ? "" : String.format("[%s]", context.getGroupName());
+            String groupName = String.format("[%s]", context.getGroupName());
             from = String.format("群聊%s(%d)", groupName, message.groupId);
         }
 
