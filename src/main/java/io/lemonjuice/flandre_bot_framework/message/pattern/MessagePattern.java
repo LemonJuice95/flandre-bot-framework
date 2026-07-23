@@ -74,11 +74,13 @@ public class MessagePattern {
                 if(loopFlag) {
                     Set<MessagePatternNode> targetNodes = new HashSet<>(pair.getSecond());
                     Set<MessagePatternNode> nextNodes = new HashSet<>();
+                    Set<MessagePatternNode> visited = new HashSet<>();
                     while(!targetNodes.isEmpty()) {
                         for(MessagePatternNode tnode : targetNodes) {
+                            visited.add(tnode);
                             this.currentNodes.forEach(cnode -> cnode.addNextNode(tnode));
                             if(this.optNodes.contains(tnode)) {
-                                nextNodes.addAll(tnode.getNextNodes());
+                                nextNodes.addAll(tnode.getNextNodes().stream().filter(n -> !visited.contains(n)).toList());
                             }
                         }
                         targetNodes.clear();
