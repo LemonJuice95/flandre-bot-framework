@@ -7,7 +7,7 @@
 ## 创建项目
 
 1. 首先，你需要一个可靠的Java IDE来进行开发，这里推荐使用[IntelliJ IDEA](https://www.jetbrains.com.cn/idea/)
-2. 创建一个新的gradle项目，**Java版本需选用21**
+2. 创建一个新的gradle项目，**Java版本需选用25**
 3. 在`build.gradle`文件中，进行如下配置：
 ```groovy
 plugins {
