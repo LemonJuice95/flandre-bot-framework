@@ -11,6 +11,7 @@ public class MessageMatcher {
     private final MessagePattern pattern;
     private final MessageSegmentList segments;
     private final Queue<State> states;
+    private final Set<State> visitedStates = new HashSet<>();
 
     private Boolean matches;
 
@@ -47,8 +48,10 @@ public class MessageMatcher {
             MessageSegment nextSegment = this.segments.get(currentState.nextSegIndex);
             if(nextSegment != null) {
                 for (MessagePatternNode nextNode : currentState.currentNode.getNextNodes()) {
-                    if (nextNode.validateCondition(nextSegment)) {
-                        this.states.add(new State(currentState.nextSegIndex + 1, nextNode));
+                    State nextState = new State(currentState.nextSegIndex + 1, nextNode);
+                    if (!this.visitedStates.contains(nextState) && nextNode.validateCondition(nextSegment)) {
+                        this.states.add(nextState);
+                        this.visitedStates.add(nextState);
                     }
                 }
             }
