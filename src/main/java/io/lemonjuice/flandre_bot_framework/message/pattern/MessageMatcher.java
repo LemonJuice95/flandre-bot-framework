@@ -9,20 +9,23 @@ import java.util.*;
 
 public class MessageMatcher {
     private final MessagePattern pattern;
-    private final Queue<Pair<Deque<MessageSegment>, MessagePatternNode>> states;
+    private final MessageSegmentList segments;
+    private final Queue<State> states;
+
     private Boolean matches;
 
     MessageMatcher(MessagePattern pattern, MessageSegmentList segments) {
         this.pattern = pattern;
+        this.segments = segments;
         this.states = new ArrayDeque<>();
-        this.states.add(Pair.of(new ArrayDeque<>(segments.getSegments()), this.pattern.getHeadNode()));
+        this.states.add(new State(0, this.pattern.getHeadNode()));
         this.matches = null;
     }
 
     public void reset(MessageSegmentList newInput) {
         this.states.clear();
         this.matches = null;
-        this.states.add(Pair.of(new ArrayDeque<>(newInput.getSegments()), this.pattern.getHeadNode()));
+        this.states.add(new State(0, this.pattern.getHeadNode()));
     }
 
     public boolean matches() {
@@ -33,22 +36,19 @@ public class MessageMatcher {
         this.matches = Boolean.FALSE;
 
         while(!this.states.isEmpty()) {
-            Pair<Deque<MessageSegment>, MessagePatternNode> currentState = this.states.poll();
-            if(this.pattern.getFinalNodes().contains(currentState.getSecond()) && currentState.getFirst().isEmpty()) {
+            State currentState = this.states.poll();
+            if(this.pattern.getFinalNodes().contains(currentState.currentNode) && currentState.nextSegIndex == this.segments.size()) {
                 this.matches = Boolean.TRUE;
                 break;
             }
-            Deque<MessageSegment> segments = new ArrayDeque<>(currentState.getFirst());
-            if(segments.isEmpty()) {
+            if(currentState.nextSegIndex == this.segments.size()) {
                 continue;
             }
-            MessageSegment nextSegment = segments.peekFirst();
+            MessageSegment nextSegment = this.segments.get(currentState.nextSegIndex);
             if(nextSegment != null) {
-                for (MessagePatternNode nextNode : currentState.getSecond().getNextNodes()) {
+                for (MessagePatternNode nextNode : currentState.currentNode.getNextNodes()) {
                     if (nextNode.validateCondition(nextSegment)) {
-                        segments.pollFirst();
-                        this.states.add(Pair.of(segments, nextNode));
-                        segments = new ArrayDeque<>(currentState.getFirst());
+                        this.states.add(new State(currentState.nextSegIndex + 1, nextNode));
                     }
                 }
             }
@@ -63,8 +63,8 @@ public class MessageMatcher {
             boolean matchedNextNode = false;
 
             MessageSegment firstSeg = this.states.peek().getFirst().peekFirst();
-            for (MessagePatternNode nextNode : this.states.peek().getSecond().getNextNodes()) {
-                if (nextNode.validateCondition(firstSeg)) {
+            for (MessagePatternNode currentNode : this.states.peek().getSecond().getNextNodes()) {
+                if (currentNode.validateCondition(firstSeg)) {
                     matchedNextNode = true;
                     break;
                 }
@@ -81,8 +81,8 @@ public class MessageMatcher {
         findHead: {
             while (!this.states.isEmpty() && !this.states.peek().getFirst().isEmpty()) {
                 MessageSegment firstSegment = this.states.peek().getFirst().peekFirst();
-                for (MessagePatternNode nextNode : this.pattern.getHeadNode().getNextNodes()) {
-                    if (nextNode.validateCondition(firstSegment)) {
+                for (MessagePatternNode currentNode : this.pattern.getHeadNode().getNextNodes()) {
+                    if (currentNode.validateCondition(firstSegment)) {
                         tempSegments = new ArrayList<>(this.states.peek().getFirst());
                         break findHead;
                     }
@@ -99,8 +99,8 @@ public class MessageMatcher {
                 this.states.add(Pair.of(currentState.getFirst(), this.pattern.getHeadNode()));
                 break;
             }
-            for(MessagePatternNode nextNode : this.pattern.getHeadNode().getNextNodes()) {
-                if(nextNode.validateCondition(currentState.getFirst().peekFirst())) {
+            for(MessagePatternNode currentNode : this.pattern.getHeadNode().getNextNodes()) {
+                if(currentNode.validateCondition(currentState.getFirst().peekFirst())) {
                     this.states.add(Pair.of())
                 }
             }
@@ -116,4 +116,28 @@ public class MessageMatcher {
         List<MessageSegment> result = new ArrayList<>();
 
     }*/
+
+    private static class State {
+        public final int nextSegIndex;
+        public final MessagePatternNode currentNode;
+
+        public State(int nextSegIndex, MessagePatternNode currentNode) {
+            this.nextSegIndex = nextSegIndex;
+            this.currentNode = currentNode;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj == this) return true;
+            if(obj instanceof State state) {
+                return this.currentNode == state.currentNode && this.nextSegIndex == state.nextSegIndex;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.nextSegIndex, this.currentNode);
+        }
+    }
 }
