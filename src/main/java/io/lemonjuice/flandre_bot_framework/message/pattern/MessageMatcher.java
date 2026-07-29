@@ -9,7 +9,7 @@ import java.util.*;
 
 public class MessageMatcher {
     private final MessagePattern pattern;
-    private final MessageSegmentList segments;
+    private MessageSegmentList segments;
     private final Queue<State> states;
     private final Set<State> visitedStates = new HashSet<>();
 
@@ -26,6 +26,7 @@ public class MessageMatcher {
     public void reset(MessageSegmentList newInput) {
         this.states.clear();
         this.matches = null;
+        this.segments = newInput;
         this.states.add(new State(0, this.pattern.getHeadNode()));
     }
 
