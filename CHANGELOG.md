@@ -1,5 +1,11 @@
 # ChangeLog
 
+## v0.26.0
+ - 使用`MethodHandle`优化事件总线的性能
+ - 添加`BotConfig`类用于管理自定义配置（半成品）
+ - 修复`MessagePattern`类中关于循环组构建的部分bug
+ - 优化`MessageMatcher`的性能
+
 ## v0.25.0
  - `MessageSegmentList`类实现了`List`接口，无需再获取`segments`字段
  - 添加了`NoticeEvent`及其子类来拆分通知类型
@@ -36,7 +42,7 @@
  - 修复`MessageMatcher`和`MessageToSend`的部分bug
 
 ## v0.20.3
- - 修正`MessagePattern`中的`builder()`方法为静态/
+ - 修正`MessagePattern`中的`builder()`方法为静态
 
 ## v0.20.2
  - `MessagePattern`新增一个`builder()`方法与一个`matcher(Message)`方法
