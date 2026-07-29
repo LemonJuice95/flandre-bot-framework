@@ -39,6 +39,7 @@ public class ReceivingMessageHandler {
             return;
         }
 
+        //TODO 增加屏蔽部分来源的消息的功能
         if(BotBasicConfig.LOG_MESSAGES.get()) {
             logMessage(message);
         }
