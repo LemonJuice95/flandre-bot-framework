@@ -1,5 +1,7 @@
 package io.lemonjuice.flandre_bot_framework;
 
+import io.lemonjuice.flandre_bot_framework.account.obj.AccountInfoWrapper;
+import io.lemonjuice.flandre_bot_framework.account.obj.ContextManagerWrapper;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileInit;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
@@ -13,6 +15,7 @@ import io.lemonjuice.flandre_bot_framework.lifecycle.Stop;
 import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
 import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
@@ -31,6 +34,11 @@ public class FlandreBot {
     private static boolean keyConfigLost = false;
     private static final List<String> configLostMessages = new ArrayList<>();
 
+    @Getter
+    private static final AccountInfoWrapper accountInfo = new AccountInfoWrapper();
+    @Getter
+    private static final ContextManagerWrapper contextManager = new ContextManagerWrapper();
+
     public static void main(String[] args) {
         stopThread.setDaemon(false);
         Runtime.getRuntime().addShutdownHook(stopThread);
@@ -41,7 +49,7 @@ public class FlandreBot {
         try {
             keepAlive.await();
         } catch (InterruptedException e) {
-            Thread.interrupted();
+            Thread.currentThread().interrupt();
         }
     }
 
