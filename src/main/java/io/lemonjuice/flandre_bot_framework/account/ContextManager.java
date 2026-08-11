@@ -78,6 +78,10 @@ public class ContextManager {
         }
     }
 
+    public static void removeFriend(long userId) {
+        FRIEND_CONTEXTS.remove(userId);
+    }
+
     public static void initGroupContexts() {
         synchronized (groupContextInitLock) {
             log.info("正在初始化群聊列表");
