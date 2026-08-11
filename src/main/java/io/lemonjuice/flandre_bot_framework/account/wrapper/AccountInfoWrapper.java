@@ -1,4 +1,4 @@
-package io.lemonjuice.flandre_bot_framework.account.obj;
+package io.lemonjuice.flandre_bot_framework.account.wrapper;
 
 import io.lemonjuice.flandre_bot_framework.account.AccountInfo;
 

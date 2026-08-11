@@ -1,7 +1,7 @@
 package io.lemonjuice.flandre_bot_framework;
 
-import io.lemonjuice.flandre_bot_framework.account.obj.AccountInfoWrapper;
-import io.lemonjuice.flandre_bot_framework.account.obj.ContextManagerWrapper;
+import io.lemonjuice.flandre_bot_framework.account.wrapper.AccountInfoWrapper;
+import io.lemonjuice.flandre_bot_framework.account.wrapper.ContextManagerWrapper;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileInit;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
