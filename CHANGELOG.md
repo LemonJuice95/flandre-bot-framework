@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v0.27.0
+ - 修复`MessageMatcher`类的reset方法
+ - 为`AccountInfo`与`ContextManager`添加一个位于主类的入口点（暂时使用包装类实现）
+ - 修复Websocket重连后有概率出现的`session`无法使用的问题
+
 ## v0.26.0
  - 使用`MethodHandle`优化事件总线的性能
  - 添加`BotConfig`类用于管理自定义配置（半成品）
