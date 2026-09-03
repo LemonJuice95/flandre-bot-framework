@@ -42,6 +42,7 @@ graph LR
 A[Flandre-Bot-Framework] -->|Websocket连接| B[OneBot实现端]
 B --> A
 B -->|OneBot实现端自研实现| C[QQ等应用]
+C --> B
 ```
 
 ## 为什么选择Flandre Bot Framework？
