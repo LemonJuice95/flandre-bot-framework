@@ -34,11 +34,11 @@ public class WSClient implements INetworkImpl {
 
     private final BlockingQueue<String> messageQueue;
     private final AtomicBoolean running;
-    private Thread senderThread;
+    private volatile Thread senderThread;
 
     private final ConcurrentHashMap<UUID, WSResponse> waitingResponses = new ConcurrentHashMap<>();
 
-    private Session session;
+    private volatile Session session;
     private String token = "";
 
     private WSClient() {
@@ -51,7 +51,7 @@ public class WSClient implements INetworkImpl {
     public synchronized boolean init(String token) {
         try {
             this.token = token;
-            this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(BotBasicConfig.CLIENT_URL.get()));
+            ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(BotBasicConfig.CLIENT_URL.get()));
             return true;
         } catch (Exception e) {
             log.error("Bot连接失败！", e);
@@ -121,7 +121,12 @@ public class WSClient implements INetworkImpl {
         while(this.running.get()) {
             try {
                 String msg = this.messageQueue.take();
-                this.session.getAsyncRemote().sendText(msg);
+                try {
+                    this.session.getAsyncRemote().sendText(msg);
+                } catch (IllegalStateException e) {
+                    this.messageQueue.put(msg);
+                    break;
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
@@ -143,6 +148,7 @@ public class WSClient implements INetworkImpl {
     public void onOpen(Session session) {
         log.info("Bot连接成功！");
         this.running.set(true);
+        this.session = session;
         this.senderThread = new Thread(this::sendingLoop, "WS-Sender");
         this.senderThread.start();
 
