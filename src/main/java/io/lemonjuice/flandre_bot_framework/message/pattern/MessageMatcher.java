@@ -18,7 +18,7 @@ public class MessageMatcher {
     MessageMatcher(MessagePattern pattern, MessageSegmentList segments) {
         this.pattern = pattern;
         this.segments = segments;
-        this.states = new ArrayDeque<>();
+        this.states = new PriorityQueue<>();
         this.states.add(new State(0, this.pattern.getHeadNode()));
         this.matches = null;
     }
@@ -49,7 +49,12 @@ public class MessageMatcher {
             MessageSegment nextSegment = this.segments.get(currentState.nextSegIndex);
             if(nextSegment != null) {
                 for (MessagePatternNode nextNode : currentState.currentNode.getNextNodes()) {
-                    State nextState = new State(currentState.nextSegIndex + 1, nextNode);
+                    State nextState = new State(
+                            currentState.nextSegIndex + 1,
+                            nextNode,
+                            currentState.priority - this.pattern.getEdgeValues().getOrDefault(new MessagePattern.Edge(currentState.currentNode, nextNode), 0)
+                    );
+
                     if (!this.visitedStates.contains(nextState) && nextNode.validateCondition(nextSegment)) {
                         this.states.add(nextState);
                         this.visitedStates.add(nextState);
@@ -121,13 +126,24 @@ public class MessageMatcher {
 
     }*/
 
-    private static class State {
+    private static class State implements Comparable<State> {
         public final int nextSegIndex;
         public final MessagePatternNode currentNode;
+        public final int priority;
 
-        public State(int nextSegIndex, MessagePatternNode currentNode) {
+        public State(int nextSegIndex, MessagePatternNode currentNode, int priority) {
             this.nextSegIndex = nextSegIndex;
             this.currentNode = currentNode;
+            this.priority = priority;
+        }
+
+        public State(int nextSegIndex, MessagePatternNode currentNode) {
+            this(nextSegIndex, currentNode, 0);
+        }
+
+        @Override
+        public int compareTo(State o) {
+            return Integer.compare(this.priority, o.priority);
         }
 
         @Override
