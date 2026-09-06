@@ -12,10 +12,10 @@ import java.util.*;
 public class MessagePattern {
     private final MessagePatternNode headNode;
     private final Set<MessagePatternNode> finalNodes;
-    private final List<MessagePatternGroup> groups;
+    private final Map<Integer, MessagePatternGroup> groups;
     private final Map<Edge, Integer> edgeValues;
 
-    private MessagePattern(MessagePatternNode headNode, Set<MessagePatternNode> finalNodes, List<MessagePatternGroup> groups, Map<Edge, Integer> edgeValues) {
+    private MessagePattern(MessagePatternNode headNode, Set<MessagePatternNode> finalNodes, Map<Integer, MessagePatternGroup> groups, Map<Edge, Integer> edgeValues) {
         this.headNode = headNode;
         this.finalNodes = finalNodes;
         this.groups = groups;
@@ -42,7 +42,7 @@ public class MessagePattern {
 
         private int nextGroupId = 1;
         private final Deque<MessagePatternGroup.Builder> groupStack;
-        private final List<MessagePatternGroup> groups = new ArrayList<>();
+        private final Map<Integer, MessagePatternGroup> groups = new HashMap<>();
 
         private final Map<Edge, Integer> edgeValues = new HashMap<>();
 
@@ -147,7 +147,7 @@ public class MessagePattern {
                     });
                 }
 
-                this.groups.add(builder.getGroupId(), builder.build());
+                this.groups.put(builder.getGroupId(), builder.build());
             }
             return this;
         }

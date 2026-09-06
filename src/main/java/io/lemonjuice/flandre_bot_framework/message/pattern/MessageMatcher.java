@@ -12,6 +12,7 @@ public class MessageMatcher {
     private MessageSegmentList segments;
     private final Queue<State> states;
     private final Set<State> visitedStates = new HashSet<>();
+    private final Map<Integer, CaptureGroup> captureGroups = new HashMap();
 
     private Boolean matches;
 
@@ -19,7 +20,10 @@ public class MessageMatcher {
         this.pattern = pattern;
         this.segments = segments;
         this.states = new PriorityQueue<>();
-        this.states.add(new State(0, this.pattern.getHeadNode()));
+
+        State firstState = new State(0, this.pattern.getHeadNode());
+        firstState.captureGroups = new HashMap<>();
+        this.states.add(firstState);
         this.matches = null;
     }
 
@@ -27,7 +31,10 @@ public class MessageMatcher {
         this.states.clear();
         this.matches = null;
         this.segments = newInput;
-        this.states.add(new State(0, this.pattern.getHeadNode()));
+
+        State firstState = new State(0, this.pattern.getHeadNode());
+        firstState.captureGroups = new HashMap<>();
+        this.states.add(firstState);
     }
 
     public boolean matches() {
@@ -41,6 +48,7 @@ public class MessageMatcher {
             State currentState = this.states.poll();
             if(this.pattern.getFinalNodes().contains(currentState.currentNode) && currentState.nextSegIndex == this.segments.size()) {
                 this.matches = Boolean.TRUE;
+                this.captureGroups.putAll(currentState.captureGroups);
                 break;
             }
             if(currentState.nextSegIndex == this.segments.size()) {
@@ -56,6 +64,16 @@ public class MessageMatcher {
                     );
 
                     if (!this.visitedStates.contains(nextState) && nextNode.validateCondition(nextSegment)) {
+
+                        nextState.captureGroups = currentState.captureGroups != null ? new HashMap<>(currentState.captureGroups) : new HashMap<>();
+
+                        for (Integer groupId : nextNode.getGroupIds()) {
+                            nextState.captureGroups.compute(groupId, (k, v) -> {
+                                if(v == null) return new CaptureGroup(currentState.nextSegIndex, currentState.nextSegIndex + 1);
+                                return v.matchAt(currentState.nextSegIndex);
+                            });
+                        }
+
                         this.states.add(nextState);
                         this.visitedStates.add(nextState);
                     }
@@ -64,6 +82,17 @@ public class MessageMatcher {
         }
 
         return this.matches;
+    }
+
+    public MessageSegmentList group(int groupId) {
+        if(this.matches == null) {
+            throw new IllegalStateException("在尚未进行匹配/无法匹配时获取捕获组");
+        }
+        CaptureGroup captureGroup = this.captureGroups.get(groupId);
+        if(captureGroup == null) {
+            throw new IllegalArgumentException("无效的组id");
+        }
+        return new MessageSegmentList(this.segments.subList(captureGroup.startIdx, captureGroup.endIdx));
     }
 
     /* WIP
@@ -130,6 +159,7 @@ public class MessageMatcher {
         public final int nextSegIndex;
         public final MessagePatternNode currentNode;
         public final int priority;
+        public Map<Integer, CaptureGroup> captureGroups;
 
         public State(int nextSegIndex, MessagePatternNode currentNode, int priority) {
             this.nextSegIndex = nextSegIndex;
@@ -158,6 +188,39 @@ public class MessageMatcher {
         @Override
         public int hashCode() {
             return Objects.hash(this.nextSegIndex, this.currentNode);
+        }
+    }
+
+    private static class CaptureGroup {
+        public final int startIdx; //inclusive
+        public final int endIdx; //exclusive
+
+        public CaptureGroup() {
+            this.startIdx = -1;
+            this.endIdx = -1;
+        }
+
+        public CaptureGroup(int startIdx, int endIdx) {
+            this.startIdx = startIdx;
+            this.endIdx = endIdx;
+        }
+
+        public CaptureGroup matchAt(int index) {
+            return new CaptureGroup(this.startIdx == -1 ? index : this.startIdx, index + 1);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj == this) return true;
+            if(obj instanceof CaptureGroup captureGroup) {
+                return captureGroup.startIdx == this.startIdx && captureGroup.endIdx == this.endIdx;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.startIdx, this.endIdx);
         }
     }
 }

@@ -1,7 +1,9 @@
 package test.command;
 
 import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AnySegmentNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.message.segment.AtMessageSegment;
@@ -16,17 +18,28 @@ public class MessagePatternTest {
     public void test() {
         MessageSegmentList segments = new MessageSegmentList(List.of(
                 new AtMessageSegment(123L),
-                new TextMessageSegment(" 测试123")
+                new TextMessageSegment(" 测试123"),
+                new TextMessageSegment(" 测试456"),
+                new TextMessageSegment(" 测试789 "),
+                new AtMessageSegment(456L)
                 ));
         MessagePattern msgPattern = MessagePattern.builder()
+                .startGroup()
                 .nextNode(new AtNode(123L))
+                .startGroup()
                 .nextNode(new RegexNode(Pattern.compile("测试(\\d+)")))
+                .endGroup(MessagePattern.GroupFlag.LOOP, MessagePattern.GroupFlag.OPTIONAL)
+                .nextLoopNode(new AnySegmentNode())
+                .endGroup()
                 .build();
-        boolean matches = msgPattern.matcher(segments).matches();
+        MessageMatcher matcher = msgPattern.matcher(segments);
+        boolean matches = matcher.matches();
         if(matches) {
             System.out.println(".........................");
         } else {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
+        System.out.println(matcher.group(1).toString());
+        System.out.println(matcher.group(2).toString());
     }
 }
