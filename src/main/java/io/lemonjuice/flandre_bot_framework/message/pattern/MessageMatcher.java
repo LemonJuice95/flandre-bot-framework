@@ -3,7 +3,6 @@ package io.lemonjuice.flandre_bot_framework.message.pattern;
 import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.MessagePatternNode;
 import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
-import io.lemonjuice.flandre_bot_framework.utils.data.Pair;
 
 import java.util.*;
 
@@ -271,36 +270,17 @@ public class MessageMatcher {
         }
     }
 
-    private static class CaptureGroup {
-        public final int startIdx; //inclusive
-        public final int endIdx; //exclusive
-
+    /**
+     * @param startIdx inclusive
+     * @param endIdx   exclusive
+     */
+    private record CaptureGroup(int startIdx, int endIdx) {
         public CaptureGroup() {
-            this.startIdx = -1;
-            this.endIdx = -1;
-        }
-
-        public CaptureGroup(int startIdx, int endIdx) {
-            this.startIdx = startIdx;
-            this.endIdx = endIdx;
+            this(-1, -1);
         }
 
         public CaptureGroup matchAt(int index) {
             return new CaptureGroup(this.startIdx == -1 ? index : this.startIdx, index + 1);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if(obj == this) return true;
-            if(obj instanceof CaptureGroup captureGroup) {
-                return captureGroup.startIdx == this.startIdx && captureGroup.endIdx == this.endIdx;
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.startIdx, this.endIdx);
         }
     }
 }
