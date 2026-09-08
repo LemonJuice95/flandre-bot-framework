@@ -211,6 +211,7 @@ public class MessageMatcher {
                 this.found = true;
                 State longestState = matchedStates.stream().max(Comparator.comparingInt(s -> s.nextSegIndex)).get();
                 this.captureGroups.putAll(longestState.captureGroups);
+                this.startAt = longestState.nextSegIndex;
                 break;
             }
         }
