@@ -16,6 +16,7 @@ public class MessagePatternNode {
 
     public MessagePatternNode(Condition condition) {
         this.condition = condition;
+        this.addGroup(0);
     }
 
     public void addGroup(int groupId) {
