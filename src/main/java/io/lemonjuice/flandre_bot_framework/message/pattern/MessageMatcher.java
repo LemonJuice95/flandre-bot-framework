@@ -153,6 +153,7 @@ public class MessageMatcher {
         this.matches = null;
         this.captureGroups.clear();
         this.visitedStates.clear();
+        this.found = false;
 
         List<State> matchedStates = new ArrayList<>();
         while(this.startAt < this.segments.size() && !this.found) {
