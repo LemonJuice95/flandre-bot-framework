@@ -35,6 +35,7 @@ public class MessageMatcher {
         this.visitedStates.clear();
         this.captureGroups.clear();
         this.matches = null;
+        this.startAt = -1;
         this.segments = newInput;
         this.found = false;
     }
