@@ -224,7 +224,7 @@ public class MessageMatcher {
      * @return 对应组捕获到的消息段列表
      */
     public MessageSegmentList group(int groupId) {
-        if(this.matches == null && !this.found) {
+        if(!Boolean.TRUE.equals(this.matches) && !this.found) {
             throw new IllegalStateException("在尚未进行匹配/无法匹配时获取捕获组");
         }
         CaptureGroup captureGroup = this.captureGroups.get(groupId);
