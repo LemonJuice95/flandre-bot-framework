@@ -221,15 +221,20 @@ public class MessageMatcher {
     /**
      * 获取对应id捕获组捕获的内容
      * @param groupId 捕获组id（由第一个{@link MessagePattern.Builder#startGroup()}开始的组id为1，后续每个{@link MessagePattern.Builder#startGroup()}对应的组id依次+1，特别地，当传入的groupId为0时，返回整个匹配到的消息段列表
-     * @return 对应组捕获到的消息段列表
+     * @return 对应组捕获到的消息段列表，特别地，当组未捕获到消息段时，返回null
+     * @throws IllegalStateException 在尚未进行匹配/无法匹配时获取捕获组时
+     * @throws IllegalArgumentException 组id无效时
      */
     public MessageSegmentList group(int groupId) {
         if(!Boolean.TRUE.equals(this.matches) && !this.found) {
             throw new IllegalStateException("在尚未进行匹配/无法匹配时获取捕获组");
         }
+        if(!this.pattern.getGroups().containsKey(groupId)) {
+            throw new IllegalArgumentException("无效的组id");
+        }
         CaptureGroup captureGroup = this.captureGroups.get(groupId);
         if(captureGroup == null) {
-            throw new IllegalArgumentException("无效的组id");
+            return null;
         }
         return new MessageSegmentList(this.segments.subList(captureGroup.startIdx, captureGroup.endIdx));
     }
