@@ -27,7 +27,11 @@ public class MessagePattern {
     }
 
     public MessageMatcher matcher(Message message) {
-        return this.matcher(message.message);
+        return this.matcher(message, true);
+    }
+
+    public MessageMatcher matcher(Message message, boolean trim) {
+        return this.matcher(trim ? message.message.trim() : message.message);
     }
 
     public static Builder builder() {
