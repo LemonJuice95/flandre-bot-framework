@@ -229,7 +229,7 @@ public class MessageMatcher {
         if(!Boolean.TRUE.equals(this.matches) && !this.found) {
             throw new IllegalStateException("在尚未进行匹配/无法匹配时获取捕获组");
         }
-        if(!this.pattern.getGroups().containsKey(groupId)) {
+        if(!this.pattern.getGroups().containsKey(groupId) && groupId != 0) {
             throw new IllegalArgumentException("无效的组id");
         }
         CaptureGroup captureGroup = this.captureGroups.get(groupId);
