@@ -85,6 +85,6 @@ public class FileHelper {
     private JSONObject getImageRequest(String fileName) {
         JSONObject data = new JSONObject();
         data.put("file", fileName);
-        return NetworkContainer.getImpl().request("get_image", data);
+        return NetworkContainer.getImpl().request("get_image", data).getJSONObject("data");
     }
 }
