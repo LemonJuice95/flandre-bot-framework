@@ -6,4 +6,5 @@
  - [命令系统](commands.md)
  - [权限系统](permissions.md)
  - [事件系统](events.md)
+ - [消息匹配](message_pattern.md)
  - WIP
