@@ -39,6 +39,10 @@ public class MessagePatternNode {
         return this.condition.validate(nextSegment);
     }
 
+    public MessagePatternNode not() {
+        return new NotNode(this);
+    }
+
     public interface Condition {
         public boolean validate(MessageSegment nextSegment);
     }
