@@ -70,7 +70,7 @@ public class MessageParser {
                 segments.removeLast();
                 segments.add(newSeg);
             } else {
-                segments.add(parseMessageSegment(array.getJSONObject(i)));
+                segments.add(seg);
             }
         }
         return new MessageSegmentList(segments);
