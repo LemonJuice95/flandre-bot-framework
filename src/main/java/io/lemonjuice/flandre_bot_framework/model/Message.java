@@ -18,8 +18,8 @@ public class Message {
     public final long targetId;
 
     public final long time;
-    public final int messageId;
-    public final int realId;
+    public final long messageId;
+    public final long realId;
     public final String realSeq;
     public final String type;
     public final String subType;
@@ -90,7 +90,7 @@ public class Message {
         public long targetId = -1;
 
         public long time = 0;
-        public int messageId = -1;
+        public long messageId = -1;
         public int realId = -1;
         public String realSeq = "";
         public String type = "";
@@ -128,7 +128,7 @@ public class Message {
             return this;
         }
 
-        public Builder messageId(int messageId) {
+        public Builder messageId(long messageId) {
             this.messageId = messageId;
             return this;
         }

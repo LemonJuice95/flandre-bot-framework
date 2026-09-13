@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.utils;
 
+import io.lemonjuice.flandre_bot_framework.account.AccountInfo;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.SegmentTypeRegisterEvent;
 import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
@@ -81,23 +82,24 @@ public class MessageParser {
         try {
             JSONObject senderJson = json.getJSONObject("sender");
 
+            Message.Sender sender = new Message.Sender(
+                    senderJson.getLong("user_id"),
+                    senderJson.getString("nickname"),
+                    senderJson.getString("card"),
+                    senderJson.optString("role", ""));
+
             Message.Builder message$builder = new Message.Builder()
-                    .selfId(json.getLong("self_id"))
-                    .userId(json.getLong("user_id"))
+                    .selfId(json.optLong("self_id", AccountInfo.getBotId()))
+                    .userId(json.optLong("user_id", sender.userId))
                     .targetId(json.optLong("target_id", -1))
                     .groupId(json.optLong("group_id", -1))
-                    .time(json.getInt("time"))
-                    .messageId(json.getInt("message_id"))
+                    .time(json.getLong("time"))
+                    .messageId(json.getLong("message_id"))
                     .realId(json.getInt("real_id"))
-                    .realSeq(json.getString("real_seq"))
+                    .realSeq(json.optString("real_seq", ""))
                     .type(json.getString("message_type"))
-                    .subType(json.getString("sub_type"))
-                    .sender(new Message.Sender(
-                            senderJson.getLong("user_id"),
-                            senderJson.getString("nickname"),
-                            senderJson.getString("card"),
-                            senderJson.optString("role", "")
-                    ))
+                    .subType(json.optString("sub_type", ""))
+                    .sender(sender)
                     .rawMessage(json.getString("raw_message"))
                     .message(parseArrayMessage(json.getJSONArray("message")))
                     .font(json.getInt("font"))

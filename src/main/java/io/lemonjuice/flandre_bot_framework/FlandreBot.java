@@ -15,6 +15,7 @@ import io.lemonjuice.flandre_bot_framework.lifecycle.Stop;
 import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import io.lemonjuice.flandre_bot_framework.plugins.PluginsLoadingProcessor;
 import io.lemonjuice.flandre_bot_framework.utils.FileHelper;
+import io.lemonjuice.flandre_bot_framework.utils.MessageHelper;
 import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -41,6 +42,8 @@ public class FlandreBot {
     private static final ContextManagerWrapper contextManager = new ContextManagerWrapper();
     @Getter
     private static final FileHelper fileHelper = new FileHelper();
+    @Getter
+    private static final MessageHelper messageHelper = new MessageHelper();
 
     public static void main(String[] args) {
         stopThread.setDaemon(false);

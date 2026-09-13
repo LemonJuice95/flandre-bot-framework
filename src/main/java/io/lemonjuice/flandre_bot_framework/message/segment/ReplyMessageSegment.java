@@ -1,5 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.message.segment;
 
+import io.lemonjuice.flandre_bot_framework.FlandreBot;
+import io.lemonjuice.flandre_bot_framework.model.Message;
 import lombok.Getter;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,5 +39,9 @@ public class ReplyMessageSegment extends MessageSegment {
         JSONObject data = new JSONObject();
         data.put("id", String.valueOf(this.msgId));
         return data;
+    }
+
+    public Message getReferredMsg() {
+        return FlandreBot.getMessageHelper().getMessage(this.msgId);
     }
 }
