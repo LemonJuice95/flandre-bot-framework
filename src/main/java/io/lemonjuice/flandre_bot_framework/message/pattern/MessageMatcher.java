@@ -160,7 +160,7 @@ public class MessageMatcher {
             this.startAt++;
 
             this.states.clear();
-            State firstState = new State(0, this.pattern.getHeadNode());
+            State firstState = new State(this.startAt, this.pattern.getHeadNode());
             firstState.captureGroups = new HashMap<>();
             this.states.add(firstState);
 
