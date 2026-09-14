@@ -32,7 +32,7 @@ public record PluginDependency(Class<? extends BotPlugin> pluginClass, Version m
         public static final Pattern parserPattern = Pattern.compile("^(\\d+)\\.(\\d+)\\.(\\d+)");
 
         public static Version parseVersion(String versionStr) {
-            if(versionStr.isEmpty() || versionStr.equalsIgnoreCase("any")) {
+            if(versionStr.isEmpty() || versionStr.equalsIgnoreCase("any") || versionStr.equalsIgnoreCase("x.x.x")) {
                 return ANY;
             }
             Matcher matcher = parserPattern.matcher(versionStr);
