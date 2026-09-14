@@ -1,5 +1,9 @@
 package io.lemonjuice.flandre_bot_framework.plugins;
 
+import io.lemonjuice.flandre_bot_framework.FlandreBot;
+import lombok.extern.log4j.Log4j2;
+import org.osgi.annotation.versioning.Version;
+
 import java.util.List;
 
 public interface BotPlugin {
@@ -13,8 +17,19 @@ public interface BotPlugin {
      * 标记哪些插件需要在此插件加载前被加载
      * @return 前置插件类列表
      */
-    default public List<Class<? extends BotPlugin>> getDependencies() {
+    default public List<PluginDependency> getDependencies() {
         return List.of();
+    }
+
+    /**
+     * 标记插件的版本
+     */
+    default public PluginDependency.Version getVersion() {
+        if(this.getClass().isAnnotationPresent(PluginVersion.class)) {
+            PluginVersion version = this.getClass().getAnnotation(PluginVersion.class);
+            return PluginDependency.Version.parseVersion(version.value());
+        }
+        return PluginDependency.Version.ANY;
     }
 
     /**
