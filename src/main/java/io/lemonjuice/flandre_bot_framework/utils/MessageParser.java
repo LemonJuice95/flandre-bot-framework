@@ -45,6 +45,7 @@ public class MessageParser {
         MESSAGE_SEGMENT_TYPES.put("video", VideoMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("xml", XmlMessageSegment::new);
         MESSAGE_SEGMENT_TYPES.put("markdown", MarkdownMessageSegment::new);
+        MESSAGE_SEGMENT_TYPES.put("file", FileMessageSegment::new);
         BotEventBus.post(new SegmentTypeRegisterEvent(MESSAGE_SEGMENT_TYPES));
     }
 
