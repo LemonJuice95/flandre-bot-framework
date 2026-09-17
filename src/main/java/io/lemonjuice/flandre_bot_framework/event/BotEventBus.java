@@ -1,6 +1,9 @@
 package io.lemonjuice.flandre_bot_framework.event;
 
+import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
+import io.lemonjuice.flandre_bot_framework.event.bus.IEventBus;
+import io.lemonjuice.flandre_bot_framework.event.bus.ParallelEventBus;
 import io.lemonjuice.flandre_bot_framework.event.bus.SyncEventBus;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -17,9 +20,13 @@ public class BotEventBus {
     @Getter
     private static BotEventBus instance;
 
-    private final SyncEventBus bus = new SyncEventBus();
+    @Getter
+    private final IEventBus bus;
 
     private BotEventBus() {
+        this.bus = BotBasicConfig.USE_PARALLEL_BUS.get() ?
+                new ParallelEventBus() :
+                new SyncEventBus();
     }
 
     public static void init() {
@@ -57,9 +64,7 @@ public class BotEventBus {
 
     public static boolean postCancelable(ICancelableEvent event) {
         try {
-            if(event instanceof Event event_) {
-                instance.bus.post(event_);
-            }
+            return instance.bus.postCancellable(event);
         } catch (NullPointerException e) {
             log.warn("事件总线未初始化完成", e);
         }

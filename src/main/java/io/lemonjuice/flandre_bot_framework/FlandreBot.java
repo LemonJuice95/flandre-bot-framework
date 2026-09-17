@@ -8,6 +8,7 @@ import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
+import io.lemonjuice.flandre_bot_framework.event.bus.IEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
 import io.lemonjuice.flandre_bot_framework.handler.ReceivingMessageHandler;
@@ -44,6 +45,8 @@ public class FlandreBot {
     private static final FileHelper fileHelper = new FileHelper();
     @Getter
     private static final MessageHelper messageHelper = new MessageHelper();
+    @Getter
+    private static volatile IEventBus eventBus = null;
 
     public static void main(String[] args) {
         stopThread.setDaemon(false);
@@ -81,7 +84,9 @@ public class FlandreBot {
 
         BotConsole.init();
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
+
         BotEventBus.init();
+        eventBus = BotEventBus.getInstance().getBus();
 
         MessageParser.initSegmentMap();
 

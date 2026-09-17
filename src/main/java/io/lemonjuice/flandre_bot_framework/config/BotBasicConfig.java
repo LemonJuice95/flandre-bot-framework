@@ -59,6 +59,8 @@ public class BotBasicConfig {
         return result;
     };
 
+    public static final Supplier<Boolean> USE_PARALLEL_BUS = () -> Boolean.valueOf(properties.getProperty("bot.eventbus.parallel_bus"));
+
     public static final Supplier<Boolean> COMMAND_SYNC_MODE = () -> Boolean.valueOf(properties.getProperty("bot.command_sync_mode"));
 
     public static void read() {
