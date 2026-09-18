@@ -50,6 +50,10 @@ public class PluginDependency {
         this.maxInclusive = maxInclusive;
     }
 
+    public PluginDependency(Class<? extends BotPlugin> pluginClass) {
+        this(pluginClass, Version.ANY, Version.ANY, true, true);
+    }
+
     public boolean isVersionValid(Version version) {
         boolean minVersionValid = this.minVersion.equals(Version.ANY) ||
                 version.compareTo(this.minVersion) > 0 ||
@@ -112,7 +116,7 @@ public class PluginDependency {
 
     public static record Version(int major, int minor, int patch) implements Comparable<Version> {
         public static final Version ANY = new Version(-1, -1, -1);
-        public static final Pattern parserPattern = Pattern.compile("^(\\d+)\\.(\\d+)\\.(\\d+)");
+        public static final Pattern parserPattern = Pattern.compile("^(\\d+|x)\\.(\\d+|x)\\.(\\d+|x)");
 
         public static Version parseVersion(String versionStr) {
             if (versionStr == null || versionStr.isBlank() || versionStr.equalsIgnoreCase("any") || versionStr.equalsIgnoreCase("x.x.x")) {
