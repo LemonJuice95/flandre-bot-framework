@@ -263,8 +263,8 @@ public class MessagePattern {
             return new MessagePattern(
                     this.headNode,
                     Set.copyOf(this.currentNodes),
-                    this.groups,
-                    this.edgeValues
+                    Map.copyOf(this.groups),
+                    Map.copyOf(this.edgeValues)
             );
         }
     }
