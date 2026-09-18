@@ -41,10 +41,9 @@ public class PluginsLoadingProcessor {
             BotPlugin depPlugin = this.plugins.get(dependency.pluginClass());
             if(depPlugin != null) {
                 if(!dependency.isVersionValid(depPlugin.getVersion())) {
-                    throw new PluginLoadingException(String.format("插件声明的依赖项\"%s\"所需的版本为[%s,%s]，实际提供的版本为%s",
+                    throw new PluginLoadingException(String.format("插件声明的依赖项\"%s\"所需的版本为%s，实际提供的版本为%s",
                             depPlugin.getName(),
-                            dependency.minVersion(),
-                            dependency.maxVersion(),
+                            this.genVersionExpr(dependency),
                             depPlugin.getVersion()
                     ));
                 }
@@ -53,6 +52,15 @@ public class PluginsLoadingProcessor {
                 throw new PluginLoadingException();
             }
         }
+    }
+
+    private String genVersionExpr(PluginDependency dependency) {
+        return String.format("%s%s,%s%s",
+                dependency.minInclusive() ? "[" : "(",
+                dependency.minVersion(),
+                dependency.maxVersion(),
+                dependency.maxInclusive() ? "]" : ")"
+                );
     }
 
     private void doLoad() {
@@ -145,7 +153,6 @@ public class PluginsLoadingProcessor {
         public final BotPlugin plugin;
         public final Set<PluginNode> outEdges = new HashSet<>();
         public final Set<PluginNode> inEdges = new HashSet<>();
-        public String cachedReason = "";
 
         public PluginNode(BotPlugin plugin) {
             this.plugin = plugin;
