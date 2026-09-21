@@ -40,8 +40,10 @@ public class HelpDocResource extends Resource<List<List<MessageSegment>>> {
                     contents.add(reading);
                     reading = new ArrayList<>();
                 } else if(image_pattern.matcher(c).matches()) {
-                    reading.add(new TextMessageSegment(readingStr.toString().trim()));
-                    readingStr = new StringBuilder();
+                    if(!readingStr.isEmpty()) {
+                        reading.add(new TextMessageSegment(readingStr.toString().trim()));
+                        readingStr = new StringBuilder();
+                    }
                     Matcher matcher = image_pattern.matcher(c);
                     matcher.find();
                     String imageSource = matcher.group(1);
