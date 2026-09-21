@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework.config;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
@@ -29,6 +30,8 @@ public class BotConfig {
      */
     @Setter
     private boolean failWhenExport = false;
+    @Getter
+    private boolean exportedOnLastLoad = false;
 
     public BotConfig(File cfgFile, File defaultFile) {
         this.cfgFile = cfgFile;
@@ -269,6 +272,7 @@ public class BotConfig {
                 } else {
                     this.cfgFile.createNewFile();
                 }
+                this.exportedOnLastLoad = true;
             } catch (IOException | NullPointerException e) {
                     log.warn("释放配置文件{}失败！", this.cfgFile.getName(), e);
                     return false;
