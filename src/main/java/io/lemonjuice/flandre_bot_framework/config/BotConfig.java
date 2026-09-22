@@ -1,5 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.config;
 
+import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
+import io.lemonjuice.flandre_bot_framework.event.meta.ConfigReloadEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -297,11 +299,15 @@ public class BotConfig {
         }
     }
 
-    public synchronized boolean reload() {
-        boolean result = this.loadProperties();
-        if(result) {
-            this.items.forEach(ConfigItem::reset);
+    public synchronized ReloadResult reload() {
+        if(!BotEventBus.postCancelable(new ConfigReloadEvent.Pre(this))) {
+            if (this.loadProperties()) {
+                this.items.forEach(ConfigItem::reset);
+                Thread.startVirtualThread(() -> BotEventBus.post(new ConfigReloadEvent.Post(this)));
+                return ReloadResult.SUCCEED;
+            }
+            return ReloadResult.FAILED;
         }
-        return result;
+        return ReloadResult.CANCELLED;
     }
 }
