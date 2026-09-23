@@ -17,7 +17,10 @@ public class BotBasicConfig {
     public static final File configFile = new File("./config/bot.properties");
     public static final File defaultConfigFile = new File("config/bot.properties");
 
-    public static final BotConfig CONFIG = new BotConfig(configFile, defaultConfigFile).failWhenExport();
+    public static final BotConfig CONFIG = FlandreBot.registerConfig(new BotConfig(configFile, defaultConfigFile)
+            .failWhenExport()
+            .name("basic")
+            .description("Bot的基础配置"));
 
     public static final ConfigItem<Boolean> LOG_MESSAGES = CONFIG.register(CONFIG::getBoolean, "bot.log_messages", false);
 

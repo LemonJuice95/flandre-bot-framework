@@ -3,6 +3,8 @@ package io.lemonjuice.flandre_bot_framework;
 import io.lemonjuice.flandre_bot_framework.account.wrapper.AccountInfoWrapper;
 import io.lemonjuice.flandre_bot_framework.account.wrapper.ContextManagerWrapper;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
+import io.lemonjuice.flandre_bot_framework.config.BotConfig;
+import io.lemonjuice.flandre_bot_framework.config.ConfigLookup;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
@@ -64,6 +66,10 @@ public class FlandreBot {
     public static void markKeyConfigLost(String message) {
         keyConfigLost = true;
         configLostMessages.add(message);
+    }
+
+    public static BotConfig registerConfig(BotConfig config) {
+        return ConfigLookup.register(config);
     }
 
     private static void configureLogger() {

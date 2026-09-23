@@ -31,9 +31,11 @@ public class BotConfig {
      * 并使load()方法返回false
      */
     @Setter
-    private boolean failWhenExport = false;
+    private volatile boolean failWhenExport = false;
     @Getter
-    private boolean exportedOnLastLoad = false;
+    private volatile boolean exportedOnLastLoad = false;
+    @Getter
+    private volatile String description = "";
 
     public BotConfig(File cfgFile, File defaultFile) {
         this.cfgFile = cfgFile;
@@ -52,6 +54,20 @@ public class BotConfig {
         this(new File(cfgFile));
     }
 
+    public String getName() {
+        return this.cfgFile.getName();
+    }
+
+    public BotConfig failWhenExport() {
+        this.failWhenExport = true;
+        return this;
+    }
+
+    public BotConfig description(String description) {
+        this.description = description;
+        return this;
+    }
+
     public <T> ConfigItem<T> register(ConfigItem<T> item) {
         this.items.add(item);
         return item;
@@ -67,11 +83,6 @@ public class BotConfig {
 
     public <T> ConfigItem<T> register(BiFunction<String, T, T> provider, String key, T defaultValue) {
         return this.register(new ConfigItem<>(provider, key, defaultValue));
-    }
-
-    public BotConfig failWhenExport() {
-        this.failWhenExport = true;
-        return this;
     }
 
     public String getString(String key, String defaultValue) {
