@@ -3,7 +3,6 @@ package io.lemonjuice.flandre_bot_framework;
 import io.lemonjuice.flandre_bot_framework.account.wrapper.AccountInfoWrapper;
 import io.lemonjuice.flandre_bot_framework.account.wrapper.ContextManagerWrapper;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
-import io.lemonjuice.flandre_bot_framework.config.BasicConfigFileInit;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
@@ -80,7 +79,7 @@ public class FlandreBot {
         System.out.println("Flandre Bot Framework v" + FrameworkInfo.getInstance().version);
         System.out.println(FrameworkInfo.logo);
 
-        BasicConfigFileInit.init();
+        BotBasicConfig.init();
 
         BotConsole.init();
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
