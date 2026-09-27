@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot_framework.message.pattern;
 import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.MessagePatternNode;
 import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
+import lombok.Getter;
 
 import java.util.*;
 
@@ -15,6 +16,7 @@ public class MessageMatcher {
 
     private Boolean matches;
     private boolean found;
+    @Getter
     private int startAt = -1;
 
     MessageMatcher(MessagePattern pattern, MessageSegmentList segments) {
@@ -152,13 +154,13 @@ public class MessageMatcher {
     public boolean find() {
         this.matches = null;
         this.captureGroups.clear();
-        this.visitedStates.clear();
         this.found = false;
 
         List<State> matchedStates = new ArrayList<>();
         while(this.startAt < this.segments.size() && !this.found) {
             this.startAt++;
 
+            this.visitedStates.clear();
             this.states.clear();
             State firstState = new State(this.startAt, this.pattern.getHeadNode());
             firstState.captureGroups = new HashMap<>();
@@ -216,6 +218,18 @@ public class MessageMatcher {
             }
         }
         return this.found;
+    }
+
+    /**
+     * 设定下一次{@link MessageMatcher#find()}方法调用的起始位置
+     * @param startAt 起始位置
+     * @throws IllegalArgumentException 位置索引越界时
+     */
+    public void seekTo(int startAt) {
+        if(startAt >= this.segments.size()) {
+            throw new IllegalArgumentException("非法的消息段索引");
+        }
+        this.startAt = startAt;
     }
 
     /**
