@@ -57,6 +57,7 @@ public class MessageMatcher {
             return this.matches;
         }
 
+        this.captureGroups.clear();
         this.states.clear();
         State firstState = new State(0, this.pattern.getHeadNode());
         firstState.captureGroups = new HashMap<>();
@@ -115,6 +116,7 @@ public class MessageMatcher {
             return this.matches;
         }
 
+        this.captureGroups.clear();
         this.states.clear();
         State firstState = new State(0, this.pattern.getHeadNode());
         firstState.captureGroups = new HashMap<>();

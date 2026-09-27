@@ -122,7 +122,7 @@ public class MessagePattern {
                                 cnode.addNextNode(tnode);
                                 this.edgeValues.compute(new Edge(cnode, tnode),
                                         (k, v) -> {
-                                    int value = 2 + builder.getGroupId() - tnode.getGroupIds().getFirst() + (this.optNodes.contains(tnode) ? 1 : 0);
+                                    int value = 2 + builder.getGroupId() - tnode.firstRealGroupId() + (this.optNodes.contains(tnode) ? 1 : 0);
                                     if(v == null) return value;
                                     return Math.max(v, value);
                                 });
@@ -227,7 +227,7 @@ public class MessagePattern {
                 this.groupStack.forEach(b -> node.addGroup(b.getGroupId()));
             }
             this.edgeValues.put(new Edge(node, node),
-                    2 + node.getGroupIds().getLast() - node.getGroupIds().getFirst() + 2);
+                    2 + node.lastRealGroupId() - node.firstRealGroupId() + 2);
             this.handleGroupFirstNodes();
             return this;
         }
@@ -245,7 +245,7 @@ public class MessagePattern {
                 this.groupStack.forEach(b -> node.addGroup(b.getGroupId()));
             }
             this.edgeValues.put(new Edge(node, node),
-                    2 + node.getGroupIds().getLast() - node.getGroupIds().getFirst() + 2);
+                    2 + node.lastRealGroupId() - node.firstRealGroupId() + 2);
             this.handleGroupFirstNodes();
             return this;
         }

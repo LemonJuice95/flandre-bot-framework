@@ -20,7 +20,17 @@ public class MessagePatternNode {
         this.addGroup(0);
     }
 
+    public int firstRealGroupId() {
+        return groupIds.size() > 1 ? groupIds.get(1) : 0;
+    }
+
+    public int lastRealGroupId() {
+        return groupIds.size() > 1 ? groupIds.getLast() : 0;
+    }
+
     public void addGroup(int groupId) {
+        if(this.groupIds.contains(groupId))
+            return;
         this.groupIds.add(groupId);
     }
 
