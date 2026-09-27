@@ -25,7 +25,7 @@ public class MessagePatternNode {
     }
 
     public void removeGroup(int groupId) {
-        this.groupIds.remove(groupId);
+        this.groupIds.remove(Integer.valueOf(groupId));
     }
 
     public void addNextNode(MessagePatternNode node) {
