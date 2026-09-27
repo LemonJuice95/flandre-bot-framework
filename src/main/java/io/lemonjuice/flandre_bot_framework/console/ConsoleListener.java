@@ -23,14 +23,19 @@ public class ConsoleListener implements Runnable {
                 String command = "";
                 try {
                     command = lineReader.readLine("> ");
-                } catch (EndOfFileException ignored) {
-                    continue;
+                } catch (EndOfFileException e) {
+                    FlandreBot.stop();
+                    return;
                 }
                 if(command.isEmpty()) {
                     continue;
                 }
 
                 String[] commandArray = this.parseCommand(command);
+                if(commandArray.length == 0) {
+                    continue;
+                }
+
                 String commandBody = commandArray[0].toLowerCase();
                 if (ConsoleCommandLookup.CONSOLE_COMMANDS.containsKey(commandBody)) {
                     String[] args = Arrays.copyOfRange(commandArray, 1, commandArray.length);
