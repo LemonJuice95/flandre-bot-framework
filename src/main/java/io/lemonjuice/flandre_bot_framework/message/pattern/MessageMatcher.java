@@ -12,7 +12,7 @@ public class MessageMatcher {
     private MessageSegmentList segments;
     private final Queue<State> states;
     private final Set<State> visitedStates = new HashSet<>();
-    private final Map<Integer, CaptureGroup> captureGroups = new HashMap();
+    private final Map<Integer, CaptureGroup> captureGroups = new HashMap<>();
 
     private Boolean matches;
     private boolean found;
