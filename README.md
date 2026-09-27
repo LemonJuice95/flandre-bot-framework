@@ -10,6 +10,8 @@
 
 有关基于本项目的示例项目，请参考[这里](https://github.com/LemonJuice95/flandre-bot-example)
 
+如果你认为示例项目所展示的内容过少，也可以参考[这个](https://github.com/lemonjuice95/flandre-bot)仓库
+
 ## 重要声明（2025.9.12）
 本项目与另一个同名的bot框架"[Flandre](https://github.com/FlandreBot/Flandre)"（使用C#开发）无任何关联
 
