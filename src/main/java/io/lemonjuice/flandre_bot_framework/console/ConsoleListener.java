@@ -24,7 +24,8 @@ public class ConsoleListener implements Runnable {
                 try {
                     command = lineReader.readLine("> ");
                 } catch (EndOfFileException e) {
-                    FlandreBot.stop();
+                    lineReader.printAbove("控制台输入遇到EOF, 无法继续使用, 即将禁用控制台命令系统");
+                    BotConsole.close();
                     return;
                 }
                 if(command.isEmpty()) {
@@ -36,14 +37,18 @@ public class ConsoleListener implements Runnable {
                     continue;
                 }
 
-                String commandBody = commandArray[0].toLowerCase();
-                if (ConsoleCommandLookup.CONSOLE_COMMANDS.containsKey(commandBody)) {
-                    String[] args = Arrays.copyOfRange(commandArray, 1, commandArray.length);
-                    Function<String[], ConsoleCommandRunner> provider = ConsoleCommandLookup.CONSOLE_COMMANDS.get(commandBody);
-                    ConsoleCommandRunner runner = provider.apply(args);
-                    runner.apply();
-                } else {
-                    lineReader.printAbove("未知命令, 使用 'help' 或 '?' 查看命令列表");
+                try {
+                    String commandBody = commandArray[0].toLowerCase();
+                    if (ConsoleCommandLookup.CONSOLE_COMMANDS.containsKey(commandBody)) {
+                        String[] args = Arrays.copyOfRange(commandArray, 1, commandArray.length);
+                        Function<String[], ConsoleCommandRunner> provider = ConsoleCommandLookup.CONSOLE_COMMANDS.get(commandBody);
+                        ConsoleCommandRunner runner = provider.apply(args);
+                        runner.apply();
+                    } else {
+                        lineReader.printAbove("未知命令, 使用 'help' 或 '?' 查看命令列表");
+                    }
+                } catch (Exception e) {
+                    lineReader.printAbove("命令执行出错: " + e.getMessage());
                 }
             }
         } catch (UserInterruptException e) {
