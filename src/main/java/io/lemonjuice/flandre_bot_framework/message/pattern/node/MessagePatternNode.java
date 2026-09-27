@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MessagePatternNode {
+    @Getter
     private final Set<MessagePatternNode> nextNodes = new HashSet<>();
     private final Condition condition;
     @Getter
@@ -25,10 +26,6 @@ public class MessagePatternNode {
 
     public void removeGroup(int groupId) {
         this.groupIds.remove(groupId);
-    }
-
-    public Set<MessagePatternNode> getNextNodes() {
-        return new HashSet<>(nextNodes);
     }
 
     public void addNextNode(MessagePatternNode node) {
