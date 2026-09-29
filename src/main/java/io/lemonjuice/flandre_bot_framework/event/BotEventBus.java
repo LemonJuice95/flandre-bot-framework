@@ -12,6 +12,7 @@ import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 @Log4j2
@@ -52,22 +53,18 @@ public class BotEventBus {
             return;
         }
 
-        Reflections reflections = new Reflections(
-                new ConfigurationBuilder()
-                        .forPackage("io.lemonjuice.flandre_bot_framework.generated.subscriber")
-                        .addScanners(Scanners.SubTypes)
-        );
-        Set<Class<? extends ISubscriberRegister>> registers = reflections.getSubTypesOf(ISubscriberRegister.class);
-        log.info("发现 {} 个订阅者注册器", registers.size());
-        for(Class<? extends ISubscriberRegister> clazz : registers) {
+        ServiceLoader<ISubscriberRegister> registrars = ServiceLoader.load(ISubscriberRegister.class);
+        int count = 0;
+
+        for(ISubscriberRegister registrar : registrars) {
             try {
-                Constructor<? extends ISubscriberRegister> constructor = clazz.getConstructor();
-                ISubscriberRegister registerInstance = constructor.newInstance();
-                registerInstance.register();
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-                log.error(String.format("生成的%s类的订阅者注册器执行失败", clazz.getSimpleName()), e instanceof InvocationTargetException ? e.getCause() : e);
+                count++;
+                registrar.register();
+            } catch (Throwable t) {
+                log.error("订阅者注册器执行失败: " + registrar.getClass().getName(), t);
             }
         }
+        log.info("共发现 {} 个订阅者注册器", count);
     }
 
     public static void post(Event event) {

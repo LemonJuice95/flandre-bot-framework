@@ -7,16 +7,25 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import javax.lang.model.util.ElementFilter;
+import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
+import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 @SupportedAnnotationTypes("io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber")
 @SupportedSourceVersion(SourceVersion.RELEASE_25)
 public class EventSubscriberProcessor extends AbstractProcessor {
+    private static final String SPI_RESOURCE = "META-INF/services/io.lemonjuice.flandre_bot_framework.event.ISubscriberRegister";
+
+    private final Set<String> registrarNames = new LinkedHashSet<>();
+    private FileObject spiFile = null;
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
@@ -42,6 +51,11 @@ public class EventSubscriberProcessor extends AbstractProcessor {
         for(TypeElement element : subscriberClasses) {
             String className = element.getQualifiedName().toString();
             String registerName = className.replace(".", "_") + "_" + Integer.toHexString(className.hashCode());
+            String fullQualifiedName = "io.lemonjuice.flandre_bot_framework.generated.subscriber." + registerName;
+
+            if(!this.registrarNames.add(fullQualifiedName)) {
+                continue;
+            }
 
             try {
                 JavaFileObject fileObject = processingEnv.getFiler().createSourceFile(String.format("io.lemonjuice.flandre_bot_framework.generated.subscriber.%s", registerName));
@@ -61,11 +75,32 @@ public class EventSubscriberProcessor extends AbstractProcessor {
                 }
 
             } catch (IOException e) {
+                this.registrarNames.remove(fullQualifiedName);
                 processingEnv.getMessager().printError("Failed to generate event subscriber register class: " + e.getMessage(), element);
                 return true;
             }
         }
+
+        if(!this.registrarNames.isEmpty()) {
+            writeSpi();
+        }
+
         return true;
+    }
+
+    private void writeSpi() {
+        try {
+            if (this.spiFile == null) {
+                this.spiFile = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", SPI_RESOURCE);
+            }
+            try (PrintWriter writer = new PrintWriter(spiFile.openWriter())) {
+                for (String fqn : registrarNames) {
+                    writer.println(fqn);
+                }
+            }
+        } catch (IOException e) {
+            processingEnv.getMessager().printError("Failed to write into SPI file: " + e.getMessage());
+        }
     }
 
     private boolean validateTypeElement(TypeElement element) {
