@@ -1,13 +1,20 @@
 # ChangeLog
 
+## v0.28.0
+ - 对群聊与私聊命令执行器都添加一个使用`MessageMatcher`进行匹配的子类
+ - 为插件系统加入依赖版本约束（破坏性变更，可能导致一些插件无法兼容新版本框架）
+ - 添加并行与异步事件总线作为实验性功能
+ - 完善`BotConfig`工具类
+ - 添加多模式匹配器`MultiMessageMatcher`
+
 ## v0.27.0
-- 修复`MessageMatcher`类的reset方法
-- 为`AccountInfo`与`ContextManager`添加一个位于主类的入口点（暂时使用包装类实现）
-- 修复Websocket重连后有概率出现的`session`无法使用的问题
-- 为消息匹配器添加捕获组机制
-- 为消息匹配器添加`find()`方法
-- 添加`FileHelper`类（目前仅用于图片获取）
-- 添加`MessageHelper`类（目前仅用于通过消息id获取消息体）
+ - 修复`MessageMatcher`类的reset方法
+ - 为`AccountInfo`与`ContextManager`添加一个位于主类的入口点（暂时使用包装类实现）
+ - 修复Websocket重连后有概率出现的`session`无法使用的问题
+ - 为消息匹配器添加捕获组机制
+ - 为消息匹配器添加`find()`方法
+ - 添加`FileHelper`类（目前仅用于图片获取）
+ - 添加`MessageHelper`类（目前仅用于通过消息id获取消息体）
 
 ## v0.26.0
  - 使用`MethodHandle`优化事件总线的性能
