@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.github.lemonjuice95'
-version = '0.28.0'
+version = '0.29.0'
 
 java {
     toolchain {
@@ -31,7 +31,19 @@ processResources {
 }
 
 sourceSets {
-    processor
+    processor {
+        java.srcDir 'src/processor/java'
+        resources.srcDir 'src/processor/resources'
+    }
+}
+
+def processorJar = tasks.register('processorJar', Jar) {
+    archiveClassifier = 'processor'
+    from sourceSets.processor.output
+}
+
+processProcessorResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 jreleaser {
@@ -68,6 +80,7 @@ publishing {
             version = project.version
 
             from components.java
+            artifact processorJar
 
             pom {
                 name = 'Flandre Bot Framework'

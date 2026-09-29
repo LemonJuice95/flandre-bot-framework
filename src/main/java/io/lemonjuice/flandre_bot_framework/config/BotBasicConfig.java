@@ -14,10 +14,7 @@ import java.util.Properties;
 
 @Log4j2
 public class BotBasicConfig {
-    public static final File configFile = new File("./config/bot.properties");
-    public static final File defaultConfigFile = new File("config/bot.properties");
-
-    public static final BotConfig CONFIG = FlandreBot.registerConfig(new BotConfig(configFile, defaultConfigFile)
+    public static final BotConfig CONFIG = FlandreBot.registerConfig(new BotConfig("./config/bot.properties", "config/bot.properties")
             .failWhenExport()
             .description("Bot的基础配置"));
 
@@ -40,6 +37,7 @@ public class BotBasicConfig {
     public static final ConfigItem<List<Long>> DEBUG_USERS = CONFIG.register(CONFIG::getLongList, "bot.debug_users");
 
     public static final ConfigItem<BusMode> EVENT_BUS_MODE = CONFIG.register(CONFIG::getEnum, "bot.eventbus.bus_mode", BusMode.SYNC);
+    public static final ConfigItem<Boolean> SCAN_CLASSPATH = CONFIG.register(CONFIG::getBoolean, "bot.eventbus.subscribers.scan_classpath", false);
 
     public static final ConfigItem<Boolean> COMMAND_SYNC_MODE = CONFIG.register(CONFIG::getBoolean, "bot.command_sync_mode", false);
 

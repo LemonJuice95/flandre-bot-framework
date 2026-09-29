@@ -23,7 +23,7 @@ public class BotConfig {
 
     private volatile Properties properties = new Properties();
     private final File cfgFile;
-    private final File defaultFile;
+    private final String defaultFile;
     private final List<ConfigItem<?>> items = new ArrayList<>();
 
     /**
@@ -37,7 +37,7 @@ public class BotConfig {
     @Getter
     private volatile String description = "";
 
-    public BotConfig(File cfgFile, File defaultFile) {
+    public BotConfig(File cfgFile, String defaultFile) {
         this.cfgFile = cfgFile;
         this.defaultFile = defaultFile;
     }
@@ -47,7 +47,7 @@ public class BotConfig {
     }
 
     public BotConfig(String cfgFile, String defaultFile) {
-        this(new File(cfgFile), new File(defaultFile));
+        this(new File(cfgFile), defaultFile);
     }
 
     public BotConfig(String cfgFile) {
@@ -278,7 +278,7 @@ public class BotConfig {
         if(!this.cfgFile.exists()) {
             try {
                 if (this.defaultFile != null) {
-                    try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(this.defaultFile.getPath());
+                    try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(this.defaultFile);
                          OutputStream output = new FileOutputStream(this.cfgFile)) {
                         output.write(input.readAllBytes());
                     }
