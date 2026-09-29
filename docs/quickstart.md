@@ -27,9 +27,7 @@ shadowJar {
     filesMatching('META-INF/services/**') {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
-    mergeServiceFiles {
-        include 'META-INF/services/io.lemonjuice.flandre_bot_framework.event.ISubscriberRegister'
-    }
+    mergeServiceFiles('META-INF/services')
 }
 
 repositories {
