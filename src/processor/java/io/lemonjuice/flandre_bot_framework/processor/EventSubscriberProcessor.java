@@ -25,6 +25,7 @@ public class EventSubscriberProcessor extends AbstractProcessor {
 
     private final Set<String> registrarNames = new LinkedHashSet<>();
     private FileObject spiFile = null;
+    private boolean spiWritten;
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -81,7 +82,8 @@ public class EventSubscriberProcessor extends AbstractProcessor {
             }
         }
 
-        if(!this.registrarNames.isEmpty()) {
+        if(!spiWritten && !this.registrarNames.isEmpty()) {
+            spiWritten = true;
             writeSpi();
         }
 

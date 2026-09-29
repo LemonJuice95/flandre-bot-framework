@@ -22,12 +22,24 @@ jar {
     }
 }
 
+shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    filesMatching('META-INF/services/**') {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.lemonjuice.flandre_bot_framework.event.ISubscriberRegister'
+    }
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     implementation 'io.github.lemonjuice95:flandre-bot-framework:${替换为具体框架版本}'
+    annotationProcessor 'io.github.lemonjuice95:flandre-bot-framework:${替换为具体框架版本}:processor'
+    //原则上两版本应该相同
 }
 ```
 
