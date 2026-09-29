@@ -10,6 +10,7 @@ import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
 import io.lemonjuice.flandre_bot_framework.console.original.OriginalConsoleCommands;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
+import io.lemonjuice.flandre_bot_framework.event.InternalSubscribers;
 import io.lemonjuice.flandre_bot_framework.event.bus.IEventBus;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.PluginRegisterEvent;
@@ -92,6 +93,7 @@ public class FlandreBot {
         OriginalConsoleCommands.ORIGINAL_CONSOLE_COMMANDS.load();
 
         BotEventBus.init();
+        InternalSubscribers.register();
         eventBus = BotEventBus.getInstance().getBus();
 
         MessageParser.initSegmentMap();
@@ -113,8 +115,6 @@ public class FlandreBot {
 
         float usedTime = (System.currentTimeMillis() - startTime) / 1000.0F;
         log.info(String.format("Bot已启动！(%.2fs)", usedTime));
-
-        Thread.startVirtualThread(AccountInfoInit::init);
 
         if(BotConsole.isAvailable()) {
             consoleListenerThread.start();
