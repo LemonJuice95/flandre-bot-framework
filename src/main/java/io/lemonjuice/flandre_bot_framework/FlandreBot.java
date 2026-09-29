@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot_framework;
 
+import io.lemonjuice.flandre_bot_framework.account.AccountInfoInit;
 import io.lemonjuice.flandre_bot_framework.account.wrapper.AccountInfoWrapper;
 import io.lemonjuice.flandre_bot_framework.account.wrapper.ContextManagerWrapper;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
@@ -112,6 +113,8 @@ public class FlandreBot {
 
         float usedTime = (System.currentTimeMillis() - startTime) / 1000.0F;
         log.info(String.format("Bot已启动！(%.2fs)", usedTime));
+
+        Thread.startVirtualThread(AccountInfoInit::init);
 
         if(BotConsole.isAvailable()) {
             consoleListenerThread.start();
