@@ -24,9 +24,7 @@ public class BotEventBus {
     private final IEventBus bus;
 
     private BotEventBus() {
-        this.bus = BotBasicConfig.USE_PARALLEL_BUS.get() ?
-                new ParallelEventBus() :
-                new SyncEventBus();
+        this.bus = BotBasicConfig.EVENT_BUS_MODE.get().getEventBus();
     }
 
     public static void init() {
