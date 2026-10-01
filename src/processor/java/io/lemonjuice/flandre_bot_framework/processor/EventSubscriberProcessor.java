@@ -25,7 +25,8 @@ public class EventSubscriberProcessor extends AbstractProcessor {
 
     private final Set<String> registrarNames = new LinkedHashSet<>();
     private FileObject spiFile = null;
-    private boolean spiWritten;
+    private boolean spiWritten = false;
+    private boolean gotNew = false;
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -49,6 +50,7 @@ public class EventSubscriberProcessor extends AbstractProcessor {
             subscriberClasses.add(typeElement);
         }
 
+        this.gotNew = false;
         for(TypeElement element : subscriberClasses) {
             String className = element.getQualifiedName().toString();
             String registerName = className.replace(".", "_") + "_" + Integer.toHexString(className.hashCode());
@@ -57,6 +59,8 @@ public class EventSubscriberProcessor extends AbstractProcessor {
             if(!this.registrarNames.add(fullQualifiedName)) {
                 continue;
             }
+
+            this.gotNew = true;
 
             try {
                 JavaFileObject fileObject = processingEnv.getFiler().createSourceFile(String.format("io.lemonjuice.flandre_bot_framework.generated.subscriber.%s", registerName));
@@ -82,7 +86,7 @@ public class EventSubscriberProcessor extends AbstractProcessor {
             }
         }
 
-        if(!spiWritten && !this.registrarNames.isEmpty()) {
+        if(!spiWritten && !this.registrarNames.isEmpty() && !this.gotNew) {
             spiWritten = true;
             writeSpi();
         }
