@@ -5,8 +5,6 @@
 ## bot.properties配置项
 
 ### 基础内容
-- `bot.name`: String
-  - bot的名称
 - `bot.log_messages`: Boolean
   - 是否在日志中记录收到的消息
 
