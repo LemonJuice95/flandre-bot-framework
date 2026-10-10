@@ -272,7 +272,7 @@ public class BotConfig {
     }
 
     public synchronized boolean load() {
-        if(!this.cfgFile.getParentFile().exists()) {
+        if(this.cfgFile.getParentFile() != null && !this.cfgFile.getParentFile().exists()) {
             this.cfgFile.getParentFile().mkdirs();
         }
         if(!this.cfgFile.exists()) {
