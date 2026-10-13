@@ -19,4 +19,12 @@ public class RegexNode extends MessagePatternNode {
     public RegexNode(Pattern regex) {
         this(regex, true);
     }
+
+    public RegexNode(String regex, boolean trim) {
+        this(Pattern.compile(regex), trim);
+    }
+
+    public RegexNode(String regex) {
+        this(regex, true);
+    }
 }
