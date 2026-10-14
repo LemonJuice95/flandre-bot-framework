@@ -10,6 +10,8 @@ import java.util.*;
 
 @Getter
 public class MessageSegmentList implements List<MessageSegment> {
+    public static final MessageSegmentList EMPTY = new MessageSegmentList(List.of());
+
     private final List<MessageSegment> segments;
 
     public MessageSegmentList() {
