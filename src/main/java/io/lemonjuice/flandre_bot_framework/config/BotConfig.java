@@ -119,6 +119,32 @@ public class BotConfig {
         return this.getLong(key, 0);
     }
 
+    public float getFloat(String key, float defaultValue) {
+        try {
+            return Float.parseFloat(this.properties.getProperty(key));
+        } catch (NumberFormatException | NullPointerException e) {
+            log.warn("配置文件{}中配置项{}的值无效(应为float)，将使用默认值{}", this.cfgFile.getName(), key, defaultValue);
+            return defaultValue;
+        }
+    }
+
+    public float getFloat(String key) {
+        return this.getFloat(key, 0.0f);
+    }
+
+    public double getDouble(String key, double defaultValue) {
+        try {
+            return Double.parseDouble(this.properties.getProperty(key));
+        } catch (NumberFormatException | NullPointerException e) {
+            log.warn("配置文件{}中配置项{}的值无效(应为double)，将使用默认值{}", this.cfgFile.getName(), key, defaultValue);
+            return defaultValue;
+        }
+    }
+
+    public double getDouble(String key) {
+        return this.getDouble(key, 0.0);
+    }
+
     public boolean getBoolean(String key, boolean defaultValue) {
         String valueStr = this.getString(key);
         if("true".equalsIgnoreCase(valueStr)) return true;
