@@ -138,6 +138,7 @@ dependencies {
     implementation('org.reflections:reflections:0.10.2') {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
+    implementation 'org.jctools:jctools-core:4.0.7'
 
     api 'org.json:json:20250517'
 
