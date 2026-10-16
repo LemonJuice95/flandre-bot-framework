@@ -28,14 +28,14 @@ public abstract class MultiSimpleGroupCommandRunner extends GroupCommandRunner {
     @Override
     public boolean matches() {
         if(this.needAtFirst()) {
-            if(this.command.message.getSegments().size() == 2 &&
-               this.command.message.getSegments().getFirst() instanceof AtMessageSegment atSeg &&
-               this.command.message.getSegments().get(1) instanceof TextMessageSegment textSeg) {
-               return atSeg.getQQ() == this.command.selfId && this.getCommandBodies().contains(textSeg.getContent());
+            if(this.getCommand().message.getSegments().size() == 2 &&
+               this.getCommand().message.getSegments().getFirst() instanceof AtMessageSegment atSeg &&
+               this.getCommand().message.getSegments().get(1) instanceof TextMessageSegment textSeg) {
+               return atSeg.getQQ() == this.getCommand().selfId && this.getCommandBodies().contains(textSeg.getContent());
             }
             return false;
         }
-        return this.command.message.isSimpleText() &&
-                this.getCommandBodies().contains(this.command.message.toString());
+        return this.getCommand().message.isSimpleText() &&
+                this.getCommandBodies().contains(this.getCommand().message.toString());
     }
 }

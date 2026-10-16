@@ -20,7 +20,7 @@ public abstract class MultiSimplePrivateCommandRunner extends PrivateCommandRunn
 
     @Override
     public boolean matches() {
-        return this.command.message.isSimpleText() &&
-                this.getCommandBodies().contains(this.command.message.toString());
+        return this.getCommand().message.isSimpleText() &&
+                this.getCommandBodies().contains(this.getCommand().message.toString());
     }
 }

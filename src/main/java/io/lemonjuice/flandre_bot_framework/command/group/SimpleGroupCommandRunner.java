@@ -23,8 +23,8 @@ public abstract class SimpleGroupCommandRunner extends GroupCommandRunner {
     @Override
     public boolean matches() {
         if(this.needAtFirst()) {
-            return this.command.message.equalsAtBotWithText(this.getCommandBody());
+            return this.getCommand().message.equalsAtBotWithText(this.getCommandBody());
         }
-        return this.command.message.equalsText(this.getCommandBody());
+        return this.getCommand().message.equalsText(this.getCommandBody());
     }
 }
