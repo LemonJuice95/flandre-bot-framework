@@ -40,7 +40,7 @@ public class BotCommandLookup {
     public static final List<CommandRunnerSlot> PRIVATE_COMMANDS = new ArrayList<>();
     public static final List<CommandRunnerSlot> FRIEND_COMMANDS = new ArrayList<>();
 
-    public static void reloadConfig() {
+    public synchronized static void reloadConfig() {
         boolean shouldReload = BotBasicConfig.POOLING_COMMAND_RUNNERS.changed() ||
                 BotBasicConfig.RUNNER_POOL_MAXIMUM_CAPACITY.changed();
         if(!shouldReload) return;
