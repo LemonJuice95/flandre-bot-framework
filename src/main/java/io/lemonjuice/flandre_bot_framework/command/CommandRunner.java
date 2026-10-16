@@ -17,12 +17,19 @@ public abstract class CommandRunner {
      * 计划在未来将访问权限收紧至private，子类访问请使用getter方法
      */
     @Deprecated(since = "0.31.0", forRemoval = true)
-    @Getter
     @Resettable
     protected Message command;
 
     public CommandRunner(Message command) {
         this.command = command;
+    }
+
+    /**
+     * 获取可能触发命令的消息体
+     * @return 消息体
+     */
+    public Message getCommand() {
+        return this.command;
     }
 
     /**
