@@ -108,6 +108,8 @@ miss率的统计方式：
 
 ## 优化后测试
 
+[测试器仓库Flandre-Pressure-Lab](https://github.com/lemonjuice95/flandre-pressure-lab)
+
 ### 瞬时爆发测试
 
 *此处GC参数均使用JVM默认参数，堆大小参数为最小1024MB，最大2048MB*
