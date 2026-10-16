@@ -49,10 +49,10 @@ public class CommandRunnerPool implements ICommandRunnerPool {
         }
         if(result == null) {
             boolean shouldNew = false;
-            if(this.size.get() < this.capacity.get()) {
+            if(this.size.getAcquire() < this.capacity.getAcquire()) {
                 this.newRunnerLock.lock();
                 try {
-                    if(this.size.get() < this.capacity.get()) {
+                    if(this.size.getAcquire() < this.capacity.getAcquire()) {
                         shouldNew = true;
                         this.size.incrementAndGet();
                     }
@@ -108,7 +108,7 @@ public class CommandRunnerPool implements ICommandRunnerPool {
                     Queue<CommandRunner> newPool = new ArrayDeque<>(targetCapacity);
                     newPool.addAll(this.runnerPool);
                     this.runnerPool = newPool;
-                    this.capacity.set(targetCapacity);
+                    this.capacity.setRelease(targetCapacity);
                     this.dontGrowBefore = currentNano + POOL_GROW_CD_NANO;
                 }
             } finally {
