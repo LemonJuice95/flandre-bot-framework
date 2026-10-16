@@ -120,11 +120,6 @@ public class CommandRunnerPool implements ICommandRunnerPool {
     public synchronized void reloadConfig(int maximumCapacity) {
         this.maximumCapacity.set(maximumCapacity);
         WARNED.set(false);
-
-        //考虑到if中条件成立时，size内部的值不可能再发生变更
-        if(this.size.get() > this.capacity.get()) {
-            this.size.set(this.capacity.get());
-        }
     }
 
     @SuppressWarnings("NonAtomicOperationOnVolatileField")
