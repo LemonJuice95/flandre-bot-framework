@@ -203,7 +203,7 @@ public class CommandRunnerPool implements ICommandRunnerPool {
                 while(this.lock.get()) {
                     Thread.onSpinWait();
                 }
-            } while(this.lock.compareAndSet(false, true));
+            } while(!this.lock.compareAndSet(false, true));
         }
 
         public void unlock() {
