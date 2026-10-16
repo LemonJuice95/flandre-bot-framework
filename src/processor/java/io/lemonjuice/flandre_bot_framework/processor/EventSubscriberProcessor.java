@@ -31,6 +31,7 @@ public class EventSubscriberProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
+            //这轮不能写文件！（血的教训）
             return false;
         }
 
@@ -86,6 +87,7 @@ public class EventSubscriberProcessor extends AbstractProcessor {
             }
         }
 
+        //没有新文件产生时意味着所有订阅者注解必然已经处理完毕，此时可以安全写入
         if(!spiWritten && !this.registrarNames.isEmpty() && !this.gotNew) {
             spiWritten = true;
             writeSpi();
