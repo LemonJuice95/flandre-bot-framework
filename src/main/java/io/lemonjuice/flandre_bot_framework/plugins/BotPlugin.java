@@ -1,9 +1,5 @@
 package io.lemonjuice.flandre_bot_framework.plugins;
 
-import io.lemonjuice.flandre_bot_framework.FlandreBot;
-import lombok.extern.log4j.Log4j2;
-import org.osgi.annotation.versioning.Version;
-
 import java.util.List;
 
 public interface BotPlugin {
