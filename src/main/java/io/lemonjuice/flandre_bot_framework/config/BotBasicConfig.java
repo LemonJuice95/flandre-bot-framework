@@ -37,9 +37,13 @@ public class BotBasicConfig {
     public static final ConfigItem<List<Long>> DEBUG_USERS = CONFIG.register(CONFIG::getLongList, "bot.debug_users");
 
     public static final ConfigItem<BusMode> EVENT_BUS_MODE = CONFIG.register(CONFIG::getEnum, "bot.eventbus.bus_mode", BusMode.SYNC);
-    public static final ConfigItem<Boolean> SCAN_CLASSPATH = CONFIG.register(CONFIG::getBoolean, "bot.eventbus.subscribers.scan_classpath", false);
+    public static final ConfigItem<Boolean> POOLING_COMMAND_RUNNERS = CONFIG.register(CONFIG::getBoolean, "bot.command.pooling_runners", false);
+    public static final ConfigItem<Integer> RUNNER_POOL_INITIAL_CAPACITY = CONFIG.register(CONFIG::getInt, "bot.command.runner_pool.initial_capacity", 10);
+    public static final ConfigItem<Integer> RUNNER_POOL_MAXIMUM_CAPACITY = CONFIG.register(CONFIG::getInt, "bot.command.runner_pool.maximum_capacity", 50);
+    public static final ConfigItem<Double> RUNNER_POOL_MISS_RATE_THRESHOLD = CONFIG.register(CONFIG::getDouble, "bot.command.runner_pool.miss_rate_threshold", 0.3);
 
     public static final ConfigItem<Boolean> COMMAND_SYNC_MODE = CONFIG.register(CONFIG::getBoolean, "bot.command_sync_mode", false);
+    public static final ConfigItem<Boolean> SCAN_CLASSPATH = CONFIG.register(CONFIG::getBoolean, "bot.eventbus.subscribers.scan_classpath", false);
 
     public static void init() {
         if(!CONFIG.load() && CONFIG.isExportedOnLastLoad()) {

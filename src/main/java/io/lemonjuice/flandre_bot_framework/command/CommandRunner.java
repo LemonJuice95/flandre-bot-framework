@@ -1,8 +1,10 @@
 package io.lemonjuice.flandre_bot_framework.command;
 
+import io.lemonjuice.flandre_bot_framework.command.annotations.Resettable;
 import io.lemonjuice.flandre_bot_framework.event.msg.PermissionDeniedEvent;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
+import lombok.Getter;
 
 /**
  * 本类及所有子类的非静态成员变量/常量
@@ -11,7 +13,13 @@ import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
  * （除非在配置中开启了同步执行模式）
  */
 public abstract class CommandRunner {
-    protected final Message command;
+    /**
+     * 计划在未来将访问权限收紧至private，子类访问请使用getter方法
+     */
+    @Deprecated(since = "0.31.0", forRemoval = true)
+    @Getter
+    @Resettable
+    protected Message command;
 
     public CommandRunner(Message command) {
         this.command = command;
@@ -48,6 +56,14 @@ public abstract class CommandRunner {
      */
     public boolean blockAfterCommands() {
         return true;
+    }
+
+    public void free() {
+        this.command = null;
+    }
+
+    public void reset(Message command) {
+        this.command = command;
     }
 
     public enum Type {
