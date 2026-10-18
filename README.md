@@ -81,7 +81,7 @@ C --> B
 >上述数据的测试机配置：
 > - CPU：i5-8265u CPU @ 1.60GHz （四核八线程，TDP 15W）
 > - 内存：单通道 8GB DDR4 2400MHz
-> - 系统：Ubuntu Server 25.04
+> - 系统：Ubuntu Server 26.04 LTS
 
 以此为多开实例提供了支持
 
