@@ -169,9 +169,10 @@ public class CommandRunnerPool implements ICommandRunnerPool {
                 if(currentTime <= this.bucketExpiresAfter) {
                     return;
                 }
-                int forwardBlockCount = Math.min((int)((currentTime - this.bucketExpiresAfter) / BUCKET_TIME_WINDOW_NANO + 1), 8);
+                int forwardBlockCount = (int)((currentTime - this.bucketExpiresAfter) / BUCKET_TIME_WINDOW_NANO + 1);
+                int actualForward = Math.min(forwardBlockCount, 8);
 
-                for(int i = 1; i <= forwardBlockCount; i++) {
+                for(int i = 1; i <= actualForward; i++) {
                     this.currentIdx = (currentIdx + 1) & 7;
                     this.borrowCount -= this.borrowBuckets[this.currentIdx];
                     this.missCount -= this.missBuckets[this.currentIdx];
