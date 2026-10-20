@@ -31,11 +31,11 @@ public abstract class MultiSimpleGroupCommandRunner extends GroupCommandRunner {
             if(this.getCommand().message.getSegments().size() == 2 &&
                this.getCommand().message.getSegments().getFirst() instanceof AtMessageSegment atSeg &&
                this.getCommand().message.getSegments().get(1) instanceof TextMessageSegment textSeg) {
-               return atSeg.getQQ() == this.getCommand().selfId && this.getCommandBodies().contains(textSeg.getContent());
+               return atSeg.getQQ() == this.getCommand().selfId && this.getCommandBodies().contains(textSeg.getContent().trim());
             }
             return false;
         }
         return this.getCommand().message.isSimpleText() &&
-                this.getCommandBodies().contains(this.getCommand().message.toString());
+                this.getCommandBodies().contains(this.getCommand().message.toString().trim());
     }
 }
