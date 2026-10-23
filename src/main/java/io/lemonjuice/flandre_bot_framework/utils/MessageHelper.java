@@ -36,7 +36,7 @@ public class MessageHelper {
 
     private JSONObject getForwardMsgsRequest(long forwardId) {
         JSONObject data = new JSONObject();
-        data.put("id", forwardId);
+        data.put("id", String.valueOf(forwardId));
         return NetworkContainer.getImpl().request("get_forward_msg", data).optJSONObject("data", null);
     }
 }
