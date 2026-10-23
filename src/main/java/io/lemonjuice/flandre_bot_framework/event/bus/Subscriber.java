@@ -6,7 +6,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 
-class Subscriber {
+public class Subscriber {
     public final Object target;
     public final Method method;
     public final MethodHandle methodHandle;

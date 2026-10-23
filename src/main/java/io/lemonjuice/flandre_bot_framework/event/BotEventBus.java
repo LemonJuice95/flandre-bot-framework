@@ -18,7 +18,7 @@ import java.util.Set;
 @Log4j2
 public class BotEventBus {
     @Getter
-    private static BotEventBus instance;
+    private static volatile BotEventBus instance;
 
     @Getter
     private final IEventBus bus;
@@ -27,14 +27,21 @@ public class BotEventBus {
         this.bus = BotBasicConfig.EVENT_BUS_MODE.get().getEventBus();
     }
 
-    public static void init() {
+    public synchronized static void init() {
         log.info("正在创建事件总线实例");
         instance = new BotEventBus();
-        registerSubscribers();
+        instance.registerSubscribers();
         log.info("事件总线初始化完成！");
     }
 
-    private static void registerSubscribers() {
+    public synchronized static void reload() {
+        BotEventBus newInstance = new BotEventBus();
+        newInstance.registerSubscribers();
+        newInstance.bus.addSubscribers(instance.bus.getSubscribers());
+        instance = newInstance;
+    }
+
+    private void registerSubscribers() {
         log.info("正在注册所有事件监听器");
         if(BotBasicConfig.SCAN_CLASSPATH.get()) {
             Reflections reflections = new Reflections(new ConfigurationBuilder()
@@ -45,7 +52,7 @@ public class BotEventBus {
                 try {
                     Constructor<?> constructor = clazz.getConstructor();
                     Object object = constructor.newInstance();
-                    instance.bus.register(object);
+                    this.bus.register(object);
                 } catch (Exception e_) {
                     log.error("注册事件监听器失败，请检查\"{}\"类中是否具有注册所需的无参构造函数", clazz.getName());
                 }

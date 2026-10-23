@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot_framework.handler;
 
 import io.lemonjuice.flandre_bot_framework.account.ContextManager;
+import io.lemonjuice.flandre_bot_framework.config.BasicConfigReloader;
 import io.lemonjuice.flandre_bot_framework.config.BotBasicConfig;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.msg.MessageEvent;
@@ -13,13 +14,18 @@ import io.lemonjuice.flandre_bot_framework.utils.MessageParser;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Log4j2
 public class ReceivingMessageHandler {
-    private static final boolean SYNC_MODE = BotBasicConfig.COMMAND_SYNC_MODE.get();
     private static volatile CommandHandler commandHandler = new AsyncCommandHandler();
+    private static final AtomicBoolean reloading = new AtomicBoolean(false);
+    private static final ConcurrentLinkedQueue<Message> storedMessages = new ConcurrentLinkedQueue<>();
 
     public synchronized static void init() {
-        if(SYNC_MODE) {
+        if(BotBasicConfig.COMMAND_SYNC_MODE.get()) {
             commandHandler = new SyncCommandHandler();
             ((SyncCommandHandler) commandHandler).getExecutorThread().start();
         } else {
@@ -30,6 +36,32 @@ public class ReceivingMessageHandler {
     public synchronized static void stop() {
         if(commandHandler instanceof SyncCommandHandler syncHandler) {
             syncHandler.getExecutorThread().interrupt();
+        }
+    }
+
+    public static void reload() {
+        if(!BotBasicConfig.COMMAND_SYNC_MODE.changed()) {
+            return;
+        }
+
+        synchronized (BasicConfigReloader.class) {
+            reloading.set(true);
+            try {
+                if (commandHandler instanceof SyncCommandHandler syncHandler) {
+                    syncHandler.getExecutorThread().interrupt();
+                }
+                if (BotBasicConfig.COMMAND_SYNC_MODE.get()) {
+                    commandHandler = new SyncCommandHandler();
+                    ((SyncCommandHandler) commandHandler).getExecutorThread().start();
+                } else {
+                    commandHandler = new AsyncCommandHandler();
+                }
+            } finally {
+                reloading.set(false);
+                while (!storedMessages.isEmpty()) {
+                    commandHandler.handle(storedMessages.poll());
+                }
+            }
         }
     }
 
@@ -56,7 +88,11 @@ public class ReceivingMessageHandler {
             }
         }
 
-        commandHandler.handle(message);
+        if(reloading.get()) {
+            storedMessages.add(message);
+        } else {
+            commandHandler.handle(message);
+        }
     }
 
     private static void logMessage(Message message) {

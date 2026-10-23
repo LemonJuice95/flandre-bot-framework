@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot_framework.event.bus;
 import io.lemonjuice.flandre_bot_framework.event.Event;
 import io.lemonjuice.flandre_bot_framework.event.ICancelableEvent;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.Method;
@@ -50,5 +51,15 @@ public abstract class AbstractEventBus implements IEventBus {
 
     private CopyOnWriteArrayList<Subscriber> getOrCreateList(Class<?> clazz) {
         return this.subscribers.computeIfAbsent(clazz, k -> new CopyOnWriteArrayList<>());
+    }
+
+    @Override
+    public ConcurrentHashMap<Class<?>, CopyOnWriteArrayList<Subscriber>> getSubscribers() {
+        return this.subscribers;
+    }
+
+    @Override
+    public void addSubscribers(ConcurrentHashMap<Class<?>, CopyOnWriteArrayList<Subscriber>> subscribers) {
+        this.subscribers.putAll(subscribers);
     }
 }
