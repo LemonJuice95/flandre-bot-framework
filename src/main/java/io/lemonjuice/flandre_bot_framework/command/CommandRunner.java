@@ -12,24 +12,17 @@ import lombok.Getter;
  * 但在处理外部共享状态的读/写时需保证操作原子性
  * （除非在配置中开启了同步执行模式）
  */
+@Getter
 public abstract class CommandRunner {
     /**
-     * 计划在未来将访问权限收紧至private，子类访问请使用getter方法
+     *  获取可能触发命令的消息体
+     * @return 消息体
      */
-    @Deprecated(since = "0.31.0", forRemoval = true)
     @Resettable
-    protected Message command;
+    private Message command;
 
     public CommandRunner(Message command) {
         this.command = command;
-    }
-
-    /**
-     * 获取可能触发命令的消息体
-     * @return 消息体
-     */
-    public Message getCommand() {
-        return this.command;
     }
 
     /**
